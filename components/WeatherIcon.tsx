@@ -1,55 +1,211 @@
+// Ícones do tempo: só linhas, sem cor (herdam a cor do texto), traço de 1,5 numa grelha de 24 px.
+// Cada grupo de códigos do IPMA tem um desenho próprio.
+
 type Props = { tipo: number; size?: number };
 
-function grupo(tipo: number): "sol" | "parcial" | "altas" | "chuva" | "trovoada" | "nevoeiro" | "nuvem" {
-  if (tipo === 1) return "sol";
-  if (tipo === 2 || tipo === 3 || tipo === 25) return "parcial";
-  if (tipo === 5) return "altas";
-  if (tipo === 19 || tipo === 20 || tipo === 23) return "trovoada";
-  if (tipo === 16 || tipo === 17 || tipo === 26) return "nevoeiro";
-  if (tipo >= 6 && tipo <= 15) return "chuva";
-  return "nuvem";
+type Grupo =
+  | "limpo" | "poucoNublado" | "parcial" | "nuvensAltas" | "nublado" | "convectiva"
+  | "chuvisco" | "chuva" | "chuvaForte" | "trovoada" | "trovoadaChuva"
+  | "neblina" | "nevoeiro" | "nuvensBaixas" | "neve" | "chuvaNeve" | "granizo" | "geada" | "desconhecido";
+
+function grupo(tipo: number): Grupo {
+  switch (tipo) {
+    case 1: return "limpo";
+    case 2: return "poucoNublado";
+    case 3: return "parcial";
+    case 5: return "nuvensAltas";
+    case 4: case 25: case 27: return "nublado";
+    case 24: return "convectiva";
+    case 7: case 10: case 13: case 15: return "chuvisco";
+    case 6: case 9: case 12: return "chuva";
+    case 8: case 11: case 14: return "chuvaForte";
+    case 19: return "trovoada";
+    case 20: case 23: return "trovoadaChuva";
+    case 16: return "neblina";
+    case 26: return "nevoeiro";
+    case 17: return "nuvensBaixas";
+    case 18: case 28: return "neve";
+    case 29: case 30: return "chuvaNeve";
+    case 21: return "granizo";
+    case 22: return "geada";
+    default: return "desconhecido";
+  }
 }
 
-const NUVEM = "M7 14.5h10.5a3.8 3.8 0 0 0 .4-7.6 5.4 5.4 0 0 0-10.4 1.6A3 3 0 0 0 7 14.5Z";
+// Nuvem base (ocupa a parte de baixo da grelha)
+const NUVEM = "M7 19a4 4 0 0 1-.4-7.98 6 6 0 0 1 11.3-1A4.5 4.5 0 0 1 17.5 19H7Z";
+// Nuvem subida, para deixar espaço à precipitação por baixo
+const SOBE = "translate(0 -3.5)";
+
+function Raios({ cx, cy, r1, r2, de = 0, ate = 360 }: { cx: number; cy: number; r1: number; r2: number; de?: number; ate?: number }) {
+  const d: string[] = [];
+  for (let a = 0; a < 360; a += 45) {
+    if (a < de || a > ate) continue;
+    const rad = (a * Math.PI) / 180;
+    d.push(`M${(cx + r1 * Math.cos(rad)).toFixed(2)} ${(cy + r1 * Math.sin(rad)).toFixed(2)}L${(cx + r2 * Math.cos(rad)).toFixed(2)} ${(cy + r2 * Math.sin(rad)).toFixed(2)}`);
+  }
+  return <path d={d.join("")} />;
+}
+
+// Esconde o que fica por trás de uma nuvem, sem usar preenchimentos de cor
+function Mascara({ id, d, transform }: { id: string; d: string; transform?: string }) {
+  return (
+    <mask id={id} maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+      <rect width="24" height="24" fill="white" />
+      <path d={d} transform={transform} fill="black" stroke="black" strokeWidth="3.5" />
+    </mask>
+  );
+}
+
+const pontos = (xs: [number, number][]) => xs.map(([x, y]) => `M${x} ${y}h.01`).join("");
+const floco = (x: number, y: number, r = 1.3) =>
+  `M${x} ${y - r}v${2 * r}M${x - r * 0.87} ${y - r / 2}l${r * 1.74} ${r}M${x - r * 0.87} ${y + r / 2}l${r * 1.74} ${-r}`;
 
 export function WeatherIcon({ tipo, size = 26 }: Props) {
   const g = grupo(tipo);
   const s = { fill: "none", stroke: "currentColor", strokeWidth: 1.5, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  const id = `wi-${g}`;
+
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
-      {g === "sol" && (
-        <g {...s}>
-          <circle cx="12" cy="12" r="4.2" />
-          <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" />
-        </g>
-      )}
-      {g === "parcial" && (
-        <g {...s}>
-          <circle cx="9" cy="9" r="3.4" />
-          <path d="M9 2.6v1.4M2.6 9h1.4M4.5 4.5l1 1M13.5 4.5l-1 1" />
-          <path d="M9.5 19.5h8.2a3.3 3.3 0 0 0 .3-6.6 4.6 4.6 0 0 0-8.8 1.4 2.6 2.6 0 0 0 .3 5.2Z" fill="var(--bg)" />
-        </g>
-      )}
-      {g === "altas" && (
-        <g {...s}>
-          <circle cx="12" cy="13" r="3.6" />
-          <path d="M3 6.5h7M13 6.5h8M6 3.5h11" />
-        </g>
-      )}
-      {g === "nuvem" && <path {...s} d="M7 18.5h10.5a3.8 3.8 0 0 0 .4-7.6 5.4 5.4 0 0 0-10.4 1.6A3 3 0 0 0 7 18.5Z" />}
-      {g === "chuva" && (
-        <>
-          <path {...s} d={NUVEM} />
-          <path d="M8.5 17.5l-1 2.5M12.5 17.5l-1 2.5M16.5 17.5l-1 2.5" stroke="var(--accent)" strokeWidth="1.6" strokeLinecap="round" />
-        </>
-      )}
-      {g === "trovoada" && (
-        <>
-          <path {...s} d={NUVEM} />
-          <path d="M12.5 15.5l-2 3.5h3l-2 3.5" fill="none" stroke="var(--accent)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-        </>
-      )}
-      {g === "nevoeiro" && <path {...s} d="M4 9h16M6 13h12M4 17h16" />}
+    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" className="wx-icon">
+      <g {...s}>
+        {g === "limpo" && (
+          <>
+            <circle cx="12" cy="12" r="4" />
+            <Raios cx={12} cy={12} r1={6.6} r2={9} />
+          </>
+        )}
+
+        {g === "poucoNublado" && (
+          <>
+            <defs><Mascara id={id} d="M13 20a2.8 2.8 0 0 1-.3-5.58 4.2 4.2 0 0 1 7.9-.7A3.1 3.1 0 0 1 20.3 20H13Z" /></defs>
+            <g mask={`url(#${id})`}>
+              <circle cx="10" cy="10" r="3.8" />
+              <Raios cx={10} cy={10} r1={6.2} r2={8.4} />
+            </g>
+            <path d="M13 20a2.8 2.8 0 0 1-.3-5.58 4.2 4.2 0 0 1 7.9-.7A3.1 3.1 0 0 1 20.3 20H13Z" />
+          </>
+        )}
+
+        {g === "parcial" && (
+          <>
+            <defs><Mascara id={id} d={NUVEM} /></defs>
+            <g mask={`url(#${id})`}>
+              <circle cx="8.5" cy="8.5" r="3.3" />
+              <Raios cx={8.5} cy={8.5} r1={5.5} r2={7.5} de={90} ate={315} />
+            </g>
+            <path d={NUVEM} />
+          </>
+        )}
+
+        {g === "nuvensAltas" && (
+          <>
+            <circle cx="12" cy="14.5" r="3.6" />
+            <Raios cx={12} cy={14.5} r1={6} r2={8} de={0} ate={180} />
+            <path d="M3.5 7.5c2.5-1.6 5 1.6 7.5 0s5-1.6 7.5 0M7 4c2-1.2 4 1.2 6 0s3.5-1 4.5-.3" />
+          </>
+        )}
+
+        {g === "nublado" && (
+          <>
+            <defs><Mascara id={id} d={NUVEM} transform="translate(-1 3.4) scale(.85)" /></defs>
+            <path d={NUVEM} transform="translate(9 0.6) scale(.6)" mask={`url(#${id})`} />
+            <path d={NUVEM} transform="translate(-1 3.4) scale(.85)" />
+          </>
+        )}
+
+        {g === "convectiva" && (
+          <>
+            <path d="M6.8 20a4 4 0 0 1-.9-7.9 4.2 4.2 0 0 1 2.6-5.3 4.2 4.2 0 0 1 7.6-.6 4 4 0 0 1 1.6 5.6A4.2 4.2 0 0 1 17.4 20H6.8Z" />
+          </>
+        )}
+
+        {g === "chuvisco" && (
+          <>
+            <path d={NUVEM} transform={SOBE} />
+            <path d={pontos([[8, 19], [12, 19], [16, 19], [10, 22], [14, 22]])} strokeWidth={2} />
+          </>
+        )}
+
+        {g === "chuva" && (
+          <>
+            <path d={NUVEM} transform={SOBE} />
+            <path d="M8.5 18.5l-1 3M12.5 18.5l-1 3M16.5 18.5l-1 3" />
+          </>
+        )}
+
+        {g === "chuvaForte" && (
+          <>
+            <path d={NUVEM} transform={SOBE} />
+            <path d="M7.5 18l-1.5 4M11 18l-1.5 4M14.5 18l-1.5 4M18 18l-1.5 4" />
+          </>
+        )}
+
+        {g === "trovoada" && (
+          <>
+            <path d={NUVEM} transform={SOBE} />
+            <path d="M13 16.5l-2.5 3.5h3l-2.5 3.5" />
+          </>
+        )}
+
+        {g === "trovoadaChuva" && (
+          <>
+            <path d={NUVEM} transform={SOBE} />
+            <path d="M12.8 16.5l-2.3 3.3h2.8l-2.3 3.4" />
+            <path d="M7.5 18l-1 2.8M17.5 18l-1 2.8" />
+          </>
+        )}
+
+        {g === "neblina" && <path d="M4 8h10M17 8h3M4 12h3M10 12h10M4 16h12M19 16h1" />}
+
+        {g === "nevoeiro" && <path d="M4 6h16M4 10h16M4 14h16M4 18h16" />}
+
+        {g === "nuvensBaixas" && (
+          <>
+            <path d={NUVEM} transform="translate(0 -5)" />
+            <path d="M4 17.5h16M6 21h12" />
+          </>
+        )}
+
+        {g === "neve" && (
+          <>
+            <path d={NUVEM} transform={SOBE} />
+            <path d={floco(8, 19.5) + floco(12, 21) + floco(16, 19.5)} strokeWidth={1.2} />
+          </>
+        )}
+
+        {g === "chuvaNeve" && (
+          <>
+            <path d={NUVEM} transform={SOBE} />
+            <path d="M8.5 18.5l-1 3M16.5 18.5l-1 3" />
+            <path d={floco(12, 20.2)} strokeWidth={1.2} />
+          </>
+        )}
+
+        {g === "granizo" && (
+          <>
+            <path d={NUVEM} transform={SOBE} />
+            <circle cx="8" cy="19.5" r="1" />
+            <circle cx="12" cy="21.2" r="1" />
+            <circle cx="16" cy="19.5" r="1" />
+          </>
+        )}
+
+        {g === "geada" && (
+          <>
+            <path d={floco(12, 10, 6)} />
+            <path d="M9.6 4.8l2.4 1.4 2.4-1.4M9.6 15.2l2.4-1.4 2.4 1.4" />
+            <path d="M4 20h16" />
+          </>
+        )}
+
+        {g === "desconhecido" && (
+          <>
+            <circle cx="12" cy="12" r="8" strokeDasharray="2 3" />
+            <path d="M9 12h6" />
+          </>
+        )}
+      </g>
     </svg>
   );
 }

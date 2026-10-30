@@ -179,7 +179,7 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .mg { display: grid; gap: 14px; }
 .mg-panel { display: flex; align-items: center; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; padding: 14px 18px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
 .mg-panel-main { display: flex; align-items: center; gap: 14px; }
-.mg-panel-main svg { color: var(--accent); flex: none; }
+.mg-panel-main svg { color: var(--ink); flex: none; }
 .mg-panel-main > div { display: grid; }
 .mg-when { color: var(--muted); }
 .mg-temp { font-family: var(--display); font-size: 40px; font-weight: 500; line-height: 1.05; }
@@ -387,7 +387,7 @@ table.data .r { text-align: right; }
 
 /* Página de um dia */
 .dia-titulo { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 18px; }
-.dia-titulo svg { flex: none; color: var(--accent); }
+.dia-titulo svg { flex: none; color: var(--ink); }
 .dia-titulo h1 { margin: 0; }
 .dia-local { color: var(--muted); font-size: 17px; margin: 6px 0 0; }
 .dia-nav { display: flex; justify-content: space-between; margin-top: 24px; }
