@@ -69,11 +69,11 @@ export default async function DiaPage({ params }: Props) {
       <div className="page-head">
         <Link className="back mono" href={`/local/${local.slug}`}>← Voltar para {local.nome}</Link>
         <div className="dia-titulo">
-          <WeatherIcon tipo={dia.tipoTempo} size={64} />
           <div>
             <h1>{dataExtensa(data)}</h1>
             <p className="dia-local">{local.nome} · {TIPOS_TEMPO[dia.tipoTempo]}</p>
           </div>
+          <WeatherIcon tipo={dia.tipoTempo} size={112} />
         </div>
         <p>{resumoDia(dia, pontos, momentos)}</p>
         <nav className="dia-nav" aria-label="Outros dias">
