@@ -1,11 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Figtree, IBM_Plex_Mono } from "next/font/google";
+import { IBM_Plex_Mono, Open_Sans } from "next/font/google";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import "./globals.css";
 
-const display = Bricolage_Grotesque({ subsets: ["latin"], weight: ["300", "400", "500"], variable: "--font-display" });
-const body = Figtree({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-body" });
+const sans = Open_Sans({ subsets: ["latin"], weight: ["300", "400", "500", "600"], variable: "--font-sans" });
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
@@ -23,7 +22,7 @@ const temaInicial = `try{var t=localStorage.getItem("tema");if(t)document.docume
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-PT" className={`${display.variable} ${body.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="pt-PT" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: temaInicial }} />
       </head>

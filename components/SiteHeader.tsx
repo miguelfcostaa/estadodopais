@@ -32,8 +32,7 @@ export function SiteHeader() {
         </Link>
         <span className="status mono">
           <span className="dot" />
-          <span>atualizado</span>
-          <span className="when">30/10, 09:31</span>
+          <span>dados do IPMA</span>
         </span>
         <button
           className="icon-btn menu-btn"

@@ -1,17 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Hora } from "@/lib/data";
 import { TIPOS_TEMPO } from "@/lib/data";
-import { diaSemana, dataCurta, hora as horaDe, num } from "@/lib/format";
+import { diaSemana, dataCurta, hora, horaAtual, num } from "@/lib/format";
 
 const DIRS: Record<string, number> = { N: 0, NE: 45, E: 90, SE: 135, S: 180, SW: 225, W: 270, NW: 315 };
 
 // Geometria do desenho (viewBox 1000 x 300)
 const L = 40, R = 990, TOP = 34, T_BOT = 178, P_TOP = 196, P_BOT = 236, W_Y = 266;
 
-export function Meteogram({ horas, agora }: { horas: Hora[]; agora: string }) {
+export function Meteogram({ horas: todas, agora: agoraServidor, fuso }: { horas: Hora[]; agora: string; fuso: string }) {
   const [sel, setSel] = useState<number | null>(null);
+  const [agora, setAgora] = useState(agoraServidor);
+  useEffect(() => setAgora(horaAtual(fuso)), [fuso]);
+  const seguintes = todas.filter((h) => h.hora >= agora);
+  const horas = (seguintes.length >= 12 ? seguintes : todas.slice(-48)).slice(0, 48);
   const n = horas.length;
   const step = (R - L) / (n - 1);
   const temps = horas.map((h) => h.temp);
@@ -35,11 +39,13 @@ export function Meteogram({ horas, agora }: { horas: Hora[]; agora: string }) {
     const d = h.hora.slice(0, 10);
     porDia.set(d, [...(porDia.get(d) ?? []), i]);
   });
+  // Só marca máximos e mínimos de dias com horas suficientes para serem reais
   porDia.forEach((idx) => {
-    if (idx.length < 12) return;
     const max = idx.reduce((a, b) => (horas[b].temp > horas[a].temp ? b : a));
     const min = idx.reduce((a, b) => (horas[b].temp < horas[a].temp ? b : a));
-    extremos.push(max, min);
+    const temPico = hora(horas[max].hora) >= 11 && hora(horas[max].hora) <= 18;
+    if (idx.length >= 6 && temPico && max !== idx[0] && max !== idx[idx.length - 1]) extremos.push(max);
+    if (idx.length >= 20) extremos.push(min);
   });
 
   const h = sel !== null ? horas[sel] : null;
@@ -59,7 +65,7 @@ export function Meteogram({ horas, agora }: { horas: Hora[]; agora: string }) {
           <text x={L - 8} y={P_BOT - 2} textAnchor="end">0%</text>
 
           {horas.map((hh, i) => {
-            const hr = horaDe(hh.hora);
+            const hr = hora(hh.hora);
             return (
               <g key={hh.hora}>
                 {hr === 0 && (
@@ -100,7 +106,7 @@ export function Meteogram({ horas, agora }: { horas: Hora[]; agora: string }) {
           {iAgora >= 0 && (
             <g>
               <circle cx={pontos[iAgora][0]} cy={pontos[iAgora][1]} r="5" fill="var(--bg)" stroke="var(--accent)" strokeWidth="2" />
-              <text x={pontos[iAgora][0]} y={pontos[iAgora][1] + 22} textAnchor="middle" className="t-label">agora</text>
+              <text x={pontos[iAgora][0] + (iAgora === 0 ? 10 : 0)} y={pontos[iAgora][1] + 22} textAnchor={iAgora === 0 ? "start" : "middle"} className="t-label">agora</text>
             </g>
           )}
           {sel !== null && <line x1={x(sel)} x2={x(sel)} y1={TOP - 6} y2={W_Y + 26} stroke="var(--ink)" opacity={0.35} />}
@@ -111,7 +117,7 @@ export function Meteogram({ horas, agora }: { horas: Hora[]; agora: string }) {
       </div>
       <div className="readout mono num" aria-live="polite">
         {h
-          ? `${diaSemana(h.hora, true)} ${String(horaDe(h.hora)).padStart(2, "0")}h  ·  ${num(h.temp)}°  ·  ${TIPOS_TEMPO[h.tipoTempo] ?? ""}  ·  vento ${num(h.vento)} km/h ${h.dirVento}  ·  chuva ${h.probChuva === null ? "sem valor" : `${h.probChuva}%`}`
+          ? `${diaSemana(h.hora, true)} ${String(hora(h.hora)).padStart(2, "0")}h  ·  ${num(h.temp)}°  ·  ${TIPOS_TEMPO[h.tipoTempo] ?? ""}  ·  vento ${num(h.vento)} km/h ${h.dirVento}  ·  chuva ${h.probChuva === null ? "sem valor" : `${h.probChuva}%`}`
           : "Passe por cima do gráfico para ver cada hora."}
       </div>
       <div className="legend mono">

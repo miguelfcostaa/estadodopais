@@ -3,7 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ForecastView } from "@/components/ForecastView";
 import { LocalPicker } from "@/components/LocalPicker";
-import { getLocal, getPrevisao, LOCAIS } from "@/lib/data";
+import { getLocal, LOCAIS } from "@/lib/data";
+import { getAvisos, getPrevisao } from "@/lib/ipma";
+
+export const revalidate = 43200; // 12 horas
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -21,12 +24,12 @@ export default async function LocalPage({ params }: Props) {
   const { slug } = await params;
   const local = getLocal(slug);
   if (!local) notFound();
-  const p = getPrevisao(slug);
+  const [p, avisos] = await Promise.all([getPrevisao(slug), getAvisos()]);
 
   return (
     <div className="wrap">
       {p ? (
-        <ForecastView p={p} />
+        <ForecastView p={p} avisos={avisos} />
       ) : (
         <>
           <div className="page-head">
@@ -37,8 +40,8 @@ export default async function LocalPage({ params }: Props) {
             <h1>{local.nome}</h1>
           </div>
           <div className="empty">
-            <p>A previsão de {local.nome} ainda não está disponível. Volte a consultar mais tarde.</p>
-            <Link className="more" href="/local/lisboa">Ver Lisboa →</Link>
+            <p>O IPMA não tem previsão disponível para {local.nome} neste momento. Volte a consultar mais tarde.</p>
+            <Link className="more" href="/">Ver a previsão de Lisboa →</Link>
           </div>
         </>
       )}

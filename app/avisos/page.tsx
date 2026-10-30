@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import { WarningsGrid } from "@/components/WarningsGrid";
 import { WarningsLead } from "@/components/WarningsLead";
-import { AREAS_AVISO, AVISOS } from "@/lib/data";
+import { AREAS_AVISO } from "@/lib/data";
 import { intervalo, nomeNivel } from "@/lib/avisos";
+import { getAvisos } from "@/lib/ipma";
 
 export const metadata: Metadata = { title: "Avisos" };
+export const revalidate = 43200; // 12 horas
 
-export default function AvisosPage() {
-  const ativos = AVISOS.filter((a) => a.nivel !== "green");
+export default async function AvisosPage() {
+  const avisos = await getAvisos();
   return (
     <div className="wrap">
       <div className="page-head">
@@ -17,22 +19,29 @@ export default function AvisosPage() {
       </div>
       <section className="section" aria-labelledby="h-mapa">
         <div className="sec-head"><h2 id="h-mapa">Agora</h2></div>
-        <WarningsLead />
-        <WarningsGrid />
+        <WarningsLead avisos={avisos} />
+        <WarningsGrid avisos={avisos} />
       </section>
       <section className="section" aria-labelledby="h-det">
-        <div className="sec-head"><h2 id="h-det">Em detalhe</h2><span className="label">{ativos.length} avisos ativos</span></div>
-        <div className="warn-list">
-          {ativos.map((a, i) => (
-            <div key={i} className={`warn-item ${a.nivel}`}>
-              <span className="label">
-                {AREAS_AVISO[a.idAreaAviso].regiao} · {AREAS_AVISO[a.idAreaAviso].nome} · {a.tipo} · {nomeNivel(a.nivel)}
-              </span>
-              <p>{a.texto}</p>
-              <p className="mono">{intervalo(a)}</p>
-            </div>
-          ))}
+        <div className="sec-head">
+          <h2 id="h-det">Em detalhe</h2>
+          <span className="label">{avisos.length === 1 ? "1 aviso ativo" : `${avisos.length} avisos ativos`}</span>
         </div>
+        {avisos.length === 0 ? (
+          <p className="summary">Não há avisos amarelos, laranja ou vermelhos neste momento.</p>
+        ) : (
+          <div className="warn-list">
+            {avisos.map((a, i) => (
+              <div key={i} className={`warn-item ${a.nivel}`}>
+                <span className="label">
+                  {AREAS_AVISO[a.idAreaAviso]?.regiao} · {AREAS_AVISO[a.idAreaAviso]?.nome ?? a.idAreaAviso} · {a.tipo} · {nomeNivel(a.nivel)}
+                </span>
+                {a.texto && <p>{a.texto}</p>}
+                <p className="mono">{intervalo(a)}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );
