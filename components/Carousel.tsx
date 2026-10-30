@@ -31,7 +31,7 @@ export function Carousel({ children, label, inicio }: { children: React.ReactNod
 
   function mover(sentido: 1 | -1) {
     const f = faixa.current;
-    if (f) f.scrollBy({ left: sentido * f.clientWidth * 0.85, behavior: "smooth" });
+    if (f) f.scrollBy({ left: sentido * f.clientWidth, behavior: "smooth" });
   }
 
   return (
