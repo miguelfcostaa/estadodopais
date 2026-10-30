@@ -175,33 +175,45 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .more { display: inline-flex; gap: 8px; align-items: center; color: var(--accent); text-decoration: none; font-weight: 500; }
 .more:hover { text-decoration: underline; text-underline-offset: 3px; }
 
-/* Meteograma */
-.chart-scroll { overflow-x: auto; margin-inline: -4px; padding-inline: 4px; }
-.meteo { display: block; width: 100%; height: auto; }
-.meteo text { font-family: var(--mono); font-size: 11px; fill: var(--muted); }
-.meteo .t-label { fill: var(--ink); font-size: 11.5px; }
-.meteo .day { fill: var(--ink); font-weight: 500; }
-.meteo .hit { fill: transparent; cursor: crosshair; }
-.legend { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 14px; color: var(--muted); }
-.legend span { display: inline-flex; align-items: center; gap: 8px; }
-.sw { width: 18px; height: 2px; background: var(--accent); display: inline-block; }
-.sw.rain { height: 9px; width: 9px; background: var(--rain); }
-.readout { color: var(--muted); margin: 10px 0 0; }
-.meteo-wrap { position: relative; min-width: 760px; }
-.meteo-tip {
-  position: absolute; top: 0; transform: translate(-50%, -6px); pointer-events: none; z-index: 2;
-  display: grid; gap: 2px; min-width: 170px; padding: 10px 14px; border-radius: 6px;
-  background: var(--surface); border: 1px solid var(--accent); box-shadow: 0 12px 30px rgba(0, 0, 0, .35);
-}
-.meteo-tip.left { transform: translate(-12%, -6px); }
-.meteo-tip.right { transform: translate(-88%, -6px); }
-.tip-when { color: var(--muted); }
-.tip-temp { font-family: var(--display); font-size: 32px; font-weight: 500; line-height: 1.1; color: var(--ink); }
-.tip-desc { font-size: 14.5px; color: var(--ink); }
-.tip-meta { display: grid; gap: 1px; margin-top: 4px; font-size: 13.5px; color: var(--muted); }
-@media (prefers-reduced-motion: no-preference) {
-  .t-line { stroke-dasharray: 2000; stroke-dashoffset: 0; animation: draw 1.4s ease-out both; }
-  @keyframes draw { from { stroke-dashoffset: 2000; } }
+/* Gráfico hora a hora */
+.mg { display: grid; gap: 14px; }
+.mg-panel { display: flex; align-items: center; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; padding: 14px 18px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+.mg-panel-main { display: flex; align-items: center; gap: 14px; }
+.mg-panel-main svg { color: var(--accent); flex: none; }
+.mg-panel-main > div { display: grid; }
+.mg-when { color: var(--muted); }
+.mg-temp { font-family: var(--display); font-size: 40px; font-weight: 500; line-height: 1.05; }
+.mg-panel-facts { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 0; }
+.mg-panel-facts div { display: grid; gap: 2px; }
+.mg-panel-facts dd { margin: 0; font-size: 16px; font-weight: 500; }
+.mg-scroll { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; }
+.mg-svg { display: block; font-variant-numeric: tabular-nums; }
+.mg-svg text { font-family: var(--body); fill: var(--muted); }
+.mg-day { font-family: var(--mono) !important; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; fill: var(--accent) !important; }
+.mg-hour { font-family: var(--mono) !important; font-size: 12px; }
+.mg-hour.now { fill: var(--accent) !important; font-weight: 600; }
+.mg-icon { color: var(--ink); overflow: visible; }
+.mg-now { fill: color-mix(in srgb, var(--accent) 8%, transparent); }
+.mg-sel { fill: color-mix(in srgb, var(--accent) 14%, transparent); }
+.mg-rule { stroke: var(--line); }
+.mg-daysep { stroke: var(--faint); stroke-dasharray: 3 4; }
+.mg-line { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; }
+.mg-dot { fill: var(--accent); }
+.mg-dot.now { fill: var(--bg); stroke: var(--accent); stroke-width: 2.5; }
+.mg-tlabel { font-size: 13px; fill: var(--ink) !important; font-weight: 500; }
+.mg-tlabel.strong { font-size: 14px; font-weight: 700; }
+.mg-rain { fill: var(--accent); opacity: .75; }
+.mg-rain-label { font-size: 11px; fill: var(--accent) !important; font-weight: 600; }
+.mg-norain { font-family: var(--mono) !important; font-size: 12px; fill: var(--faint) !important; }
+.mg-arrow { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.mg-wind { font-size: 12px; }
+.mg-hit { fill: transparent; cursor: pointer; }
+.mg-hint { color: var(--faint); margin: 0; }
+@media (max-width: 760px) {
+  .mg-panel { padding: 12px 14px; }
+  .mg-temp { font-size: 34px; }
+  .mg-panel-facts { gap: 8px 18px; }
+  .mg-panel-facts dd { font-size: 14.5px; }
 }
 
 /* Próximos dias: colunas clicáveis */
@@ -468,11 +480,6 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
   table.data td:last-child, table.data th:last-child { padding-right: 0; }
 }
 @media (max-width: 760px) {
-  /* gráfico: maior e deslizável na horizontal */
-  .meteo-wrap { min-width: 720px; }
-  .meteo text { font-size: 16px; }
-  .meteo .t-label { font-size: 16px; }
-  .legend { flex-direction: column; gap: 6px; }
   /* resumo do dia: dois por linha */
   .facts-wide { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; }
   .facts-wide dd { font-size: 30px; }

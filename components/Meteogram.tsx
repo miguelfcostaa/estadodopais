@@ -1,143 +1,210 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Hora } from "@/lib/data";
 import { TIPOS_TEMPO } from "@/lib/data";
-import { diaSemana, dataCurta, hora, horaAtual, num } from "@/lib/format";
+import { dataCurta, diaSemana, hora, horaAtual, num } from "@/lib/format";
+import { WeatherIcon } from "./WeatherIcon";
 
 const DIRS: Record<string, number> = { N: 0, NE: 45, E: 90, SE: 135, S: 180, SW: 225, W: 270, NW: 315 };
 
-// Geometria do desenho (viewBox 1000 x 300)
-const L = 40, R = 990, TOP = 34, T_BOT = 178, P_TOP = 196, P_BOT = 236, W_Y = 266;
+// Faixas do gráfico (em píxeis reais, sem escalar como uma imagem)
+const Y_DIA = 14;
+const Y_HORA = 36;
+const Y_ICONE = 48;
+const TAM_ICONE = 26;
+const T_TOPO = 108; // topo da curva (deixa espaço para os rótulos)
+const T_BASE = 196;
+const C_TOPO = 214; // faixa da chuva
+const C_BASE = 262;
+const Y_VENTO = 284;
+const ALTURA = 312;
+
+// Curva suave que não inventa máximos nem mínimos entre pontos (Fritsch-Carlson)
+function curva(pts: [number, number][]): string {
+  const n = pts.length;
+  if (n < 2) return "";
+  const m: number[] = [];
+  for (let i = 0; i < n - 1; i++) m.push((pts[i + 1][1] - pts[i][1]) / (pts[i + 1][0] - pts[i][0]));
+  const t: number[] = [m[0]];
+  for (let i = 1; i < n - 1; i++) t.push(m[i - 1] * m[i] <= 0 ? 0 : (m[i - 1] + m[i]) / 2);
+  t.push(m[n - 2]);
+  for (let i = 0; i < n - 1; i++) {
+    if (m[i] === 0) { t[i] = 0; t[i + 1] = 0; continue; }
+    const a = t[i] / m[i], b = t[i + 1] / m[i], s = a * a + b * b;
+    if (s > 9) { const k = 3 / Math.sqrt(s); t[i] = k * a * m[i]; t[i + 1] = k * b * m[i]; }
+  }
+  let d = `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
+  for (let i = 0; i < n - 1; i++) {
+    const dx = (pts[i + 1][0] - pts[i][0]) / 3;
+    d += ` C${(pts[i][0] + dx).toFixed(1)} ${(pts[i][1] + t[i] * dx).toFixed(1)} ${(pts[i + 1][0] - dx).toFixed(1)} ${(pts[i + 1][1] - t[i + 1] * dx).toFixed(1)} ${pts[i + 1][0].toFixed(1)} ${pts[i + 1][1].toFixed(1)}`;
+  }
+  return d;
+}
 
 export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeAgora = true }: { horas: Hora[]; agora: string; fuso: string; aPartirDeAgora?: boolean }) {
-  const [sel, setSel] = useState<number | null>(null);
+  const caixa = useRef<HTMLDivElement>(null);
+  const faixa = useRef<HTMLDivElement>(null);
+  const [largura, setLargura] = useState(1000);
   const [agora, setAgora] = useState(agoraServidor);
+  const [sel, setSel] = useState<number | null>(null);
+
   useEffect(() => setAgora(horaAtual(fuso)), [fuso]);
+  useEffect(() => {
+    const el = caixa.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setLargura(el.clientWidth));
+    ro.observe(el);
+    setLargura(el.clientWidth);
+    return () => ro.disconnect();
+  }, []);
+
   const seguintes = todas.filter((h) => h.hora >= agora);
   const horas = aPartirDeAgora ? (seguintes.length >= 12 ? seguintes : todas.slice(-48)).slice(0, 48) : todas;
   const n = horas.length;
-  const step = (R - L) / (n - 1);
-  const temps = horas.map((h) => h.temp);
-  const tMin = Math.floor(Math.min(...temps) / 2) * 2 - 1;
-  const tMax = Math.ceil(Math.max(...temps) / 2) * 2 + 1;
-  const x = (i: number) => L + i * step;
-  const y = (t: number) => T_BOT - ((t - tMin) / (tMax - tMin)) * (T_BOT - TOP);
-
-  const grelha: number[] = [];
-  for (let t = Math.ceil(tMin / 4) * 4; t <= tMax; t += 4) grelha.push(t);
-
-  const pontos = horas.map((h, i) => [x(i), y(h.temp)] as const);
-  const linha = pontos.map(([px, py], i) => `${i ? "L" : "M"}${px.toFixed(1)} ${py.toFixed(1)}`).join(" ");
   const iAgora = horas.findIndex((h) => h.hora === agora);
+
+  // Largura de cada coluna: ocupa o espaço todo, com um mínimo legível (o resto desliza)
+  const minimo = largura < 600 ? 46 : 24;
+  const col = Math.max(minimo, largura / Math.max(n, 1));
+  const W = Math.round(col * n);
+  const cx = (i: number) => col * i + col / 2;
+  const passo = (px: number) => Math.max(1, Math.ceil(px / col));
+  const pRotulo = passo(36);
+  const pIcone = passo(32);
+  // Mostra um rótulo de p em p horas; a hora atual tem sempre o seu e afasta os vizinhos
+  const mostra = (i: number, p: number) =>
+    i === iAgora || ((p === 1 || hora(horas[i].hora) % p === 0) && (iAgora < 0 || Math.abs(i - iAgora) >= p));
+  // Alinhamento junto às margens, para os rótulos não ficarem cortados
+  const ancora = (i: number): "start" | "middle" | "end" => (cx(i) < 18 ? "start" : cx(i) > W - 18 ? "end" : "middle");
+  const xr = (i: number) => (ancora(i) === "start" ? col * i + 2 : ancora(i) === "end" ? col * (i + 1) - 2 : cx(i));
+
+  // No telemóvel, abrir já na hora atual
+  useEffect(() => {
+    const f = faixa.current;
+    if (f && iAgora > 0) f.scrollLeft = Math.max(0, cx(iAgora) - 60);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [iAgora, col]);
+
+  if (n === 0) return null;
+
+  const temps = horas.map((h) => h.temp);
+  const tMin = Math.min(...temps), tMax = Math.max(...temps);
+  const amplitude = Math.max(tMax - tMin, 4);
+  const y = (t: number) => T_BASE - ((t - tMin) / amplitude) * (T_BASE - T_TOPO);
+  const pts = horas.map((h, i) => [cx(i), y(h.temp)] as [number, number]);
+  const linha = curva(pts);
+  const iMax = temps.indexOf(tMax), iMin = temps.indexOf(tMin);
+  // Rótulo de temperatura: os extremos têm sempre; os outros saem se ficarem colados a um extremo
+  const rotuloTemp = (i: number) =>
+    i === iMax || i === iMin || (mostra(i, pRotulo) && Math.abs(i - iMax) >= pRotulo && Math.abs(i - iMin) >= pRotulo) || i === iAgora;
   const semChuva = horas.every((h) => !h.probChuva);
 
-  // Máximos e mínimos locais de cada dia
-  const extremos: number[] = [];
-  const porDia = new Map<string, number[]>();
-  horas.forEach((h, i) => {
-    const d = h.hora.slice(0, 10);
-    porDia.set(d, [...(porDia.get(d) ?? []), i]);
-  });
-  // Só marca máximos e mínimos de dias com horas suficientes para serem reais
-  porDia.forEach((idx) => {
-    const max = idx.reduce((a, b) => (horas[b].temp > horas[a].temp ? b : a));
-    const min = idx.reduce((a, b) => (horas[b].temp < horas[a].temp ? b : a));
-    const temPico = hora(horas[max].hora) >= 11 && hora(horas[max].hora) <= 18;
-    if (idx.length >= 6 && temPico && max !== idx[0] && max !== idx[idx.length - 1]) extremos.push(max);
-    if (idx.length >= 20) extremos.push(min);
-  });
-
-  const h = sel !== null ? horas[sel] : null;
+  const escolhido = sel ?? (iAgora >= 0 ? iAgora : 0);
+  const h = horas[escolhido];
+  const quando = escolhido === iAgora ? `Agora · ${String(hora(h.hora)).padStart(2, "0")}h` : `${diaSemana(h.hora, true)} ${dataCurta(h.hora)} · ${String(hora(h.hora)).padStart(2, "0")}h`;
 
   return (
-    <>
-      <div className="chart-scroll">
-        <div className="meteo-wrap">
-        <svg className="meteo" viewBox="0 0 1000 300" role="img" aria-label="Meteograma: temperatura, probabilidade de chuva e vento hora a hora" onMouseLeave={() => setSel(null)}>
-          {grelha.map((t) => (
-            <g key={t}>
-              <line x1={L} x2={R} y1={y(t)} y2={y(t)} stroke="var(--line)" />
-              <text x={L - 8} y={y(t) + 4} textAnchor="end">{t}°</text>
-            </g>
-          ))}
-          <line x1={L} x2={R} y1={P_BOT} y2={P_BOT} stroke="var(--line)" />
-          <text x={L - 8} y={P_TOP + 8} textAnchor="end">100</text>
-          <text x={L - 8} y={P_BOT - 2} textAnchor="end">0%</text>
+    <div className="mg" ref={caixa}>
+      <div className="mg-panel" aria-live="polite">
+        <div className="mg-panel-main">
+          <WeatherIcon tipo={h.tipoTempo} size={44} />
+          <div>
+            <span className="mg-when mono">{quando}</span>
+            <span className="mg-temp num">{num(h.temp)}°</span>
+          </div>
+        </div>
+        <dl className="mg-panel-facts">
+          <div><dt className="label">Tempo</dt><dd>{TIPOS_TEMPO[h.tipoTempo] ?? "—"}</dd></div>
+          <div><dt className="label">Chuva</dt><dd className="num">{h.probChuva === null ? "—" : `${Math.round(h.probChuva)}%`}</dd></div>
+          <div><dt className="label">Vento</dt><dd className="num">{Math.round(h.vento)} km/h {h.dirVento}</dd></div>
+          {h.humidade !== null && <div><dt className="label">Humidade</dt><dd className="num">{Math.round(h.humidade)}%</dd></div>}
+        </dl>
+      </div>
+
+      <div className="mg-scroll" ref={faixa}>
+        <svg className="mg-svg" width={W} height={ALTURA} role="img" aria-label="Gráfico hora a hora: temperatura, chuva e vento" onMouseLeave={() => setSel(null)}>
+          <defs>
+            <linearGradient id="mg-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.28" />
+              <stop offset="100%" stopColor="var(--accent)" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+
+          {/* coluna escolhida e coluna de agora */}
+          {iAgora >= 0 && <rect x={col * iAgora} y={0} width={col} height={ALTURA} className="mg-now" />}
+          {sel !== null && <rect x={col * sel} y={0} width={col} height={ALTURA} className="mg-sel" />}
+
+          {/* faixas de fundo */}
+          <line x1={0} x2={W} y1={T_BASE + 6} y2={T_BASE + 6} className="mg-rule" />
+          <line x1={0} x2={W} y1={C_BASE} y2={C_BASE} className="mg-rule" />
 
           {horas.map((hh, i) => {
-            const hr = hora(hh.hora);
+            const novoDia = i === 0 || hh.hora.slice(0, 10) !== horas[i - 1].hora.slice(0, 10);
+            const x = cx(i);
             return (
               <g key={hh.hora}>
-                {hr === 0 && (
+                {novoDia && (
                   <>
-                    <line x1={x(i)} x2={x(i)} y1={10} y2={P_BOT} stroke="var(--faint)" strokeDasharray="2 4" />
-                    <text x={x(i) + 6} y={18} className="day">{`${diaSemana(hh.hora, true)} ${dataCurta(hh.hora)}`}</text>
+                    {i > 0 && <line x1={col * i} x2={col * i} y1={0} y2={ALTURA} className="mg-daysep" />}
+                    <text x={col * i + 6} y={Y_DIA} className="mg-day">
+                      {hh.hora.slice(0, 10) === agora.slice(0, 10) ? "Hoje" : `${diaSemana(hh.hora, true)} ${dataCurta(hh.hora)}`}
+                    </text>
                   </>
                 )}
-                {hr % 3 === 0 && (
-                  <>
-                    <text x={x(i)} y={P_BOT + 16} textAnchor="middle">{String(hr).padStart(2, "0")}h</text>
-                    <g transform={`translate(${x(i)},${W_Y}) rotate(${((DIRS[hh.dirVento] ?? 0) + 180) % 360})`}>
-                      <path d="M0 -7 L0 7 M-3.5 3 L0 7 L3.5 3" fill="none" stroke="var(--muted)" strokeWidth="1.3" strokeLinecap="round" />
+                {mostra(i, pRotulo) && (
+                  <text x={xr(i)} y={Y_HORA} textAnchor={ancora(i)} className={i === iAgora ? "mg-hour now" : "mg-hour"}>
+                    {i === iAgora ? "Agora" : `${String(hora(hh.hora)).padStart(2, "0")}h`}
+                  </text>
+                )}
+                {mostra(i, pIcone) && (
+                  <svg x={Math.min(Math.max(x - TAM_ICONE / 2, 0), W - TAM_ICONE)} y={Y_ICONE} width={TAM_ICONE} height={TAM_ICONE} className="mg-icon">
+                    <WeatherIcon tipo={hh.tipoTempo} size={TAM_ICONE} />
+                  </svg>
+                )}
+                {/* chuva */}
+                {hh.probChuva !== null && hh.probChuva > 0 && (
+                  <rect x={x - Math.min(col * 0.32, 9)} width={Math.min(col * 0.64, 18)} y={C_BASE - (hh.probChuva / 100) * (C_BASE - C_TOPO)} height={(hh.probChuva / 100) * (C_BASE - C_TOPO)} rx={2} className="mg-rain" />
+                )}
+                {hh.probChuva !== null && hh.probChuva >= 10 && mostra(i, pRotulo) && (
+                  <text x={x} y={C_BASE - (hh.probChuva / 100) * (C_BASE - C_TOPO) - 4} textAnchor="middle" className="mg-rain-label">{Math.round(hh.probChuva)}%</text>
+                )}
+                {/* vento */}
+                {mostra(i, pRotulo) && (
+                  <g>
+                    <g transform={`translate(${x},${Y_VENTO - 6}) rotate(${((DIRS[hh.dirVento] ?? 0) + 180) % 360})`}>
+                      <path d="M0 -6 L0 6 M-3.5 2.5 L0 6 L3.5 2.5" className="mg-arrow" />
                     </g>
-                    <text x={x(i)} y={W_Y + 22} textAnchor="middle">{Math.round(hh.vento)}</text>
-                  </>
-                )}
-                {!!hh.probChuva && (
-                  <rect x={x(i) - step * 0.35} width={step * 0.7} y={P_BOT - (hh.probChuva / 100) * (P_BOT - P_TOP)} height={(hh.probChuva / 100) * (P_BOT - P_TOP)} fill="var(--rain)" />
+                    <text x={xr(i)} y={Y_VENTO + 18} textAnchor={ancora(i)} className="mg-wind">{Math.round(hh.vento)}</text>
+                  </g>
                 )}
               </g>
             );
           })}
-          {semChuva && <text x={(L + R) / 2} y={P_BOT - 12} textAnchor="middle">sem chuva prevista</text>}
 
-          <path d={`${linha} L${R} ${T_BOT} L${L} ${T_BOT} Z`} fill="var(--accent)" opacity={0.1} />
-          <path className="t-line" d={linha} fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinejoin="round" />
-          {extremos.map((i) => {
-            const [px, py] = pontos[i];
-            const cima = horas[i].temp > (tMin + tMax) / 2;
-            return (
-              <g key={`e${i}`}>
-                <circle cx={px} cy={py} r="2.5" fill="var(--accent)" />
-                <text x={px} y={py + (cima ? -9 : 18)} textAnchor="middle" className="t-label">{num(horas[i].temp)}°</text>
+          {semChuva && <text x={Math.min(W, largura) / 2} y={C_BASE - 12} textAnchor="middle" className="mg-norain">sem chuva prevista</text>}
+
+          {/* temperatura */}
+          <path d={`${linha} L${pts[n - 1][0]} ${T_BASE + 6} L${pts[0][0]} ${T_BASE + 6} Z`} fill="url(#mg-fill)" />
+          <path d={linha} className="mg-line" />
+          {horas.map((hh, i) =>
+            rotuloTemp(i) ? (
+              <g key={`t${hh.hora}`}>
+                <circle cx={pts[i][0]} cy={pts[i][1]} r={i === iAgora ? 4.5 : 2.5} className={i === iAgora ? "mg-dot now" : "mg-dot"} />
+                <text x={xr(i)} y={pts[i][1] - 10} textAnchor={ancora(i)} className={i === iMax || i === iMin ? "mg-tlabel strong" : "mg-tlabel"}>
+                  {Math.round(hh.temp)}°
+                </text>
               </g>
-            );
-          })}
-          {iAgora >= 0 && (
-            <g>
-              <circle cx={pontos[iAgora][0]} cy={pontos[iAgora][1]} r="5" fill="var(--bg)" stroke="var(--accent)" strokeWidth="2" />
-              <text x={pontos[iAgora][0] + (iAgora === 0 ? 10 : 0)} y={pontos[iAgora][1] + 22} textAnchor={iAgora === 0 ? "start" : "middle"} className="t-label">agora</text>
-            </g>
+            ) : null,
           )}
-          {sel !== null && <line x1={x(sel)} x2={x(sel)} y1={TOP - 6} y2={W_Y + 26} stroke="var(--ink)" opacity={0.35} />}
+
+          {/* zonas de toque, uma por coluna */}
           {horas.map((hh, i) => (
-            <rect key={`h${hh.hora}`} className="hit" x={x(i) - step / 2} y={0} width={step} height={300} onMouseEnter={() => setSel(i)} onTouchStart={() => setSel(i)} />
+            <rect key={`hit${hh.hora}`} x={col * i} y={0} width={col} height={ALTURA} className="mg-hit" onMouseEnter={() => setSel(i)} onClick={() => setSel(i)} />
           ))}
         </svg>
-        {h && sel !== null && (
-          <div
-            className={`meteo-tip${x(sel) < 160 ? " left" : x(sel) > 840 ? " right" : ""}`}
-            style={{ left: `${(x(sel) / 1000) * 100}%` }}
-            aria-live="polite"
-          >
-            <span className="tip-when mono">{diaSemana(h.hora, true)} · {String(hora(h.hora)).padStart(2, "0")}h</span>
-            <span className="tip-temp num">{num(h.temp)}°</span>
-            <span className="tip-desc">{TIPOS_TEMPO[h.tipoTempo] ?? ""}</span>
-            <span className="tip-meta num">
-              <span>Chuva {h.probChuva === null ? "—" : `${Math.round(h.probChuva)}%`}</span>
-              <span>Vento {Math.round(h.vento)} km/h {h.dirVento}</span>
-            </span>
-          </div>
-        )}
-        </div>
       </div>
-      <p className="readout mono">Passe por cima do gráfico, ou toque nele, para ver cada hora.</p>
-      <div className="legend mono">
-        <span><i className="sw" />temperatura</span>
-        <span><i className="sw rain" />probabilidade de chuva</span>
-        <span>→ direção do vento, em km/h</span>
-      </div>
-    </>
+      <p className="mg-hint mono">Passe o rato ou toque numa hora para ver os detalhes. Chuva em %, vento em km/h.</p>
+    </div>
   );
 }
