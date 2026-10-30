@@ -1,7 +1,7 @@
 // Ícones do tempo: só linhas, sem cor (herdam a cor do texto), traço de 1,5 numa grelha de 24 px.
 // Cada grupo de códigos do IPMA tem um desenho próprio.
 
-type Props = { tipo: number; size?: number };
+type Props = { tipo: number; size?: number; noite?: boolean };
 
 type Grupo =
   | "limpo" | "poucoNublado" | "parcial" | "nuvensAltas" | "nublado" | "convectiva"
@@ -32,6 +32,24 @@ function grupo(tipo: number): Grupo {
   }
 }
 
+// Lua em quarto crescente (grelha de 24 px)
+const LUA = "M20 14.6A8.2 8.2 0 1 1 9.4 4a6.6 6.6 0 0 0 10.6 10.6Z";
+
+// Crescente: círculo (cx, cy, r) menos o círculo (ix, iy, ir); a parte cheia fica do lado oposto ao corte
+function crescente(cx: number, cy: number, r: number, ix: number, iy: number, ir: number): string {
+  const dx = ix - cx, dy = iy - cy, d = Math.hypot(dx, dy);
+  const a = (r * r - ir * ir + d * d) / (2 * d);
+  const h = Math.sqrt(Math.max(r * r - a * a, 0));
+  const mx = cx + (a * dx) / d, my = cy + (a * dy) / d;
+  const p1 = [mx + (h * dy) / d, my - (h * dx) / d];
+  const p2 = [mx - (h * dy) / d, my + (h * dx) / d];
+  const f = (n: number) => n.toFixed(2);
+  return `M${f(p1[0])} ${f(p1[1])}A${r} ${r} 0 1 0 ${f(p2[0])} ${f(p2[1])}A${ir} ${ir} 0 0 1 ${f(p1[0])} ${f(p1[1])}Z`;
+}
+const LUA_POUCO = crescente(9, 9, 5.2, 12.2, 11.6, 4.4);
+const LUA_PARCIAL = crescente(8.2, 7.6, 4.6, 11, 9.8, 3.9);
+const LUA_ALTAS = crescente(12, 15, 4.6, 15, 12.6, 3.9);
+
 // Nuvem base (ocupa a parte de baixo da grelha)
 const NUVEM = "M7 19a4 4 0 0 1-.4-7.98 6 6 0 0 1 11.3-1A4.5 4.5 0 0 1 17.5 19H7Z";
 // Nuvem subida, para deixar espaço à precipitação por baixo
@@ -61,22 +79,54 @@ const pontos = (xs: [number, number][]) => xs.map(([x, y]) => `M${x} ${y}h.01`).
 const floco = (x: number, y: number, r = 1.3) =>
   `M${x} ${y - r}v${2 * r}M${x - r * 0.87} ${y - r / 2}l${r * 1.74} ${r}M${x - r * 0.87} ${y + r / 2}l${r * 1.74} ${-r}`;
 
-export function WeatherIcon({ tipo, size = 26 }: Props) {
+export function WeatherIcon({ tipo, size = 26, noite = false }: Props) {
   const g = grupo(tipo);
+  const comSol = g === "limpo" || g === "poucoNublado" || g === "parcial" || g === "nuvensAltas";
+  const lua = noite && comSol;
   const s = { fill: "none", stroke: "currentColor", strokeWidth: 1.5, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
-  const id = `wi-${g}`;
+  const id = `wi-${g}${lua ? "-n" : ""}`;
 
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" className="wx-icon">
       <g {...s}>
-        {g === "limpo" && (
+        {lua && g === "limpo" && (
+          <>
+            <path d={LUA} />
+            <path d="M17.5 3.5v2M16.5 4.5h2M20.5 8.5v1.4M19.8 9.2h1.4" strokeWidth={1.2} />
+          </>
+        )}
+
+        {lua && g === "poucoNublado" && (
+          <>
+            <defs><Mascara id={id} d="M13 20a2.8 2.8 0 0 1-.3-5.58 4.2 4.2 0 0 1 7.9-.7A3.1 3.1 0 0 1 20.3 20H13Z" /></defs>
+            <path d={LUA_POUCO} mask={`url(#${id})`} />
+            <path d="M13 20a2.8 2.8 0 0 1-.3-5.58 4.2 4.2 0 0 1 7.9-.7A3.1 3.1 0 0 1 20.3 20H13Z" />
+          </>
+        )}
+
+        {lua && g === "parcial" && (
+          <>
+            <defs><Mascara id={id} d={NUVEM} /></defs>
+            <path d={LUA_PARCIAL} mask={`url(#${id})`} />
+            <path d={NUVEM} />
+          </>
+        )}
+
+        {lua && g === "nuvensAltas" && (
+          <>
+            <path d={LUA_ALTAS} />
+            <path d="M3.5 7.5c2.5-1.6 5 1.6 7.5 0s5-1.6 7.5 0M7 4c2-1.2 4 1.2 6 0s3.5-1 4.5-.3" />
+          </>
+        )}
+
+        {!lua && g === "limpo" && (
           <>
             <circle cx="12" cy="12" r="4" />
             <Raios cx={12} cy={12} r1={6.6} r2={9} />
           </>
         )}
 
-        {g === "poucoNublado" && (
+        {!lua && g === "poucoNublado" && (
           <>
             <defs><Mascara id={id} d="M13 20a2.8 2.8 0 0 1-.3-5.58 4.2 4.2 0 0 1 7.9-.7A3.1 3.1 0 0 1 20.3 20H13Z" /></defs>
             <g mask={`url(#${id})`}>
@@ -87,7 +137,7 @@ export function WeatherIcon({ tipo, size = 26 }: Props) {
           </>
         )}
 
-        {g === "parcial" && (
+        {!lua && g === "parcial" && (
           <>
             <defs><Mascara id={id} d={NUVEM} /></defs>
             <g mask={`url(#${id})`}>
@@ -98,7 +148,7 @@ export function WeatherIcon({ tipo, size = 26 }: Props) {
           </>
         )}
 
-        {g === "nuvensAltas" && (
+        {!lua && g === "nuvensAltas" && (
           <>
             <circle cx="12" cy="14.5" r="3.6" />
             <Raios cx={12} cy={14.5} r1={6} r2={8} de={0} ate={180} />

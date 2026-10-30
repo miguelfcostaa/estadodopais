@@ -3,6 +3,7 @@
 
 import { getLocal, TIPOS_TEMPO, type Aviso, type Dia, type Hora, type Local, type NivelAviso } from "./data";
 import { diaSemana, hora, horaAtual, quandoDia } from "./format";
+import { criarNoite } from "./sol";
 
 const OPEN = "https://api.ipma.pt/open-data";
 const PUBLIC = "https://api.ipma.pt/public-data";
@@ -116,6 +117,7 @@ export async function getPrevisao(slug: string): Promise<Previsao | null> {
   const agora = horaAtual(fuso(local));
   const horarias = agregado.filter((a) => a.idPeriodo === 1);
   // Todas as horas disponíveis: o gráfico escolhe as 48 seguintes no navegador.
+  const eNoite = criarNoite(local.lat, local.lon, fuso(local));
   const ponto = (a: Agregado, passo: 1 | 3): Hora => ({
     hora: a.dataPrev.slice(0, 16),
     temp: n(a.tMed) ?? 0,
@@ -124,6 +126,7 @@ export async function getPrevisao(slug: string): Promise<Previsao | null> {
     dirVento: a.ddVento ?? "",
     tipoTempo: a.idTipoTempo ?? 0,
     humidade: n(a.hR),
+    noite: eNoite(a.dataPrev.slice(0, 16)),
     passo,
     sensacao: n(a.utci),
     onda: n(a.ondulacao),

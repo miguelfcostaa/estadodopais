@@ -34,7 +34,7 @@ export function HourlyTable({ horas: todas, agora: agoraServidor, fuso, aPartirD
               <span className="hour-day mono">{novoDia ? `${nomeDia(h.hora)} ${dataCurta(h.hora)}` : " "}</span>
               <span className="hour-time">{h.hora === agora ? "Agora" : `${String(hora(h.hora)).padStart(2, "0")}h`}</span>
               <span className="hour-icon" title={desc}>
-                <WeatherIcon tipo={h.tipoTempo} size={34} />
+                <WeatherIcon tipo={h.tipoTempo} size={34} noite={h.noite} />
                 <span className="sr-only">{desc}</span>
               </span>
               <span className="hour-temp num">{Math.round(h.temp)}°</span>

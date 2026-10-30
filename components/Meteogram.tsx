@@ -108,7 +108,7 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
     <div className="mg" ref={caixa}>
       <div className="mg-panel" aria-live="polite">
         <div className="mg-panel-main">
-          <WeatherIcon tipo={h.tipoTempo} size={44} />
+          <WeatherIcon tipo={h.tipoTempo} size={44} noite={h.noite} />
           <div>
             <span className="mg-when mono">{quando}</span>
             <span className="mg-temp num">{num(h.temp)}°</span>
@@ -159,7 +159,7 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
                 )}
                 {mostra(i, pIcone) && (
                   <svg x={Math.min(Math.max(x - TAM_ICONE / 2, 0), W - TAM_ICONE)} y={Y_ICONE} width={TAM_ICONE} height={TAM_ICONE} className="mg-icon">
-                    <WeatherIcon tipo={hh.tipoTempo} size={TAM_ICONE} />
+                    <WeatherIcon tipo={hh.tipoTempo} size={TAM_ICONE} noite={hh.noite} />
                   </svg>
                 )}
                 {/* chuva */}

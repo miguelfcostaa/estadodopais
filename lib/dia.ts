@@ -10,6 +10,7 @@ export type Momento = {
   inicio: number; // hora
   fim: number;
   tipoTempo: number;
+  noite: boolean;
   tMin: number;
   tMax: number;
   probChuva: number | null;
@@ -48,7 +49,8 @@ export function momentosDoDia(pontos: Hora[]): Momento[] {
     const chuva = intervalo(ps.map((p) => p.probChuva));
     const vento = ps.reduce((s, p) => s + p.vento, 0) / ps.length;
     const dir = ps.reduce((a, b) => (b.vento > a.vento ? b : a)).dirVento;
-    return [{ ...m, tipoTempo: tipoDominante(ps), tMin: t[0], tMax: t[1], probChuva: chuva ? chuva[1] : null, vento, dirVento: dir }];
+    const noite = ps.filter((p) => p.noite).length > ps.length / 2;
+    return [{ ...m, noite, tipoTempo: tipoDominante(ps), tMin: t[0], tMax: t[1], probChuva: chuva ? chuva[1] : null, vento, dirVento: dir }];
   });
 }
 

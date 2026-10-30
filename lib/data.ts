@@ -5,6 +5,8 @@ export type Local = {
   slug: string;
   globalIdLocal: number;
   idAreaAviso: string;
+  lat: number;
+  lon: number;
   regiao: "Continente" | "Madeira" | "Açores";
 };
 
@@ -16,6 +18,7 @@ export type Hora = {
   dirVento: string;
   tipoTempo: number;
   humidade: number | null;
+  noite?: boolean; // entre o pôr e o nascer do sol
   passo?: 1 | 3; // horas entre este valor e o seguinte
   sensacao?: number | null;
   onda?: number | null;
@@ -57,24 +60,49 @@ export function slugify(nome: string): string {
     .replace(/(^-|-$)/g, "");
 }
 
-// Lista real de distrits-islands.json
-const LOCAIS_RAW: [string, number, string][] = [
-  ["Aveiro", 1010500, "AVR"], ["Beja", 1020500, "BJA"], ["Braga", 1030300, "BRG"],
-  ["Guimarães", 1030800, "BRG"], ["Bragança", 1040200, "BGC"], ["Castelo Branco", 1050200, "CBO"],
-  ["Coimbra", 1060300, "CBR"], ["Évora", 1070500, "EVR"], ["Faro", 1080500, "FAR"],
-  ["Sagres", 1081505, "FAR"], ["Portimão", 1081100, "FAR"], ["Loulé", 1080800, "FAR"],
-  ["Guarda", 1090700, "GDA"], ["Penhas Douradas", 1090821, "GDA"], ["Leiria", 1100900, "LRA"],
-  ["Lisboa", 1110600, "LSB"], ["Portalegre", 1121400, "PTG"], ["Porto", 1131200, "PTO"],
-  ["Santarém", 1141600, "STM"], ["Setúbal", 1151200, "STB"], ["Sines", 1151300, "STB"],
-  ["Viana do Castelo", 1160900, "VCT"], ["Vila Real", 1171400, "VRL"], ["Viseu", 1182300, "VIS"],
-  ["Funchal", 2310300, "MCS"], ["Porto Santo", 2320100, "MPS"], ["Vila do Porto", 3410100, "AOR"],
-  ["Ponta Delgada", 3420300, "AOR"], ["Angra do Heroísmo", 3430100, "ACE"],
-  ["Santa Cruz da Graciosa", 3440100, "ACE"], ["Velas", 3450200, "ACE"], ["Madalena", 3460200, "ACE"],
-  ["Horta", 3470100, "ACE"], ["Santa Cruz das Flores", 3480200, "AOC"], ["Vila do Corvo", 3490100, "AOC"],
+// Lista de distrits-islands.json: nome, globalIdLocal, área de aviso, latitude, longitude
+const LOCAIS_RAW: [string, number, string, number, number][] = [
+  ["Aveiro", 1010500, "AVR", 40.6413, -8.6535],
+  ["Beja", 1020500, "BJA", 38.02, -7.87],
+  ["Braga", 1030300, "BRG", 41.5475, -8.4227],
+  ["Guimarães", 1030800, "BRG", 41.4434, -8.2938],
+  ["Bragança", 1040200, "BGC", 41.8076, -6.7606],
+  ["Castelo Branco", 1050200, "CBO", 39.8217, -7.4957],
+  ["Coimbra", 1060300, "CBR", 40.2081, -8.4194],
+  ["Évora", 1070500, "EVR", 38.5701, -7.9104],
+  ["Faro", 1080500, "FAR", 37.0146, -7.9331],
+  ["Sagres", 1081505, "FAR", 37.0168, -8.9403],
+  ["Portimão", 1081100, "FAR", 37.15, -8.52],
+  ["Loulé", 1080800, "FAR", 37.1397, -8.0202],
+  ["Guarda", 1090700, "GDA", 40.5379, -7.2647],
+  ["Penhas Douradas", 1090821, "GDA", 40.4075, -7.5665],
+  ["Leiria", 1100900, "LRA", 39.7473, -8.8069],
+  ["Lisboa", 1110600, "LSB", 38.766, -9.1286],
+  ["Portalegre", 1121400, "PTG", 39.29, -7.42],
+  ["Porto", 1131200, "PTO", 41.158, -8.6294],
+  ["Santarém", 1141600, "STM", 39.2, -8.74],
+  ["Setúbal", 1151200, "STB", 38.5246, -8.8856],
+  ["Sines", 1151300, "STB", 37.956, -8.8643],
+  ["Viana do Castelo", 1160900, "VCT", 41.6952, -8.8365],
+  ["Vila Real", 1171400, "VRL", 41.3053, -7.744],
+  ["Viseu", 1182300, "VIS", 40.6585, -7.912],
+  ["Funchal", 2310300, "MCS", 32.6485, -16.9084],
+  ["Porto Santo", 2320100, "MPS", 33.07, -16.34],
+  ["Vila do Porto", 3410100, "AOR", 36.9563, -25.1409],
+  ["Ponta Delgada", 3420300, "AOR", 37.7415, -25.6677],
+  ["Angra do Heroísmo", 3430100, "ACE", 38.67, -27.22],
+  ["Santa Cruz da Graciosa", 3440100, "ACE", 39.08, -28.0],
+  ["Velas", 3450200, "ACE", 38.6842, -28.2133],
+  ["Madalena", 3460200, "ACE", 38.5325, -28.5237],
+  ["Horta", 3470100, "ACE", 38.5363, -28.6315],
+  ["Santa Cruz das Flores", 3480200, "AOC", 39.45, -31.13],
+  ["Vila do Corvo", 3490100, "AOC", 39.67, -31.12],
 ];
 
-export const LOCAIS: Local[] = LOCAIS_RAW.map(([nome, globalIdLocal, idAreaAviso]) => ({
+export const LOCAIS: Local[] = LOCAIS_RAW.map(([nome, globalIdLocal, idAreaAviso, lat, lon]) => ({
   nome,
+  lat,
+  lon,
   slug: slugify(nome),
   globalIdLocal,
   idAreaAviso,
