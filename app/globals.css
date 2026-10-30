@@ -161,10 +161,10 @@ h1 em { font-style: normal; color: var(--accent); }
 .source { color: var(--faint); margin: 16px 0 0; }
 
 .facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; border-top: 1px solid var(--line); margin: 0; }
-.facts div { padding: 14px 0; border-bottom: 1px solid var(--line); display: grid; gap: 4px; align-content: center; }
+.facts div { padding: 16px 0; border-bottom: 1px solid var(--line); display: grid; gap: 8px; align-content: center; }
 .facts div:nth-child(odd) { padding-right: 16px; }
-.facts dd { margin: 0; font-family: var(--display); font-size: 28px; font-weight: 500; line-height: 1.15; }
-.facts dd small { font-family: var(--body); font-size: 13px; color: var(--muted); margin-left: 4px; }
+.facts dd { margin: 0; font-family: var(--display); font-size: clamp(32px, 3.2vw, 44px); font-weight: 500; line-height: 1.1; }
+.facts dd small { font-family: var(--body); font-size: 16px; color: var(--muted); margin-left: 6px; }
 
 .section { padding-block: 44px; border-top: 1px solid var(--line); }
 .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
@@ -327,8 +327,8 @@ table.data .r { text-align: right; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .chip { font-size: 13px; color: var(--muted); padding: 3px 9px; border: 1px solid var(--line); border-radius: 999px; }
 
-.facts dt { display: flex; align-items: center; gap: 8px; }
-.fact-icon { color: var(--accent); flex: none; }
+.facts dt { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.fact-icon { color: var(--accent); flex: none; width: 20px; height: 20px; }
 
 /* Ligação para a página hora a hora, por baixo dos próximos dias */
 .after-days { margin-top: 20px; display: flex; align-items: center; gap: 12px 24px; flex-wrap: wrap; }
