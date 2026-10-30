@@ -205,11 +205,9 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 }
 
 /* Próximos dias: colunas clicáveis */
-.days5 { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.day { border-left: 1px solid var(--line); min-width: 0; }
-.day:first-child { border-left: 0; }
-.days5 .day:nth-child(n + 6) { border-top: 1px solid var(--line); }
-.days5 .day:nth-child(5n + 1) { border-left: 0; }
+/* Só linhas verticais: cada cartão tem linha à esquerda e à direita; entre dois cartões fica uma só */
+.days5 { list-style: none; margin: 0; padding: 0 1px 0 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); row-gap: 16px; }
+.day { border-left: 1px solid var(--line); border-right: 1px solid var(--line); margin-right: -1px; min-width: 0; }
 .day-link { display: flex; flex-direction: column; gap: 14px; height: 100%; padding: 18px 18px 20px; color: inherit; text-decoration: none; transition: background-color .15s; }
 .day.today .day-link, .day-link:hover, .day-link:focus-visible { background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 10%, transparent), transparent 75%); box-shadow: inset 0 2px 0 var(--accent); }
 .day-link:focus-visible { outline: none; }
@@ -439,12 +437,11 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 .carousel-btn:disabled { opacity: .3; cursor: default; }
 
 /* Horas em carrossel */
-.hours-track { list-style: none; margin: 0; padding: 0; display: flex; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.hours-track { list-style: none; margin: 0; padding: 0 1px 0 0; display: flex; }
 .hours-track .hour {
   flex: 0 0 10%; min-width: 0; scroll-snap-align: start; display: grid; justify-items: center; gap: 9px; padding: 14px 8px 16px; text-align: center;
-  border-left: 1px solid var(--line); font-variant-numeric: tabular-nums;
+  border-left: 1px solid var(--line); border-right: 1px solid var(--line); margin-right: -1px; font-variant-numeric: tabular-nums;
 }
-.hours-track .hour:first-child { border-left: 0; }
 .hours-track .hour.new-day { border-left: 1px solid var(--faint); }
 .hour-day { font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; min-height: 1.2em; white-space: nowrap; }
 .hour-time { font-size: 15px; color: var(--muted); font-weight: 500; }
@@ -457,8 +454,6 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 
 /* 10 dias em carrossel */
 .days5.days-track { display: flex; }
-.days-track .day { flex: 0 0 20%; scroll-snap-align: start; border-top: 0 !important; }
-.days-track .day:nth-child(5n + 1) { border-left: 1px solid var(--line); }
-.days-track .day:first-child { border-left: 0; }
+.days-track .day { flex: 0 0 20%; scroll-snap-align: start; }
 @media (max-width: 1100px) { .days-track .day { flex-basis: calc(100% / 3); } }
 @media (max-width: 760px) { .days-track .day { flex-basis: 25%; } }
