@@ -520,6 +520,24 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 .av-forma.red { fill: color-mix(in srgb, var(--w-red) 70%, var(--surface)); }
 .av-area:hover .av-forma, .av-area:focus-visible .av-forma { filter: brightness(1.35); stroke: var(--ink); }
 .av-forma.neutra { fill: var(--surface); }
+/* pontos das zonas da Madeira: ponto na cor do nível, contorno do fundo e halo suave */
+.av-ponto {
+  --c: color-mix(in srgb, var(--w-green) 70%, var(--surface));
+  position: absolute; width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; border-radius: 50%;
+  background: var(--c); box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px color-mix(in srgb, var(--c) 30%, transparent);
+  transition: transform .15s ease;
+}
+.av-ponto.yellow { --c: var(--w-yellow); }
+.av-ponto.orange { --c: var(--w-orange); }
+.av-ponto.red { --c: var(--w-red); }
+.av-ponto:hover, .av-ponto:focus-visible { transform: scale(1.3); outline: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .av-ponto:not(.green)::after {
+    content: ""; position: absolute; inset: -2px; border-radius: 50%; border: 1.5px solid var(--c);
+    animation: av-pulso 2.4s ease-out infinite;
+  }
+  @keyframes av-pulso { from { transform: scale(1); opacity: .8; } to { transform: scale(2.6); opacity: 0; } }
+}
 /* no telemóvel o continente fica mais pequeno e centrado */
 @media (max-width: 900px) {
   .mapa-avisos .mapa-continente .mapa-box { max-width: 230px; margin-inline: auto; }

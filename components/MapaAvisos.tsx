@@ -2,8 +2,8 @@ import Link from "next/link";
 import type { Aviso, NivelAviso } from "@/lib/data";
 import { AREAS_AVISO, NIVEIS } from "@/lib/data";
 import { nivelDaArea } from "@/lib/avisos";
-import { PAINEIS } from "@/lib/mapa";
-import { AREAS_MAPA } from "@/lib/mapa-avisos";
+import { PAINEIS, type Painel } from "@/lib/mapa";
+import { AREAS_MAPA, type AreaMapa } from "@/lib/mapa-avisos";
 
 const ORDEM: NivelAviso[] = ["green", "yellow", "orange", "red"];
 const pior = (ns: NivelAviso[]) => ns.reduce((m, n) => (ORDEM.indexOf(n) > ORDEM.indexOf(m) ? n : m), "green" as NivelAviso);
@@ -15,6 +15,21 @@ function nivelForma(avisos: Aviso[], id: string): NivelAviso {
 
 // Parte do painel a mostrar, em unidades do painel (o mapa do mar precisa do mar à esquerda; este não)
 const RECORTE: Record<string, [number, number, number, number]> = { continente: [215, 673, 0, 825] }; // x0, x1, y0, y1
+
+// Zonas da ilha da Madeira: um ponto em cima de cada zona, na cor do seu nível
+function PontoZona({ a, painel, avisos }: { a: AreaMapa; painel: Painel; avisos: Aviso[] }) {
+  const nivel = nivelDaArea(avisos, a.id);
+  const nome = AREAS_AVISO[a.id]?.nome;
+  return (
+    <Link
+      href={`/avisos/${a.id.toLowerCase()}`}
+      className={`av-ponto ${nivel}`}
+      style={{ left: `${(a.c[0] / painel.w) * 100}%`, top: `${(a.c[1] / painel.h) * 100}%` }}
+      title={nome}
+      aria-label={nome}
+    />
+  );
+}
 
 // A ilha da Madeira é uma só forma: ao clicar abre a zona com o aviso mais grave (ou a Costa Sul, se não houver)
 function zonaMadeira(avisos: Aviso[]): string {
@@ -46,6 +61,11 @@ function Mapa({ nome, titulo, avisos }: { nome: "continente" | "acores" | "madei
               );
             })}
         </svg>
+        {areas
+          .filter((a) => !a.d)
+          .map((a) => (
+            <PontoZona key={a.id} a={a} painel={painel} avisos={avisos} />
+          ))}
       </div>
     </figure>
   );
