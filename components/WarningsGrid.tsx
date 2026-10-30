@@ -63,7 +63,11 @@ export function WarningsGrid({ avisos }: { avisos: Aviso[] }) {
           <details className="calm">
             <summary>
               <span className="lvl green" />
-              Sem aviso em {totalSem} {totalSem === 1 ? "área" : "áreas"}
+              <span className="calm-text">Sem aviso em {totalSem} {totalSem === 1 ? "área" : "áreas"}</span>
+              <span className="calm-more mono">
+                <span className="calm-ver">ver todas</span>
+                <span className="calm-fechar">fechar</span>
+              </span>
             </summary>
             {semAviso
               .filter((r) => r.areas.length > 0)
