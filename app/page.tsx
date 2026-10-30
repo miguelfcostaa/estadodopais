@@ -9,7 +9,7 @@ export default async function HomePage() {
   if (!p) throw new Error("Sem previsão para o local por defeito");
   return (
     <div className="wrap">
-      <ForecastView p={p} avisos={avisos} />
+      <ForecastView p={p} avisos={avisos} naInicio />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BackLink } from "@/components/BackLink";
 import { HourlyTable } from "@/components/HourlyTable";
 import { Meteogram } from "@/components/Meteogram";
 import { getLocal, LOCAIS } from "@/lib/data";
@@ -30,7 +31,7 @@ export default async function HorasPage({ params }: Props) {
   return (
     <div className="wrap">
       <div className="page-head">
-        <Link className="back mono" href={`/local/${local.slug}`}>← Voltar para {local.nome}</Link>
+        <BackLink slug={local.slug} nome={local.nome} />
         <h1>Hora a hora em {local.nome}</h1>
         <p>Temperatura, chuva, vento e humidade nas próximas 48 horas.</p>
       </div>

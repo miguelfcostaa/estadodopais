@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BackLink } from "@/components/BackLink";
 import { DayColumns } from "@/components/DayColumns";
 import { getLocal, LOCAIS } from "@/lib/data";
 import { getPrevisao } from "@/lib/ipma";
@@ -29,7 +30,7 @@ export default async function DiasPage({ params }: Props) {
   return (
     <div className="wrap">
       <div className="page-head">
-        <Link className="back mono" href={`/local/${local.slug}`}>← Voltar para {local.nome}</Link>
+        <BackLink slug={local.slug} nome={local.nome} />
         <h1>Previsão - {local.nome}</h1>
         <p>Previsão dia a dia: tempo, temperaturas mínima e máxima, chuva e vento.</p>
       </div>
