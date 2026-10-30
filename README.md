@@ -4,7 +4,28 @@ Site de meteorologia para Portugal feito com os dados abertos do IPMA.
 
 ## Estado
 
-Protótipo visual em `index.html`, ainda sem ligação à API. Os valores são uma amostra real do IPMA para Lisboa, recolhida a 30/10/2026.
+Protótipo em Next.js, ainda sem ligação à API. Os valores são uma amostra real do IPMA (Lisboa, avisos e mar), recolhida a 30/10/2026, em `lib/data.ts`.
+
+## Páginas
+
+- `/` previsão de hoje (Lisboa por defeito)
+- `/local/[slug]` previsão por local (35 locais da API)
+- `/avisos` avisos meteorológicos
+- `/mar` estado do mar ao longo da costa
+- `/sobre` sobre o projeto, fonte dos dados e condições
+
+## Estrutura
+
+- `app/layout.tsx` cabeçalho, corpo e rodapé partilhados por todas as páginas
+- `components/` cabeçalho, rodapé, meteograma, lista de dias, avisos
+- `lib/` dados de exemplo e funções de formatação
+
+## Correr localmente
+
+```bash
+npm install
+npm run dev
+```
 
 ## Fontes de dados
 

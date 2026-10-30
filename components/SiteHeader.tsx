@@ -1,0 +1,60 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { ThemeToggle } from "./ThemeToggle";
+
+const LINKS = [
+  { href: "/", label: "Hoje" },
+  { href: "/avisos", label: "Avisos" },
+  { href: "/mar", label: "Mar" },
+  { href: "/sobre", label: "Sobre" },
+];
+
+export function SiteHeader() {
+  const pathname = usePathname();
+  const [aberto, setAberto] = useState(false);
+
+  useEffect(() => setAberto(false), [pathname]);
+
+  function ativo(href: string) {
+    if (href === "/") return pathname === "/" || pathname.startsWith("/local/");
+    return pathname.startsWith(href);
+  }
+
+  return (
+    <header className="site-header">
+      <div className="wrap bar">
+        <Link className="brand" href="/">
+          aberta<b>.</b>
+        </Link>
+        <span className="status mono">
+          <span className="dot" />
+          <span>exemplo</span>
+          <span className="when">· previsão IPMA de 30/10, 09:31</span>
+        </span>
+        <button
+          className="icon-btn menu-btn"
+          type="button"
+          aria-expanded={aberto}
+          aria-controls="site-nav"
+          aria-label={aberto ? "Fechar menu" : "Abrir menu"}
+          onClick={() => setAberto((v) => !v)}
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+            <path d={aberto ? "M6 6l12 12M18 6L6 18" : "M4 7h16M4 12h16M4 17h16"} stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          </svg>
+        </button>
+        <nav id="site-nav" className="site-nav" aria-label="Principal" data-open={aberto}>
+          {LINKS.map((l) => (
+            <Link key={l.href} href={l.href} aria-current={ativo(l.href) ? "page" : undefined}>
+              {l.label}
+            </Link>
+          ))}
+        </nav>
+        <ThemeToggle />
+      </div>
+    </header>
+  );
+}
