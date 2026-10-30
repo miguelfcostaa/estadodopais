@@ -21,9 +21,9 @@ export default async function MarPage() {
             <thead>
               <tr>
                 <th className="label">Zona</th>
-                <th className="label">Região</th>
+                <th className="label col-wide">Região</th>
                 <th className="label r">Ondas</th>
-                <th className="label">Direção</th>
+                <th className="label col-wide">Direção</th>
                 <th className="label r">Água</th>
               </tr>
             </thead>
@@ -31,9 +31,9 @@ export default async function MarPage() {
               {zonas.map((z) => (
                 <tr key={z.zona}>
                   <td>{z.zona}</td>
-                  <td className="mono">{z.regiao}</td>
-                  <td className="r">{num(z.ondaMin)}–{num(z.ondaMax)} m</td>
-                  <td className="mono">{z.dir}</td>
+                  <td className="mono col-wide">{z.regiao}</td>
+                  <td className="r">{num(z.ondaMin)}–{num(z.ondaMax)}<span className="unit-m"> m</span> <span className="mono dir-inline">{z.dir}</span></td>
+                  <td className="mono col-wide">{z.dir}</td>
                   <td className="r">{z.aguaMin !== null && z.aguaMax !== null ? `${num(z.aguaMin)}–${num(z.aguaMax)}°` : "—"}</td>
                 </tr>
               ))}

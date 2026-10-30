@@ -21,7 +21,7 @@ export function Carousel({ children, label, inicio }: { children: React.ReactNod
     if (!f) return;
     if (inicio) {
       const alvo = f.querySelector<HTMLElement>(inicio);
-      if (alvo) f.scrollLeft = alvo.offsetLeft - f.offsetLeft;
+      if (alvo) f.scrollLeft = alvo.offsetLeft;
     }
     atualizar();
     const ro = new ResizeObserver(atualizar);
