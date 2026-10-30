@@ -9,7 +9,7 @@ function tiposDaArea(avisos: Aviso[], id: string): string[] {
   return [...new Set(avisosDaArea(avisos, id).map((a) => a.tipo.toLowerCase()))];
 }
 
-export function WarningsGrid({ avisos }: { avisos: Aviso[] }) {
+export function WarningsGrid({ avisos, legenda = true }: { avisos: Aviso[]; legenda?: boolean }) {
   const comAviso = REGIOES.flatMap((r) => areasPorRegiao(r).filter((id) => nivelDaArea(avisos, id) !== "green"));
   const semAviso = REGIOES.map((r) => ({ regiao: r, areas: areasPorRegiao(r).filter((id) => nivelDaArea(avisos, id) === "green") }));
   const totalSem = semAviso.reduce((n, r) => n + r.areas.length, 0);
@@ -85,6 +85,7 @@ export function WarningsGrid({ avisos }: { avisos: Aviso[] }) {
         )}
       </div>
 
+      {legenda && (
       <div className="scale mono">
         {NIVEIS.map((n) => (
           <span key={n.id}>
@@ -93,6 +94,7 @@ export function WarningsGrid({ avisos }: { avisos: Aviso[] }) {
           </span>
         ))}
       </div>
+      )}
     </>
   );
 }

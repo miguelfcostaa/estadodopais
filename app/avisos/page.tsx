@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { MapaAvisos } from "@/components/MapaAvisos";
 import { WarningsGrid } from "@/components/WarningsGrid";
 import { AREAS_AVISO } from "@/lib/data";
 import { intervalo, nomeNivel } from "@/lib/avisos";
@@ -17,8 +18,13 @@ export default async function AvisosPage() {
         <p>O IPMA emite avisos por distrito no continente e por zona nas ilhas. A cor diz o grau de risco; o tipo diz porquê.</p>
       </div>
       <section className="section" aria-labelledby="h-mapa">
-        <div className="sec-head"><h2 id="h-mapa">Agora</h2></div>
-        <WarningsGrid avisos={avisos} />
+        <div className="sec-head"><h2 id="h-mapa">No mapa</h2><span className="label">toque numa área para ver os avisos</span></div>
+        <MapaAvisos avisos={avisos} />
+        <p className="mapa-nota mono">A cor de cada área mostra o aviso mais grave nos próximos 3 dias. Limites: Natural Earth.</p>
+      </section>
+      <section className="section" aria-labelledby="h-areas">
+        <div className="sec-head"><h2 id="h-areas">Por área</h2></div>
+        <WarningsGrid avisos={avisos} legenda={false} />
       </section>
       <section className="section" aria-labelledby="h-det">
         <div className="sec-head">

@@ -507,3 +507,34 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 @media (max-width: 900px) {
   .mapa { grid-template-columns: 1fr; }
 }
+
+/* Mapa de avisos: o continente ocupa menos largura, porque não precisa de mar para etiquetas */
+.mapa-avisos { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+@media (max-width: 900px) { .mapa-avisos { grid-template-columns: 1fr; } }
+/* Mapa de avisos */
+.av-area { cursor: pointer; }
+.av-forma { stroke: var(--bg); stroke-width: 1.2; stroke-linejoin: round; vector-effect: non-scaling-stroke; transition: filter .15s; }
+.av-forma.green { fill: color-mix(in srgb, var(--w-green) 22%, var(--surface)); }
+.av-forma.yellow { fill: color-mix(in srgb, var(--w-yellow) 62%, var(--surface)); }
+.av-forma.orange { fill: color-mix(in srgb, var(--w-orange) 66%, var(--surface)); }
+.av-forma.red { fill: color-mix(in srgb, var(--w-red) 70%, var(--surface)); }
+.av-area:hover .av-forma, .av-area:focus-visible .av-forma { filter: brightness(1.35); stroke: var(--ink); }
+.av-label {
+  position: absolute; transform: translate(-50%, -50%); display: grid; justify-items: center; text-align: center;
+  line-height: 1.2; white-space: nowrap; text-decoration: none; color: var(--ink);
+  font-size: clamp(10px, .85vw, 12px); text-shadow: 0 0 3px var(--bg), 0 0 6px var(--bg);
+}
+.av-label b { font-weight: 500; }
+.av-label.green { color: var(--muted); }
+.av-label.ativo b { font-weight: 700; font-size: 1.1em; }
+.av-label .mono { font-size: .9em; }
+.av-label.yellow .mono { color: var(--w-yellow); }
+.av-label.orange .mono { color: var(--w-orange); }
+.av-label.red .mono { color: var(--w-red); }
+.av-label.abaixo { transform: translate(-50%, 14px); }
+.av-label.abaixo.margem { transform: translate(-14px, 14px); justify-items: start; text-align: left; }
+.av-forma.neutra { fill: var(--surface); }
+.av-label:hover b { text-decoration: underline; text-underline-offset: 2px; }
+@media (max-width: 600px) {
+  .mapa-continente .av-label.green { display: none; } /* no telemóvel, só os nomes com aviso */
+}
