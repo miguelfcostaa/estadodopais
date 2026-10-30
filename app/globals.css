@@ -520,12 +520,6 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 .av-forma.red { fill: color-mix(in srgb, var(--w-red) 70%, var(--surface)); }
 .av-area:hover .av-forma, .av-area:focus-visible .av-forma { filter: brightness(1.35); stroke: var(--ink); }
 .av-forma.neutra { fill: var(--surface); }
-/* pontos das zonas da Madeira */
-.av-ponto { position: absolute; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; box-shadow: 0 0 0 2px var(--bg); background: color-mix(in srgb, var(--w-green) 45%, var(--surface)); }
-.av-ponto.yellow { background: var(--w-yellow); }
-.av-ponto.orange { background: var(--w-orange); }
-.av-ponto.red { background: var(--w-red); }
-.av-ponto:hover, .av-ponto:focus-visible { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--ink); }
 /* no telemóvel o continente fica mais pequeno e centrado */
 @media (max-width: 900px) {
   .mapa-avisos .mapa-continente .mapa-box { max-width: 230px; margin-inline: auto; }
