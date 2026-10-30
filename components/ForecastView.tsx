@@ -8,7 +8,6 @@ import { DayColumns } from "./DayColumns";
 import { FactIcon, type NomeIcone } from "./FactIcon";
 import { LocalPicker } from "./LocalPicker";
 import { WarningsGrid } from "./WarningsGrid";
-import { WarningsLead } from "./WarningsLead";
 
 export function ForecastView({ p, avisos }: { p: Previsao; avisos: Aviso[] }) {
   const { local, resumo, atual, mar } = p;
@@ -68,7 +67,6 @@ export function ForecastView({ p, avisos }: { p: Previsao; avisos: Aviso[] }) {
           <h2 id="h-av">Avisos</h2>
           <Link className="more" href="/avisos">Ver todos os avisos →</Link>
         </div>
-        <WarningsLead avisos={avisos} />
         <WarningsGrid avisos={avisos} />
       </section>
 

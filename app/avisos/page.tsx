@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { WarningsGrid } from "@/components/WarningsGrid";
-import { WarningsLead } from "@/components/WarningsLead";
 import { AREAS_AVISO } from "@/lib/data";
 import { intervalo, nomeNivel } from "@/lib/avisos";
 import { getAvisos } from "@/lib/ipma";
@@ -19,7 +18,6 @@ export default async function AvisosPage() {
       </div>
       <section className="section" aria-labelledby="h-mapa">
         <div className="sec-head"><h2 id="h-mapa">Agora</h2></div>
-        <WarningsLead avisos={avisos} />
         <WarningsGrid avisos={avisos} />
       </section>
       <section className="section" aria-labelledby="h-det">
