@@ -12,7 +12,7 @@ const LINKS = [
   { href: "/sobre", label: "Sobre" },
 ];
 
-export function SiteHeader() {
+export function SiteHeader({ atualizado }: { atualizado: string }) {
   const pathname = usePathname();
   const [aberto, setAberto] = useState(false);
 
@@ -27,12 +27,11 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="wrap bar">
         <Link className="brand" href="/">
-          <img className="brand-mark" src="/logo.svg" alt="" width="28" height="28" />
-          <span>aberta<b>.</b></span>
+          <span>aberta<b>.pt</b></span>
         </Link>
         <span className="status mono">
           <span className="dot" />
-          <span>dados do IPMA</span>
+          <span>atualizado {atualizado}</span>
         </span>
         <button
           className="icon-btn menu-btn"

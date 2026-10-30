@@ -21,6 +21,11 @@ export function horaAtual(timeZone = "Europe/Lisbon"): string {
   return `${p.year}-${p.month}-${p.day}T${p.hour}:00`;
 }
 
+// Hora e minuto atuais: "11:42".
+export function horaMinutoAtual(timeZone = "Europe/Lisbon"): string {
+  return new Intl.DateTimeFormat("pt-PT", { timeZone, hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date());
+}
+
 export function num(n: number, casas = 1): string {
   const v = Number.isInteger(n) ? String(n) : n.toFixed(casas);
   return v.replace(".", ",");

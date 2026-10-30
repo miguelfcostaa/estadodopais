@@ -6,8 +6,7 @@ export function SiteFooter() {
       <div className="wrap cols">
         <div>
           <Link className="brand" href="/">
-            <img className="brand-mark" src="/logo.svg" alt="" width="28" height="28" />
-            <span>aberta<b>.</b></span>
+            <span>aberta<b>.pt</b></span>
           </Link>
           <p>O tempo em Portugal, explicado de forma simples. Feito com os dados abertos do IPMA.</p>
         </div>
