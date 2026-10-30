@@ -1,11 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Mono, Open_Sans } from "next/font/google";
+import { IBM_Plex_Mono, Instrument_Serif, Parkinsans } from "next/font/google";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { horaMinutoAtual } from "@/lib/format";
 import "./globals.css";
 
-const sans = Open_Sans({ subsets: ["latin"], weight: ["300", "400", "500", "600"], variable: "--font-sans" });
+const display = Instrument_Serif({ subsets: ["latin"], weight: "400", variable: "--font-display" });
+const sans = Parkinsans({ subsets: ["latin"], weight: ["300", "400", "500", "600"], variable: "--font-sans" });
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
@@ -23,7 +24,7 @@ const temaInicial = `try{var t=localStorage.getItem("tema");if(t)document.docume
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-PT" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="pt-PT" className={`${display.variable} ${sans.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: temaInicial }} />
       </head>
