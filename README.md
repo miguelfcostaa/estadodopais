@@ -1,4 +1,4 @@
-# aberta.pt
+# previsao.pt
 
 Site de meteorologia para Portugal feito com os dados abertos do IPMA.
 
