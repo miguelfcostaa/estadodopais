@@ -1,11 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Mono, Instrument_Serif, Parkinsans } from "next/font/google";
+import { IBM_Plex_Mono, Parkinsans } from "next/font/google";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { horaMinutoAtual } from "@/lib/format";
 import "./globals.css";
 
-const display = Instrument_Serif({ subsets: ["latin"], weight: "400", variable: "--font-display" });
 const sans = Parkinsans({ subsets: ["latin"], weight: ["300", "400", "500", "600"], variable: "--font-sans" });
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono" });
 
@@ -24,9 +23,13 @@ const temaInicial = `try{var t=localStorage.getItem("tema");if(t)document.docume
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-PT" className={`${display.variable} ${sans.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="pt-PT" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: temaInicial }} />
+        {/* Clash Display (Fontshare, licença ITF FFL): servida pela Fontshare, os ficheiros não podem ir para o repositório público */}
+        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link rel="preconnect" href="https://cdn.fontshare.com" crossOrigin="" />
+        <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600&display=swap" />
       </head>
       <body>
         <SiteHeader atualizado={horaMinutoAtual()} />
