@@ -65,7 +65,7 @@ export type Previsao = {
 const DIRECOES: Record<string, string> = {
   N: "norte", NE: "nordeste", E: "leste", SE: "sudeste", S: "sul", SW: "sudoeste", W: "oeste", NW: "noroeste",
 };
-const INTENSIDADE_VENTO: Record<number, string> = { 1: "fraco", 2: "moderado", 3: "forte", 4: "muito forte" };
+export const INTENSIDADE_VENTO: Record<number, string> = { 1: "fraco", 2: "moderado", 3: "forte", 4: "muito forte" };
 
 export function direcaoExtenso(d: string): string {
   return DIRECOES[d] ?? d;
@@ -128,6 +128,8 @@ export async function getPrevisao(slug: string): Promise<Previsao | null> {
     tMax: n(a.tMax) ?? 0,
     probChuva: Math.round(n(a.probabilidadePrecipita) ?? 0),
     tipoTempo: a.idTipoTempo ?? 0,
+    dirVento: a.ddVento ?? "",
+    ventoClasse: a.idFfxVento ?? null,
   }));
   if (!dias.length) return null;
 

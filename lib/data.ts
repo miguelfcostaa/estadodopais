@@ -23,6 +23,8 @@ export type Dia = {
   tMax: number;
   probChuva: number;
   tipoTempo: number;
+  dirVento: string;
+  ventoClasse: number | null; // 1 fraco a 4 muito forte
 };
 
 export type NivelAviso = "green" | "yellow" | "orange" | "red";

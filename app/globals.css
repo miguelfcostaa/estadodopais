@@ -118,8 +118,9 @@ img, svg { max-width: 100%; }
 .page-head p { color: var(--muted); font-size: 17px; max-width: 60ch; margin: 0; }
 h1 em { font-style: normal; color: var(--accent); }
 
-.lead { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 56px; padding-block: 48px 40px; align-items: end; }
-@media (max-width: 900px) { .lead { grid-template-columns: 1fr; gap: 32px; padding-block: 32px 28px; } }
+.lead { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 56px; padding-block: 0 40px; align-items: stretch; }
+.place-top { margin: 48px 0 22px; }
+@media (max-width: 900px) { .lead { grid-template-columns: 1fr; gap: 32px; padding-block: 0 28px; } .place-top { margin: 32px 0 18px; } }
 .place { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
 /* Seletor de local: continente, Madeira e Açores lado a lado */
 .picker-row { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -159,8 +160,8 @@ h1 em { font-style: normal; color: var(--accent); }
 .summary { max-width: 60ch; color: var(--muted); font-size: 17px; margin: 0; }
 .source { color: var(--faint); margin: 16px 0 0; }
 
-.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); margin: 0; }
-.facts div { padding: 14px 0; border-bottom: 1px solid var(--line); display: grid; gap: 2px; }
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; border-top: 1px solid var(--line); margin: 0; }
+.facts div { padding: 14px 0; border-bottom: 1px solid var(--line); display: grid; gap: 4px; align-content: center; }
 .facts div:nth-child(odd) { padding-right: 16px; }
 .facts dd { margin: 0; font-family: var(--display); font-size: 28px; font-weight: 500; line-height: 1.15; }
 .facts dd small { font-family: var(--body); font-size: 13px; color: var(--muted); margin-left: 4px; }
@@ -191,25 +192,45 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
   @keyframes draw { from { stroke-dashoffset: 2000; } }
 }
 
-/* Lista de dias */
-.drow {
-  display: grid; grid-template-columns: 112px 34px minmax(0, 1.2fr) 44px minmax(120px, 2fr) 44px 92px;
-  align-items: center; gap: 16px; padding-block: 12px; border-bottom: 1px solid var(--line);
-}
-.drow:first-child { border-top: 1px solid var(--line); }
-.drow .d { font-weight: 500; }
-.drow .d .mono { display: block; color: var(--muted); font-weight: 400; }
-.drow .desc { color: var(--muted); font-size: 14.5px; }
-.drow .tmin { color: var(--muted); text-align: right; }
-.range { position: relative; height: 4px; background: var(--line); border-radius: 2px; }
-.range i { position: absolute; top: 0; bottom: 0; border-radius: 2px; background: linear-gradient(90deg, var(--rain), var(--accent)); }
-.pp { display: flex; align-items: center; gap: 8px; color: var(--muted); justify-content: flex-end; }
-.pp .bar-p { width: 40px; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
-.pp .bar-p i { display: block; height: 100%; background: var(--accent); }
-.pp.wet { color: var(--accent); }
+/* Próximos dias: 5 colunas */
+.days5 { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.day { display: grid; grid-template-rows: auto auto 1fr auto; gap: 18px; padding: 20px 18px 22px; border-left: 1px solid var(--line); min-width: 0; }
+.day:first-child { border-left: 0; }
+.day.today { background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 9%, transparent), transparent 70%); box-shadow: inset 0 2px 0 var(--accent); }
+.day-head { display: grid; gap: 2px; }
+.day-name { font-family: var(--display); font-size: 20px; font-weight: 500; }
+.day-head .mono { color: var(--muted); }
+.nome-curto { display: none; }
+.day-wx { display: grid; gap: 8px; justify-items: start; min-height: 86px; align-content: start; }
+.day-desc { color: var(--muted); font-size: 14px; line-height: 1.35; }
+.day-temp { height: 150px; padding-block: 26px; }
+.day-track { position: relative; height: 100%; width: 6px; margin-left: 4px; background: var(--line); border-radius: 3px; }
+.day-track i { position: absolute; left: 0; right: 0; border-radius: 3px; background: linear-gradient(0deg, var(--rain), var(--accent)); }
+.day-track b { position: absolute; left: 16px; white-space: nowrap; font-weight: 400; font-style: normal; line-height: 1; }
+.day-track .tmax { top: 0; transform: translateY(-30%); font-family: var(--display); font-size: 28px; font-weight: 500; color: var(--ink); }
+.day-track .tmin { bottom: 0; transform: translateY(30%); font-size: 16px; color: var(--muted); }
+.day-meta { margin: 0; display: grid; gap: 10px; }
+.day-meta div { display: grid; gap: 3px; }
+.day-meta dd { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 14.5px; }
+.day-meta .wet dd { color: var(--accent); }
+.rain-bar { flex: 1; max-width: 60px; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.rain-bar i { display: block; height: 100%; background: var(--accent); }
+.day-wind dd { color: var(--muted); }
+.day-wind svg { color: var(--ink); flex: none; }
 @media (max-width: 760px) {
-  .drow { grid-template-columns: 84px 28px 34px minmax(0, 1fr) 34px 52px; gap: 10px; }
-  .drow .desc, .pp .bar-p { display: none; }
+  .day { padding: 14px 6px 16px; gap: 12px; justify-items: center; text-align: center; }
+  .day-name { font-size: 15px; }
+  .day-head .mono { font-size: 11px; }
+  .day-wx { min-height: 0; justify-items: center; }
+  .day-wx svg { width: 30px; height: 30px; }
+  .day-desc, .day-meta .day-wind, .rain-bar, .day-meta dt, .nome-longo { display: none; }
+  .nome-curto { display: inline; }
+  .day-temp { height: 120px; padding-block: 22px; }
+  .day-track { margin-left: 0; margin-inline: auto; }
+  .day-track b { left: 50%; }
+  .day-track .tmax { transform: translate(-50%, -150%); font-size: 18px; }
+  .day-track .tmin { transform: translate(-50%, 150%); font-size: 13px; }
+  .day-meta dd { justify-content: center; font-size: 13px; }
 }
 
 /* Avisos */

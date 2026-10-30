@@ -4,7 +4,7 @@ import { RISCO_INCENDIO } from "@/lib/data";
 import type { Previsao } from "@/lib/ipma";
 import { direcaoExtenso } from "@/lib/ipma";
 import { dataLonga, graus, hora, horaDe, num, nivelUV } from "@/lib/format";
-import { DayList } from "./DayList";
+import { DayColumns } from "./DayColumns";
 import { FactIcon, type NomeIcone } from "./FactIcon";
 import { LocalPicker } from "./LocalPicker";
 import { Meteogram } from "./Meteogram";
@@ -26,12 +26,12 @@ export function ForecastView({ p, avisos }: { p: Previsao; avisos: Aviso[] }) {
 
   return (
     <>
+      <div className="place place-top">
+        <span className="label">{dataLonga(p.agora)}</span>
+        <LocalPicker atual={local.slug} />
+      </div>
       <div className="lead">
         <div>
-          <div className="place">
-            <span className="label">{dataLonga(p.agora)}</span>
-            <LocalPicker atual={local.slug} />
-          </div>
           <h1>
             {resumo.titulo} <em className="num">{resumo.destaque}</em>.
           </h1>
@@ -68,10 +68,10 @@ export function ForecastView({ p, avisos }: { p: Previsao; avisos: Aviso[] }) {
 
       <section className="section" aria-labelledby="h-10">
         <div className="sec-head">
-          <h2 id="h-10">Próximos {p.dias.length} dias</h2>
-          <span className="label">mínima · máxima · chuva</span>
+          <h2 id="h-10">Próximos dias</h2>
+          <span className="label">hoje e os 4 dias seguintes</span>
         </div>
-        <DayList dias={p.dias} />
+        <DayColumns dias={p.dias.slice(0, 5)} />
       </section>
 
       <section className="section" aria-labelledby="h-av">
