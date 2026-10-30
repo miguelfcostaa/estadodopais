@@ -48,6 +48,8 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
   const [largura, setLargura] = useState(1000);
   const [agora, setAgora] = useState(agoraServidor);
   const [sel, setSel] = useState<number | null>(null);
+  const [podeVoltar, setPodeVoltar] = useState(false);
+  const [podeAvancar, setPodeAvancar] = useState(false);
 
   useEffect(() => setAgora(horaAtual(fuso)), [fuso]);
   useEffect(() => {
@@ -64,8 +66,8 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
   const n = horas.length;
   const iAgora = horas.findIndex((h) => h.hora === agora);
 
-  // Largura de cada coluna: ocupa o espaço todo, com um mínimo legível (o resto desliza)
-  const minimo = largura < 600 ? 46 : 24;
+  // Largura de cada coluna: ocupa o espaço todo, com um mínimo para caber cada hora (o resto desliza)
+  const minimo = largura < 600 ? 46 : 44;
   const col = Math.max(minimo, largura / Math.max(n, 1));
   const W = Math.round(col * n);
   const cx = (i: number) => col * i + col / 2;
@@ -83,8 +85,21 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
   useEffect(() => {
     const f = faixa.current;
     if (f && iAgora > 0) f.scrollLeft = Math.max(0, cx(iAgora) - 60);
+    atualizar();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [iAgora, col]);
+
+  function atualizar() {
+    const f = faixa.current;
+    if (!f) return;
+    setPodeVoltar(f.scrollLeft > 4);
+    setPodeAvancar(f.scrollLeft + f.clientWidth < f.scrollWidth - 4);
+  }
+
+  function mover(sentido: 1 | -1) {
+    const f = faixa.current;
+    if (f) f.scrollBy({ left: sentido * f.clientWidth * 0.8, behavior: "smooth" });
+  }
 
   if (n === 0) return null;
 
@@ -122,7 +137,8 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
         </dl>
       </div>
 
-      <div className="mg-scroll" ref={faixa}>
+      <div className={`mg-wrap${podeVoltar ? " fade-l" : ""}${podeAvancar ? " fade-r" : ""}`}>
+      <div className="mg-scroll" ref={faixa} onScroll={atualizar}>
         <svg className="mg-svg" width={W} height={ALTURA} role="img" aria-label="Gráfico hora a hora: temperatura, chuva e vento" onMouseLeave={() => setSel(null)}>
           <defs>
             <linearGradient id="mg-fill" x1="0" y1="0" x2="0" y2="1">
@@ -204,7 +220,16 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
           ))}
         </svg>
       </div>
-      <p className="mg-hint mono">Passe o rato ou toque numa hora para ver os detalhes. Chuva em %, vento em km/h.</p>
+      </div>
+      <div className="mg-foot">
+        <p className="mg-hint mono">Passe o rato ou toque numa hora para ver os detalhes. Chuva em %, vento em km/h.</p>
+        {(podeVoltar || podeAvancar) && (
+          <div className="carousel-nav">
+            <button type="button" className="carousel-btn" onClick={() => mover(-1)} disabled={!podeVoltar} aria-label="Horas anteriores">‹</button>
+            <button type="button" className="carousel-btn" onClick={() => mover(1)} disabled={!podeAvancar} aria-label="Horas seguintes">›</button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
