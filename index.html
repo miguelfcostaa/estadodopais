@@ -1,0 +1,470 @@
+<title>aberta</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500&family=Figtree:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: uma coluna editorial larga; frase-resumo + meteograma como peça central, depois 10 dias, avisos e mar. Escuro por defeito. */
+:root {
+  --bg: #0b1520;
+  --surface: #10202f;
+  --line: #1d3043;
+  --ink: #e3edf6;
+  --muted: #8ca1b5;
+  --faint: #4a6075;
+  --accent: #58b0ff;
+  --rain: #2f6aa3;
+  --w-green: #4fa36a;
+  --w-yellow: #e9bf2a;
+  --w-orange: #f08a24;
+  --w-red: #e0443a;
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+  --body: "Figtree", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --bg: #edf3f9;
+  --surface: #f6f9fc;
+  --line: #d3dfeb;
+  --ink: #0f1f2f;
+  --muted: #52687d;
+  --faint: #9fb2c4;
+  --accent: #1e6fd0;
+  --rain: #8db8e2;
+  --w-green: #2f8a4c;
+  --w-yellow: #b98f00;
+  --w-orange: #d26a00;
+  --w-red: #c42d24;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 16px/1.55 var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+.wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (min-width: 720px) { .wrap { padding-left: max(48px, env(safe-area-inset-left, 0px)); padding-right: max(48px, env(safe-area-inset-right, 0px)); } }
+.mono { font-family: var(--mono); font-size: 12.5px; letter-spacing: .02em; }
+.label { font-family: var(--mono); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.num { font-variant-numeric: tabular-nums; }
+
+/* Cabeçalho */
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); }
+.bar { display: flex; align-items: center; gap: 20px; padding-block: 22px; flex-wrap: wrap; }
+.brand { font-family: var(--display); font-size: 26px; font-weight: 400; letter-spacing: -.01em; text-decoration: none; }
+.brand b { color: var(--accent); font-weight: 400; }
+.status { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex: none; }
+.bar nav { margin-left: auto; display: flex; gap: 28px; align-items: center; }
+.bar nav a { text-decoration: none; color: var(--muted); padding-block: 4px; border-bottom: 1px solid transparent; }
+.bar nav a:hover { color: var(--ink); }
+.bar nav a.on { color: var(--ink); border-bottom-color: var(--ink); }
+.theme { background: none; border: 0; color: var(--ink); padding: 4px; cursor: pointer; display: grid; place-items: center; }
+@media (max-width: 760px) { .bar nav a { display: none; } .bar { gap: 12px; } .status .when { display: none; } }
+
+/* Faixa de protótipo */
+.proto { border: 1px dashed var(--faint); color: var(--muted); padding: 10px 14px; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.proto strong { color: var(--ink); font-weight: 500; }
+
+/* Abertura */
+.lead { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 56px; padding-block: 56px 40px; align-items: end; }
+@media (max-width: 900px) { .lead { grid-template-columns: 1fr; gap: 32px; padding-block: 36px 28px; } }
+.place { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 18px; }
+.picker { position: relative; }
+.picker select {
+  appearance: none; background: transparent; color: var(--ink); border: 1px solid var(--line);
+  font: 500 14px var(--body); padding: 7px 34px 7px 12px; border-radius: 3px; cursor: pointer;
+}
+.picker select option { background: var(--surface); color: var(--ink); }
+.picker::after { content: ""; position: absolute; right: 13px; top: 50%; width: 6px; height: 6px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: translateY(-70%) rotate(45deg); pointer-events: none; }
+h1 {
+  font-family: var(--display); font-weight: 300; font-size: clamp(42px, 6.4vw, 84px);
+  line-height: 1.02; letter-spacing: -.025em; margin: 0 0 22px; text-wrap: balance;
+  font-variation-settings: "opsz" 96;
+}
+h1 em { font-style: normal; color: var(--accent); }
+.summary { max-width: 60ch; color: var(--muted); font-size: 17px; margin: 0; }
+.summary b { color: var(--ink); font-weight: 500; }
+.notice { margin-top: 14px; color: var(--accent); min-height: 1.5em; }
+
+.facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+.facts div { padding: 14px 0; border-bottom: 1px solid var(--line); display: grid; gap: 2px; }
+.facts div:nth-child(odd) { padding-right: 16px; }
+.facts dt { margin: 0; }
+.facts dd { margin: 0; font-family: var(--display); font-size: 26px; font-weight: 400; line-height: 1.2; }
+.facts dd small { font-family: var(--body); font-size: 13px; color: var(--muted); margin-left: 4px; }
+
+/* Secções */
+section { padding-block: 44px; border-top: 1px solid var(--line); }
+.sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+h2 { font-family: var(--display); font-weight: 400; font-size: clamp(26px, 3vw, 34px); letter-spacing: -.015em; margin: 0; text-wrap: balance; }
+.caption { display: flex; gap: 12px; color: var(--muted); font-size: 14.5px; max-width: 62ch; margin-top: 18px; }
+.caption svg { flex: none; margin-top: 4px; }
+
+/* Meteograma */
+.chart-scroll { overflow-x: auto; margin-inline: -4px; padding-inline: 4px; }
+#meteo { display: block; width: 100%; min-width: 760px; height: auto; }
+#meteo text { font-family: var(--mono); font-size: 11px; fill: var(--muted); }
+#meteo .t-label { fill: var(--ink); font-size: 11.5px; }
+#meteo .day { fill: var(--ink); font-weight: 500; }
+#meteo .hit { fill: transparent; cursor: crosshair; }
+.legend { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 14px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 8px; }
+.sw { width: 18px; height: 2px; background: var(--accent); display: inline-block; }
+.sw.rain { height: 9px; width: 9px; background: var(--rain); opacity: .8; }
+.readout { min-height: 1.6em; color: var(--ink); margin-top: 10px; }
+
+/* 10 dias */
+.days { display: grid; }
+.drow {
+  display: grid; grid-template-columns: 112px 34px minmax(0, 1.2fr) 44px minmax(120px, 2fr) 44px 92px;
+  align-items: center; gap: 16px; padding-block: 12px; border-bottom: 1px solid var(--line);
+}
+.drow:first-child { border-top: 1px solid var(--line); }
+.drow .d { font-weight: 500; }
+.drow .d .mono { display: block; color: var(--muted); font-weight: 400; }
+.drow .desc { color: var(--muted); font-size: 14.5px; }
+.drow .tmin { color: var(--muted); text-align: right; }
+.drow .tmax { text-align: left; }
+.range { position: relative; height: 4px; background: var(--line); border-radius: 2px; }
+.range i { position: absolute; top: 0; bottom: 0; border-radius: 2px; background: linear-gradient(90deg, var(--rain), var(--accent)); }
+.pp { display: flex; align-items: center; gap: 8px; color: var(--muted); justify-content: flex-end; }
+.pp .bar-p { width: 40px; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.pp .bar-p i { display: block; height: 100%; background: var(--rain); }
+.pp.wet { color: var(--rain); }
+.wx { color: var(--ink); }
+@media (max-width: 760px) {
+  .drow { grid-template-columns: 84px 28px 34px minmax(0, 1fr) 34px 64px; gap: 10px; }
+  .drow .desc { display: none; }
+  .pp .bar-p { display: none; }
+}
+
+/* Avisos */
+.warn-lead { font-family: var(--display); font-size: clamp(20px, 2.2vw, 24px); font-weight: 300; max-width: 46ch; margin: 0 0 28px; line-height: 1.35; }
+.warn-lead b { font-weight: 400; color: var(--w-yellow); }
+.regions { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 32px; }
+@media (max-width: 900px) { .regions { grid-template-columns: 1fr; } }
+.areas { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0 20px; margin-top: 10px; }
+.area { display: flex; align-items: center; gap: 10px; padding-block: 8px; border-bottom: 1px solid var(--line); font-size: 14.5px; min-width: 0; }
+.area .lvl { width: 9px; height: 9px; border-radius: 2px; flex: none; background: var(--w-green); opacity: .55; }
+.area.yellow .lvl { background: var(--w-yellow); opacity: 1; }
+.area.yellow { color: var(--ink); font-weight: 500; }
+.area:not(.yellow) { color: var(--muted); }
+.area .why { margin-left: auto; color: var(--w-yellow); }
+.scale { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 22px; color: var(--muted); }
+.scale span { display: inline-flex; gap: 8px; align-items: center; }
+.scale i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+.warn-detail { margin-top: 26px; border-left: 2px solid var(--w-yellow); padding: 4px 0 4px 16px; max-width: 70ch; }
+.warn-detail p { margin: 6px 0 0; color: var(--muted); }
+
+/* Mar, UV, incêndio */
+.trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; }
+@media (max-width: 900px) { .trio { grid-template-columns: 1fr; gap: 32px; } }
+.trio h3 { font-family: var(--display); font-weight: 400; font-size: 22px; margin: 6px 0 12px; }
+.big { font-family: var(--display); font-weight: 300; font-size: 54px; line-height: 1; letter-spacing: -.02em; }
+.big small { font-size: 18px; color: var(--muted); font-family: var(--body); letter-spacing: 0; margin-left: 6px; }
+.trio p { color: var(--muted); margin: 12px 0 0; font-size: 14.5px; max-width: 40ch; }
+.steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-top: 16px; }
+.steps i { height: 6px; background: var(--line); border-radius: 1px; }
+.steps i.on { background: var(--accent); }
+.steps-l { display: flex; justify-content: space-between; margin-top: 6px; color: var(--faint); }
+
+footer { border-top: 1px solid var(--line); padding-block: 32px 48px; color: var(--muted); display: flex; gap: 24px; flex-wrap: wrap; justify-content: space-between; font-size: 14px; }
+footer p { margin: 0; max-width: 60ch; }
+
+@media (prefers-reduced-motion: no-preference) {
+  #tline { stroke-dasharray: var(--len); stroke-dashoffset: 0; animation: draw 1.4s ease-out both; }
+  @keyframes draw { from { stroke-dashoffset: var(--len); } }
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.5"/><g stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></g></symbol>
+    <symbol id="i-part" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="9" cy="9" r="3.4"/><path d="M9 2.6v1.4M2.6 9h1.4M4.5 4.5l1 1M13.5 4.5l-1 1"/><path d="M9.5 19.5h8.2a3.3 3.3 0 0 0 .3-6.6 4.6 4.6 0 0 0-8.8 1.4 2.6 2.6 0 0 0 .3 5.2Z" fill="var(--bg)"/></g></symbol>
+    <symbol id="i-high" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="13" r="3.6"/><path d="M3 6.5h7M13 6.5h8M6 3.5h11"/></g></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18.5h10.5a3.8 3.8 0 0 0 .4-7.6 5.4 5.4 0 0 0-10.4 1.6A3 3 0 0 0 7 18.5Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+    <symbol id="i-rain" viewBox="0 0 24 24"><path d="M7 14.5h10.5a3.8 3.8 0 0 0 .4-7.6 5.4 5.4 0 0 0-10.4 1.6A3 3 0 0 0 7 14.5Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8.5 17.5l-1 2.5M12.5 17.5l-1 2.5M16.5 17.5l-1 2.5" stroke="var(--rain)" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="#hoje">aberta<b>.</b></a>
+    <span class="status mono"><span class="dot"></span><span>exemplo</span><span class="when">· previsão IPMA de 30/10, 09:31</span></span>
+    <nav aria-label="Secções">
+      <a href="#hoje" class="on">Hoje</a>
+      <a href="#dias">10 dias</a>
+      <a href="#avisos">Avisos</a>
+      <a href="#mar">Mar</a>
+    </nav>
+    <button class="theme" id="themeBtn" type="button" aria-label="Mudar entre tema escuro e claro" title="Tema">
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17Z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="proto mono"><strong>Protótipo</strong> Ainda sem ligação aos dados. Os valores são uma amostra real do IPMA para Lisboa, recolhida a 30 de outubro de 2026, e servem só para ver o desenho.</div>
+
+  <div class="lead" id="hoje">
+    <div>
+      <div class="place">
+        <span class="label">Sexta, 30 out</span>
+        <label class="picker"><span class="label" style="position:absolute;left:-9999px">Escolher local</span>
+          <select id="local" aria-label="Escolher local"></select>
+        </label>
+      </div>
+      <h1>Céu com nuvens altas, máxima de <em class="num">27°</em>.</h1>
+      <p class="summary">Mínima de <b class="num">16°</b> de madrugada e tarde quente, com o pico às 16h. <b>Sem chuva até quarta.</b> Vento fraco de nordeste, a rodar para norte ao fim da tarde. A chuva deve chegar a partir de <b>sexta, 6 de novembro</b>.</p>
+      <div class="notice mono" id="notice" aria-live="polite"></div>
+    </div>
+    <dl class="facts">
+      <div><dt class="label">Às 10h</dt><dd class="num">20°<small>previsto</small></dd></div>
+      <div><dt class="label">Humidade</dt><dd class="num">38<small>%</small></dd></div>
+      <div><dt class="label">Vento</dt><dd class="num">7<small>km/h · NE</small></dd></div>
+      <div><dt class="label">Índice UV</dt><dd class="num">3,5<small>moderado</small></dd></div>
+      <div><dt class="label">Mar</dt><dd class="num">0,7–1<small>m · NW</small></dd></div>
+      <div><dt class="label">Água</dt><dd class="num">16°<small>costa de Lisboa</small></dd></div>
+    </dl>
+  </div>
+
+  <section aria-labelledby="h-48">
+    <div class="sec-head">
+      <h2 id="h-48">Próximas 48 horas</h2>
+      <span class="label">Lisboa · hora a hora</span>
+    </div>
+    <div class="chart-scroll"><svg id="meteo" viewBox="0 0 1000 300" role="img" aria-label="Meteograma de 48 horas: temperatura, probabilidade de chuva e vento hora a hora"></svg></div>
+    <div class="readout mono num" id="readout">Passe por cima do gráfico para ver cada hora.</div>
+    <div class="legend mono"><span><i class="sw"></i>temperatura</span><span><i class="sw rain"></i>probabilidade de chuva</span><span>→ direção do vento, em km/h</span></div>
+    <p class="caption"><svg width="18" height="12" viewBox="0 0 18 12" aria-hidden="true"><path d="M1 8c3 0 3-6 6-6s3 8 6 8 3-4 4-4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>Um meteograma: a linha é a temperatura prevista, as barras a probabilidade de chuva e as setas mostram para onde sopra o vento. O ponto marca a hora atual.</p>
+  </section>
+
+  <section id="dias" aria-labelledby="h-10">
+    <div class="sec-head">
+      <h2 id="h-10">Próximos 10 dias</h2>
+      <span class="label">mínima · máxima · chuva</span>
+    </div>
+    <div class="days" id="days"></div>
+  </section>
+
+  <section id="avisos" aria-labelledby="h-av">
+    <div class="sec-head">
+      <h2 id="h-av">Avisos</h2>
+      <span class="label">próximos 3 dias</span>
+    </div>
+    <p class="warn-lead">Sem avisos no continente nem nos Açores. <b>Aviso amarelo na Madeira</b> por precipitação, de sábado às 21h a domingo às 9h.</p>
+    <div class="regions">
+      <div><span class="label">Continente</span><div class="areas" id="a-cont"></div></div>
+      <div><span class="label">Madeira</span><div class="areas" id="a-mad"></div></div>
+      <div><span class="label">Açores</span><div class="areas" id="a-acores"></div></div>
+    </div>
+    <div class="warn-detail">
+      <span class="label">Madeira · costa sul e regiões montanhosas</span>
+      <p>Aguaceiros, por vezes fortes, podendo ser acompanhados de trovoada.</p>
+    </div>
+    <div class="scale mono">
+      <span><i style="background:var(--w-green)"></i>verde · sem risco</span>
+      <span><i style="background:var(--w-yellow)"></i>amarelo · atenção</span>
+      <span><i style="background:var(--w-orange)"></i>laranja · risco moderado a elevado</span>
+      <span><i style="background:var(--w-red)"></i>vermelho · risco extremo</span>
+    </div>
+  </section>
+
+  <section id="mar" aria-labelledby="h-mar">
+    <div class="sec-head">
+      <h2 id="h-mar">Mar, sol e fogo</h2>
+      <span class="label">hoje · Lisboa</span>
+    </div>
+    <div class="trio">
+      <div>
+        <span class="label">Estado do mar</span>
+        <h3>Costa de Lisboa</h3>
+        <div class="big num">0,7–1<small>m</small></div>
+        <p>Ondas de noroeste com período de 5 a 8,5 segundos. Água entre 15,5° e 15,8°.</p>
+      </div>
+      <div>
+        <span class="label">Radiação ultravioleta</span>
+        <h3>Índice UV</h3>
+        <div class="big num">3,5<small>moderado</small></div>
+        <div class="steps" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+        <div class="steps-l mono"><span>baixo</span><span>extremo</span></div>
+        <p>Óculos de sol e protetor nas horas centrais do dia.</p>
+      </div>
+      <div>
+        <span class="label">Risco de incêndio</span>
+        <h3>Concelho de Lisboa</h3>
+        <div class="big">Moderado</div>
+        <div class="steps" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+        <div class="steps-l mono"><span>reduzido</span><span>máximo</span></div>
+        <p>Nível 2 em 5 na escala do IPMA.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>Dados: <a href="https://www.ipma.pt" target="_blank" rel="noopener">IPMA, I.P.</a> · Instituto Português do Mar e da Atmosfera. Este site não é do IPMA.</p>
+  <p class="mono">aberta · nome provisório · protótipo</p>
+</footer>
+
+<script>
+(function () {
+  // Amostra real: api.ipma.pt/public-data/forecast/aggregate/1110600.json (Lisboa), 30/10/2026
+  // [hora, temperatura, prob. chuva (-99 = sem valor), vento km/h, direção, tipo de tempo]
+  var H = [
+    ["30T02",17.9,-99,7.6,"NE",5],["30T03",17.2,0,7.2,"NE",2],["30T04",16.4,-99,7.2,"NE",5],["30T05",16.3,-99,7.2,"NE",5],
+    ["30T06",16.2,0,7.9,"NE",5],["30T07",15.7,-99,8.3,"NE",5],["30T08",16.2,-99,8.3,"NE",5],["30T09",18.3,0,7.6,"NE",5],
+    ["30T10",20.3,-99,7.2,"NE",5],["30T11",22.1,-99,8.3,"E",5],["30T12",23.2,0,8.6,"E",5],["30T13",24.9,-99,8.3,"E",5],
+    ["30T14",25.8,-99,7.2,"E",5],["30T15",26.6,0,5.8,"NE",5],["30T16",27.1,-99,7.2,"NE",5],["30T17",24.8,-99,9.7,"N",5],
+    ["30T18",23.2,0,9.0,"N",5],["30T19",22.0,-99,8.6,"N",5],["30T20",21.4,-99,9.4,"N",5],["30T21",20.4,0,9.4,"N",5],
+    ["30T22",19.6,-99,8.3,"N",5],["30T23",19.1,-99,7.2,"N",2],["31T00",18.2,0,6.5,"N",1],["31T01",16.9,-99,5.8,"N",1],
+    ["31T02",16.1,-99,5.0,"N",1],["31T03",15.1,0,6.1,"N",1],["31T04",14.5,-99,6.5,"N",1],["31T05",13.8,-99,5.8,"N",1],
+    ["31T06",13.4,0,6.5,"N",1],["31T07",13.1,-99,6.8,"N",1],["31T08",14.3,-99,7.6,"N",1],["31T09",17.3,0,6.5,"NE",1],
+    ["31T10",19.5,-99,6.1,"NE",1],["31T11",21.3,-99,6.8,"E",1],["31T12",22.3,0,7.2,"E",1],["31T13",24.1,-99,7.2,"SE",1],
+    ["31T14",24.8,-99,5.4,"SE",1],["31T15",26.3,0,2.9,"SW",2],["31T16",25.1,-99,6.1,"NW",1],["31T17",23.1,-99,10.1,"NW",1],
+    ["31T18",20.7,0,11.5,"NW",1],["31T19",19.4,-99,11.5,"NW",1],["31T20",19.1,-99,11.5,"NW",1],["31T21",18.9,0,9.4,"N",1],
+    ["31T22",18.0,-99,7.6,"N",1],["31T23",17.3,-99,6.5,"N",1],["01T00",16.8,0,5.4,"N",1],["01T01",16.6,-99,6.5,"NE",1]
+  ];
+  // [data, mín, máx, prob. chuva, tipo de tempo]
+  var D = [
+    ["2026-10-30",15.7,27.1,0,5],["2026-10-31",13.1,26.3,0,1],["2026-11-01",13.6,25.7,0,1],["2026-11-02",13.7,25.7,0,1],
+    ["2026-11-03",11.2,22.2,0,2],["2026-11-04",10.7,20.5,2,1],["2026-11-05",10.2,19.7,22,2],["2026-11-06",11.7,19.6,55,7],
+    ["2026-11-07",13.4,20.1,71,6],["2026-11-08",14.0,19.8,80,6]
+  ];
+  var WT = {1:"Céu limpo",2:"Céu pouco nublado",3:"Céu parcialmente nublado",4:"Céu muito nublado",5:"Nuvens altas",6:"Aguaceiros/chuva",7:"Aguaceiros fracos"};
+  function icon(t) { return t === 1 ? "i-sun" : t === 2 || t === 3 ? "i-part" : t === 5 ? "i-high" : t >= 6 && t <= 15 ? "i-rain" : "i-cloud"; }
+  var DIRS = {N:0,NE:45,E:90,SE:135,S:180,SW:225,W:270,NW:315};
+  var NS = "http://www.w3.org/2000/svg";
+  function el(name, attrs, parent) { var e = document.createElementNS(NS, name); for (var k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+  function fmt(n) { return String(n).replace(".", ","); }
+
+  // Locais (lista real de distrits-islands.json)
+  var LOCAIS = ["Aveiro","Beja","Braga","Guimarães","Bragança","Castelo Branco","Coimbra","Évora","Faro","Sagres","Portimão","Loulé","Guarda","Penhas Douradas","Leiria","Lisboa","Portalegre","Porto","Santarém","Setúbal","Sines","Viana do Castelo","Vila Real","Viseu","Funchal","Porto Santo","Vila do Porto","Ponta Delgada","Angra do Heroísmo","Santa Cruz da Graciosa","Velas","Madalena","Horta","Santa Cruz das Flores","Vila do Corvo"];
+  var sel = document.getElementById("local");
+  LOCAIS.forEach(function (n) { var o = document.createElement("option"); o.value = o.textContent = n; if (n === "Lisboa") o.selected = true; sel.appendChild(o); });
+  sel.addEventListener("change", function () {
+    document.getElementById("notice").textContent = sel.value === "Lisboa" ? "" : "No protótipo só Lisboa tem dados. " + sel.value + " vai funcionar quando ligarmos à API.";
+  });
+
+  // Meteograma
+  var svg = document.getElementById("meteo");
+  var W = 1000, L = 40, R = 990, top = 34, tBot = 178, pTop = 196, pBot = 236, wY = 266;
+  var n = H.length, step = (R - L) / (n - 1);
+  var tmin = 12, tmax = 28;
+  function x(i) { return L + i * step; }
+  function y(t) { return tBot - (t - tmin) / (tmax - tmin) * (tBot - top); }
+  var g = el("g", {}, svg);
+  [14, 18, 22, 26].forEach(function (t) {
+    el("line", {x1: L, x2: R, y1: y(t), y2: y(t), stroke: "var(--line)", "stroke-width": 1}, g);
+    var tx = el("text", {x: L - 8, y: y(t) + 4, "text-anchor": "end"}, g); tx.textContent = t + "°";
+  });
+  el("line", {x1: L, x2: R, y1: pBot, y2: pBot, stroke: "var(--line)"}, g);
+  var pl = el("text", {x: L - 8, y: pBot - 2, "text-anchor": "end"}, g); pl.textContent = "0%";
+  var pl2 = el("text", {x: L - 8, y: pTop + 8, "text-anchor": "end"}, g); pl2.textContent = "100";
+  H.forEach(function (h, i) {
+    var hr = +h[0].slice(3);
+    if (hr === 0) {
+      el("line", {x1: x(i), x2: x(i), y1: 10, y2: pBot, stroke: "var(--faint)", "stroke-dasharray": "2 4"}, g);
+      var d = el("text", {x: x(i) + 6, y: 18, "class": "day"}, g); d.textContent = h[0].slice(0, 2) === "31" ? "sáb 31/10" : "dom 1/11";
+    }
+    if (hr % 3 === 0) {
+      var lab = el("text", {x: x(i), y: pBot + 16, "text-anchor": "middle"}, g); lab.textContent = String(hr).padStart(2, "0") + "h";
+      var a = el("g", {transform: "translate(" + x(i) + "," + wY + ") rotate(" + ((DIRS[h[4]] + 180) % 360) + ")"}, g);
+      el("path", {d: "M0 -7 L0 7 M-3.5 3 L0 7 L3.5 3", fill: "none", stroke: "var(--muted)", "stroke-width": 1.3, "stroke-linecap": "round"}, a);
+      var ws = el("text", {x: x(i), y: wY + 22, "text-anchor": "middle"}, g); ws.textContent = Math.round(h[3]);
+    }
+    if (h[2] > 0) el("rect", {x: x(i) - step * .35, width: step * .7, y: pBot - h[2] / 100 * (pBot - pTop), height: h[2] / 100 * (pBot - pTop), fill: "var(--rain)", opacity: .8}, g);
+  });
+  var nr = el("text", {x: (L + R) / 2, y: pBot - 12, "text-anchor": "middle"}, g); nr.textContent = "sem chuva prevista";
+  var pts = H.map(function (h, i) { return [x(i), y(h[1])]; });
+  var dPath = pts.map(function (p, i) { return (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1); }).join(" ");
+  el("path", {d: dPath + " L" + R + " " + tBot + " L" + L + " " + tBot + " Z", fill: "var(--accent)", opacity: .08}, g);
+  var line = el("path", {id: "tline", d: dPath, fill: "none", stroke: "var(--accent)", "stroke-width": 2, "stroke-linejoin": "round"}, g);
+  try { line.style.setProperty("--len", line.getTotalLength()); } catch (e) {}
+  // máximos e mínimos marcados
+  [[14, "27,1°"], [29, "13,1°"], [37, "26,3°"]].forEach(function (m) {
+    var p = pts[m[0]], up = H[m[0]][1] > 20;
+    el("circle", {cx: p[0], cy: p[1], r: 2.5, fill: "var(--accent)"}, g);
+    var t = el("text", {x: p[0], y: p[1] + (up ? -9 : 18), "text-anchor": "middle", "class": "t-label"}, g); t.textContent = m[1];
+  });
+  var now = 8;
+  el("circle", {cx: pts[now][0], cy: pts[now][1], r: 5, fill: "var(--bg)", stroke: "var(--accent)", "stroke-width": 2}, g);
+  var nl = el("text", {x: pts[now][0], y: pts[now][1] + 22, "text-anchor": "middle", "class": "t-label"}, g); nl.textContent = "agora";
+  var cursor = el("line", {y1: top - 6, y2: wY + 26, stroke: "var(--ink)", "stroke-width": 1, opacity: 0}, g);
+  var ro = document.getElementById("readout");
+  H.forEach(function (h, i) {
+    var r = el("rect", {x: x(i) - step / 2, y: 0, width: step, height: 300, "class": "hit"}, svg);
+    function show() {
+      cursor.setAttribute("x1", x(i)); cursor.setAttribute("x2", x(i)); cursor.setAttribute("opacity", .35);
+      var day = h[0].slice(0, 2) === "30" ? "sex" : h[0].slice(0, 2) === "31" ? "sáb" : "dom";
+      ro.textContent = day + " " + h[0].slice(3) + "h  ·  " + fmt(h[1]) + "°  ·  " + (WT[h[5]] || "") + "  ·  vento " + fmt(h[3]) + " km/h " + h[4] + "  ·  chuva " + (h[2] < 0 ? "sem valor" : h[2] + "%");
+    }
+    r.addEventListener("mouseenter", show);
+    r.addEventListener("touchstart", show, {passive: true});
+  });
+
+  // 10 dias
+  var DN = ["dom","seg","ter","qua","qui","sex","sáb"];
+  var lo = 10, hi = 28, box = document.getElementById("days");
+  D.forEach(function (d, i) {
+    var dt = new Date(d[0] + "T12:00:00");
+    var name = i === 0 ? "Hoje" : i === 1 ? "Amanhã" : DN[dt.getDay()].charAt(0).toUpperCase() + DN[dt.getDay()].slice(1);
+    var row = document.createElement("div"); row.className = "drow";
+    var l = (d[1] - lo) / (hi - lo) * 100, w = (d[2] - d[1]) / (hi - lo) * 100;
+    row.innerHTML =
+      '<div class="d">' + name + '<span class="mono num">' + dt.getDate() + "/" + (dt.getMonth() + 1) + "</span></div>" +
+      '<svg class="wx" width="26" height="26" aria-hidden="true"><use href="#' + icon(d[4]) + '"/></svg>' +
+      '<div class="desc">' + WT[d[4]] + "</div>" +
+      '<div class="tmin num">' + Math.round(d[1]) + "°</div>" +
+      '<div class="range" aria-label="de ' + fmt(d[1]) + " a " + fmt(d[2]) + ' graus"><i style="left:' + l + "%;width:" + w + '%"></i></div>' +
+      '<div class="tmax num">' + Math.round(d[2]) + "°</div>" +
+      '<div class="pp mono num' + (d[3] >= 20 ? " wet" : "") + '"><span class="bar-p"><i style="width:' + d[3] + '%"></i></span>' + d[3] + "%</div>";
+    box.appendChild(row);
+  });
+
+  // Avisos (amostra warnings_www.json)
+  var CONT = ["Aveiro","Beja","Braga","Bragança","Castelo Branco","Coimbra","Évora","Faro","Guarda","Leiria","Lisboa","Portalegre","Porto","Santarém","Setúbal","Viana do Castelo","Vila Real","Viseu"];
+  var MAD = [["Costa Norte"],["Costa Sul","chuva"],["Regiões montanhosas","chuva"],["Porto Santo"]];
+  var ACO = [["Grupo Ocidental"],["Grupo Central"],["Grupo Oriental"]];
+  function areas(id, list) {
+    var b = document.getElementById(id);
+    list.forEach(function (a) {
+      if (typeof a === "string") a = [a];
+      var d = document.createElement("div"); d.className = "area" + (a[1] ? " yellow" : "");
+      d.innerHTML = '<span class="lvl"></span><span>' + a[0] + "</span>" + (a[1] ? '<span class="why mono">' + a[1] + "</span>" : "");
+      b.appendChild(d);
+    });
+  }
+  areas("a-cont", CONT); areas("a-mad", MAD); areas("a-acores", ACO);
+
+  // Tema
+  var root = document.documentElement;
+  try { var saved = localStorage.getItem("tema"); if (saved) root.setAttribute("data-theme", saved); } catch (e) {}
+  document.getElementById("themeBtn").addEventListener("click", function () {
+    var next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("tema", next); } catch (e) {}
+  });
+
+  // Navegação ativa
+  var links = document.querySelectorAll(".bar nav a");
+  function mark() {
+    var h = location.hash || "#hoje";
+    links.forEach(function (a) { a.classList.toggle("on", a.getAttribute("href") === h); });
+  }
+  window.addEventListener("hashchange", mark); mark();
+})();
+</script>
