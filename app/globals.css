@@ -471,3 +471,39 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 /* Localização */
 .perto { color: var(--muted); }
 .geo-aviso { color: var(--muted); margin: 0 0 24px; }
+
+/* Mapa do estado do mar */
+.mapa { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+.mapa-ilhas { display: grid; gap: 24px; }
+.mapa-painel { margin: 0; display: grid; gap: 10px; }
+.mapa-acores, .mapa-madeira { border: 1px solid var(--line); padding: 14px 18px 22px; }
+.mapa-box { position: relative; width: 100%; }
+.mapa-terra { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; }
+.mapa-pt { fill: var(--surface); stroke: var(--muted); stroke-width: 1; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.mapa-es { fill: none; stroke: var(--line); stroke-width: 1; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+/* o pino fica no ponto exato; a etiqueta afasta-se 16 px, ligada por um traço */
+.mapa-pino { position: absolute; width: 0; height: 0; }
+.mapa-ponto { position: absolute; left: -4.5px; top: -4.5px; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2px var(--bg); }
+.mapa-pino::before { content: ""; position: absolute; background: var(--faint); }
+.mapa-pino.esquerda::before { right: 6px; top: 0; width: 10px; height: 1px; }
+.mapa-pino.direita::before { left: 6px; top: 0; width: 10px; height: 1px; }
+.mapa-pino.baixo::before, .mapa-pino.baixoEsq::before, .mapa-pino.baixoDir::before { left: 0; top: 6px; width: 1px; height: 10px; }
+.mapa-pino.cima::before { left: 0; bottom: 6px; width: 1px; height: 10px; }
+.mapa-label {
+  position: absolute; display: grid; gap: 1px; white-space: nowrap; line-height: 1.25;
+  font-size: clamp(11px, 1.05vw, 13.5px); color: var(--muted); pointer-events: none;
+}
+.mapa-label b { color: var(--ink); font-weight: 600; font-size: 1.08em; }
+.mapa-label span { display: inline-flex; align-items: center; gap: 4px; }
+.mapa-label svg { color: var(--accent); flex: none; }
+.mapa-label em { font-style: normal; color: var(--ink); }
+.esquerda .mapa-label { right: 18px; top: 0; transform: translateY(-50%); text-align: right; justify-items: end; }
+.direita .mapa-label { left: 18px; top: 0; transform: translateY(-50%); }
+.baixo .mapa-label { top: 18px; left: 0; transform: translateX(-50%); text-align: center; justify-items: center; }
+.baixoEsq .mapa-label { top: 18px; right: -8px; text-align: right; justify-items: end; }
+.baixoDir .mapa-label { top: 18px; left: -8px; }
+.cima .mapa-label { bottom: 18px; left: 0; transform: translateX(-50%); text-align: center; justify-items: center; }
+.mapa-nota { color: var(--faint); margin: 18px 0 0; }
+@media (max-width: 900px) {
+  .mapa { grid-template-columns: 1fr; }
+}

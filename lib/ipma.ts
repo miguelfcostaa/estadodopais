@@ -215,10 +215,10 @@ export async function getAvisos(): Promise<Aviso[]> {
 
 const ORDEM_REGIOES: Local["regiao"][] = ["Continente", "Madeira", "Açores"];
 
-export type ZonaMar = { zona: string; regiao: Local["regiao"]; ondaMin: number; ondaMax: number; dir: string; aguaMin: number | null; aguaMax: number | null; lat: number };
+export type ZonaMar = { id: number; zona: string; regiao: Local["regiao"]; lon: number; ondaMin: number; ondaMax: number; dir: string; aguaMin: number | null; aguaMax: number | null; lat: number };
 
 export async function getMar(): Promise<{ data: string; zonas: ZonaMar[] }> {
-  type Loc = { globalIdLocal: number; local: string; latitude: string; idRegiao: number };
+  type Loc = { globalIdLocal: number; local: string; latitude: string; longitude: string; idRegiao: number };
   type Prev = { globalIdLocal: number; waveHighMin: string; waveHighMax: string; predWaveDir: string; sstMin: string; sstMax: string };
   const [locs, prev] = await Promise.all([
     obter<Loc[]>(`${OPEN}/sea-locations.json`),
@@ -229,6 +229,8 @@ export async function getMar(): Promise<{ data: string; zonas: ZonaMar[] }> {
     .map((p) => {
       const l = locs.find((x) => x.globalIdLocal === p.globalIdLocal);
       return {
+        id: p.globalIdLocal,
+        lon: Number(l?.longitude ?? 0),
         zona: (l?.local ?? String(p.globalIdLocal)).replace(/,\s*costa$/i, ""),
         regiao: regiao(p.globalIdLocal),
         ondaMin: n(p.waveHighMin) ?? 0,

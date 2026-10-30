@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { MapaMar } from "@/components/MapaMar";
 import { getMar } from "@/lib/ipma";
 import { dataLonga, num } from "@/lib/format";
 
@@ -14,8 +15,13 @@ export default async function MarPage() {
         <h1>Estado do mar</h1>
         <p>Altura das ondas e temperatura da água ao longo da costa, do continente aos Açores.</p>
       </div>
+      <section className="section" aria-labelledby="h-mapa">
+        <div className="sec-head"><h2 id="h-mapa">No mapa</h2><span className="label">ondas em metros · água em °C</span></div>
+        <MapaMar zonas={zonas} />
+        <p className="mapa-nota mono">A seta mostra para onde seguem as ondas. Valores previstos pelo IPMA para hoje. Contornos: Natural Earth.</p>
+      </section>
       <section className="section" aria-labelledby="h-costa">
-        <div className="sec-head"><h2 id="h-costa">Ao longo da costa</h2><span className="label">ondas em metros · água em °C</span></div>
+        <div className="sec-head"><h2 id="h-costa">Em detalhe</h2><span className="label">ondas em metros · água em °C</span></div>
         <div className="table-scroll">
           <table className="data">
             <thead>
