@@ -1,4 +1,4 @@
-export type NomeIcone = "temperatura" | "humidade" | "vento" | "uv" | "ondas" | "agua" | "sensacao" | "chuva";
+export type NomeIcone = "temperatura" | "humidade" | "vento" | "uv" | "ondas" | "agua" | "sensacao" | "chuva" | "fogo";
 
 // Ícones de traço simples, na cor de destaque, para os números principais
 export function FactIcon({ nome }: { nome: NomeIcone }) {
@@ -44,6 +44,7 @@ export function FactIcon({ nome }: { nome: NomeIcone }) {
           <path d="M12 8v6M12 14l-3 6.5M12 14l3 6.5M7.5 10.5h9" />
         </g>
       )}
+      {nome === "fogo" && <path {...s} d="M12 21a6 6 0 0 0 6-6c0-4-3-5.5-3.5-9.5C12 7 10 9.5 10.5 12 9 11.5 8.5 10 8.5 9 7 10.5 6 12.5 6 15a6 6 0 0 0 6 6Z" />}
       {nome === "chuva" && (
         <g {...s}>
           <path d="M3.5 12a8.5 8.5 0 0 1 17 0Z" />

@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { HourlyTable } from "@/components/HourlyTable";
 import { Meteogram } from "@/components/Meteogram";
 import { getLocal, LOCAIS } from "@/lib/data";
-import { horaDe } from "@/lib/format";
 import { getPrevisao } from "@/lib/ipma";
 
 export const revalidate = 43200; // 12 horas
@@ -34,7 +33,6 @@ export default async function HorasPage({ params }: Props) {
         <Link className="back mono" href={`/local/${local.slug}`}>← Voltar para {local.nome}</Link>
         <h1>Hora a hora em {local.nome}</h1>
         <p>Temperatura, chuva, vento e humidade nas próximas 48 horas.</p>
-        <p className="source mono">Previsão do IPMA atualizada às {horaDe(p.atualizado)}</p>
       </div>
 
       <section className="section" aria-labelledby="h-graf">

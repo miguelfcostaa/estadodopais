@@ -10,12 +10,12 @@ const DIRS: Record<string, number> = { N: 0, NE: 45, E: 90, SE: 135, S: 180, SW:
 // Geometria do desenho (viewBox 1000 x 300)
 const L = 40, R = 990, TOP = 34, T_BOT = 178, P_TOP = 196, P_BOT = 236, W_Y = 266;
 
-export function Meteogram({ horas: todas, agora: agoraServidor, fuso }: { horas: Hora[]; agora: string; fuso: string }) {
+export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeAgora = true }: { horas: Hora[]; agora: string; fuso: string; aPartirDeAgora?: boolean }) {
   const [sel, setSel] = useState<number | null>(null);
   const [agora, setAgora] = useState(agoraServidor);
   useEffect(() => setAgora(horaAtual(fuso)), [fuso]);
   const seguintes = todas.filter((h) => h.hora >= agora);
-  const horas = (seguintes.length >= 12 ? seguintes : todas.slice(-48)).slice(0, 48);
+  const horas = aPartirDeAgora ? (seguintes.length >= 12 ? seguintes : todas.slice(-48)).slice(0, 48) : todas;
   const n = horas.length;
   const step = (R - L) / (n - 1);
   const temps = horas.map((h) => h.temp);

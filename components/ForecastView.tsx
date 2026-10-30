@@ -3,7 +3,7 @@ import type { Aviso } from "@/lib/data";
 import { RISCO_INCENDIO } from "@/lib/data";
 import type { Previsao } from "@/lib/ipma";
 import { direcaoExtenso } from "@/lib/ipma";
-import { dataLonga, graus, hora, horaDe, num, nivelUV } from "@/lib/format";
+import { dataLonga, graus, hora, num, nivelUV } from "@/lib/format";
 import { DayColumns } from "./DayColumns";
 import { FactIcon, type NomeIcone } from "./FactIcon";
 import { LocalPicker } from "./LocalPicker";
@@ -35,7 +35,6 @@ export function ForecastView({ p, avisos }: { p: Previsao; avisos: Aviso[] }) {
             {resumo.titulo} <em className="num">{resumo.destaque}</em>.
           </h1>
           <p className="summary">{resumo.texto}</p>
-          <p className="source mono">Previsão do IPMA atualizada às {horaDe(p.atualizado)}</p>
         </div>
         <dl className="facts">
           {visiveis.map((f) => (
@@ -58,7 +57,7 @@ export function ForecastView({ p, avisos }: { p: Previsao; avisos: Aviso[] }) {
           <h2 id="h-10">Próximos dias</h2>
           <span className="label">hoje e os 4 dias seguintes</span>
         </div>
-        <DayColumns dias={p.dias.slice(0, 5)} />
+        <DayColumns dias={p.dias.slice(0, 5)} slug={local.slug} />
         <div className="after-days">
           <Link className="btn" href={`/local/${local.slug}/dias`}>Ver mais dias</Link>
           <Link className="more" href={`/local/${local.slug}/horas`}>Ver previsão das próximas 48 horas →</Link>

@@ -16,6 +16,12 @@ export type Hora = {
   dirVento: string;
   tipoTempo: number;
   humidade: number | null;
+  passo?: 1 | 3; // horas entre este valor e o seguinte
+  sensacao?: number | null;
+  onda?: number | null;
+  dirOnda?: string;
+  periodoOnda?: number | null;
+  agua?: number | null;
 };
 
 export type Dia = {
@@ -26,6 +32,9 @@ export type Dia = {
   tipoTempo: number;
   dirVento: string;
   ventoClasse: number | null; // 1 fraco a 4 muito forte
+  uv?: number | null;
+  intensidade?: number | null; // 0 sem precipitação a 3 forte
+  riscoIncendio?: number | null; // 1 a 5, só hoje e amanhã no continente
 };
 
 export type NivelAviso = "green" | "yellow" | "orange" | "red";

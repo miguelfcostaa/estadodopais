@@ -38,6 +38,7 @@ type Agregado = {
   ffVento?: string;
   ddVento?: string;
   idFfxVento?: number;
+  idIntensidadePrecipita?: number;
   idTipoTempo?: number;
   probabilidadePrecipita?: string;
   iUv?: string;
@@ -59,6 +60,7 @@ export type Previsao = {
   mar: { onda: number; dirOnda: string; periodo: number | null; agua: number | null } | null;
   riscoIncendio: number | null; // 1 a 5
   horas: Hora[];
+  pontos: Hora[]; // horas e, depois delas, valores de 3 em 3 horas
   dias: Dia[];
 };
 
@@ -101,28 +103,48 @@ export async function getPrevisao(slug: string): Promise<Previsao | null> {
   const local = getLocal(slug);
   if (!local) return null;
 
-  const [agregado, rcm] = await Promise.all([
+  type Rcm = { dataPrev: string; local: Record<string, { data: { rcm: number } }> };
+  const rcmDia = (d: 0 | 1) =>
+    local.regiao === "Continente" ? obter<Rcm>(`${OPEN}/forecast/meteorology/rcm/rcm-d${d}.json`).catch(() => null) : Promise.resolve(null);
+  const [agregado, rcm, rcm1] = await Promise.all([
     obter<Agregado[]>(`${PUBLIC}/forecast/aggregate/${local.globalIdLocal}.json`),
-    local.regiao === "Continente"
-      ? obter<{ local: Record<string, { data: { rcm: number } }> }>(`${OPEN}/forecast/meteorology/rcm/rcm-d0.json`).catch(() => null)
-      : Promise.resolve(null),
+    rcmDia(0),
+    rcmDia(1),
   ]);
   if (!agregado.length) return null;
 
   const agora = horaAtual(fuso(local));
   const horarias = agregado.filter((a) => a.idPeriodo === 1);
   // Todas as horas disponíveis: o gráfico escolhe as 48 seguintes no navegador.
-  const horas: Hora[] = horarias.map((a) => ({
-      hora: a.dataPrev.slice(0, 16),
-      temp: n(a.tMed) ?? 0,
-      probChuva: n(a.probabilidadePrecipita),
-      vento: n(a.ffVento) ?? 0,
-      dirVento: a.ddVento ?? "",
-      tipoTempo: a.idTipoTempo ?? 0,
-      humidade: n(a.hR),
-    }));
+  const ponto = (a: Agregado, passo: 1 | 3): Hora => ({
+    hora: a.dataPrev.slice(0, 16),
+    temp: n(a.tMed) ?? 0,
+    probChuva: n(a.probabilidadePrecipita),
+    vento: n(a.ffVento) ?? 0,
+    dirVento: a.ddVento ?? "",
+    tipoTempo: a.idTipoTempo ?? 0,
+    humidade: n(a.hR),
+    passo,
+    sensacao: n(a.utci),
+    onda: n(a.ondulacao),
+    dirOnda: a.dirOndulacao ?? "",
+    periodoOnda: n(a.periodOndulacao),
+    agua: n(a.tempAguaMar),
+  });
+  const horas: Hora[] = horarias.map((a) => ponto(a, 1));
+  const ultimaHora = horas.at(-1)?.hora ?? "";
+  const pontos: Hora[] = [
+    ...horas,
+    ...agregado.filter((a) => a.idPeriodo === 3 && a.dataPrev.slice(0, 16) > ultimaHora).map((a) => ponto(a, 3)),
+  ];
 
   const diarias = agregado.filter((a) => a.idPeriodo === 24);
+  const dico = String(local.globalIdLocal).slice(1, 5);
+  const risco = new Map<string, number>();
+  for (const r of [rcm, rcm1]) {
+    const v = r?.local[dico]?.data.rcm;
+    if (r && v) risco.set(r.dataPrev.slice(0, 10), v);
+  }
   const dias: Dia[] = diarias.map((a) => ({
     data: a.dataPrev.slice(0, 10),
     tMin: n(a.tMin) ?? 0,
@@ -131,13 +153,15 @@ export async function getPrevisao(slug: string): Promise<Previsao | null> {
     tipoTempo: a.idTipoTempo ?? 0,
     dirVento: a.ddVento ?? "",
     ventoClasse: a.idFfxVento ?? null,
+    uv: n(a.iUv),
+    intensidade: a.idIntensidadePrecipita ?? null,
+    riscoIncendio: risco.get(a.dataPrev.slice(0, 10)) ?? null,
   }));
   if (!dias.length) return null;
 
   const atualH = horarias.find((a) => a.dataPrev.slice(0, 16) === agora) ?? horarias.find((a) => a.dataPrev.slice(0, 16) > agora) ?? horarias[horarias.length - 1];
   const hojeD = diarias[0];
   const onda = n(atualH?.ondulacao);
-  const dico = String(local.globalIdLocal).slice(1, 5);
 
   return {
     local,
@@ -157,6 +181,7 @@ export async function getPrevisao(slug: string): Promise<Previsao | null> {
     mar: onda !== null ? { onda, dirOnda: atualH?.dirOndulacao ?? "", periodo: n(atualH?.periodOndulacao), agua: n(atualH?.tempAguaMar) } : null,
     riscoIncendio: rcm?.local[dico]?.data.rcm ?? null,
     horas,
+    pontos,
     dias,
   };
 }

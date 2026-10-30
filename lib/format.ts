@@ -78,3 +78,10 @@ export function quandoDia(iso: string): string {
 export function horaDe(iso: string): string {
   return iso.slice(11, 16);
 }
+
+// "Sábado, 31 de outubro"
+export function dataExtensa(iso: string): string {
+  const p = partes(iso);
+  const nome = DIAS_SEMANA[p.semana];
+  return `${nome.charAt(0).toUpperCase()}${nome.slice(1)}, ${p.dia} de ${MESES_LONGOS[p.mes - 1]}`;
+}

@@ -9,11 +9,11 @@ import { WeatherIcon } from "./WeatherIcon";
 const DIRS: Record<string, number> = { N: 0, NE: 45, E: 90, SE: 135, S: 180, SW: 225, W: 270, NW: 315 };
 
 // Tabela hora a hora das próximas 48 horas, a partir da hora atual de quem vê
-export function HourlyTable({ horas: todas, agora: agoraServidor, fuso }: { horas: Hora[]; agora: string; fuso: string }) {
+export function HourlyTable({ horas: todas, agora: agoraServidor, fuso, aPartirDeAgora = true }: { horas: Hora[]; agora: string; fuso: string; aPartirDeAgora?: boolean }) {
   const [agora, setAgora] = useState(agoraServidor);
   useEffect(() => setAgora(horaAtual(fuso)), [fuso]);
   const seguintes = todas.filter((h) => h.hora >= agora);
-  const horas = (seguintes.length >= 12 ? seguintes : todas.slice(-48)).slice(0, 48);
+  const horas = aPartirDeAgora ? (seguintes.length >= 12 ? seguintes : todas.slice(-48)).slice(0, 48) : todas;
 
   return (
     <div className="table-scroll">
@@ -30,18 +30,18 @@ export function HourlyTable({ horas: todas, agora: agoraServidor, fuso }: { hora
         </thead>
         <tbody>
           {horas.map((h, i) => {
-            const novoDia = i === 0 || hora(h.hora) === 0;
+            const novoDia = aPartirDeAgora && (i === 0 || hora(h.hora) === 0);
             return [
               novoDia && (
                 <tr key={`d${h.hora}`} className="day-row">
                   <td colSpan={7}>
-                    {i === 0 ? "Hoje" : diaSemana(h.hora).charAt(0).toUpperCase() + diaSemana(h.hora).slice(1)}
+                    {h.hora.slice(0, 10) === agora.slice(0, 10) ? "Hoje" : diaSemana(h.hora).charAt(0).toUpperCase() + diaSemana(h.hora).slice(1)}
                     <span className="mono">{dataCurta(h.hora)}</span>
                   </td>
                 </tr>
               ),
-              <tr key={h.hora} className={i === 0 ? "now" : undefined}>
-                <td className="mono">{i === 0 ? "agora" : `${String(hora(h.hora)).padStart(2, "0")}h`}</td>
+              <tr key={h.hora} className={h.hora === agora ? "now" : undefined}>
+                <td className="mono">{h.hora === agora ? "agora" : `${String(hora(h.hora)).padStart(2, "0")}h`}</td>
                 <td className="wx-cell"><WeatherIcon tipo={h.tipoTempo} size={22} /></td>
                 <td className="wx-desc">{TIPOS_TEMPO[h.tipoTempo] ?? ""}</td>
                 <td className="r temp">{num(Math.round(h.temp))}°</td>
