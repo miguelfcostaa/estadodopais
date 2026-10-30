@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { PrototypeBanner } from "@/components/PrototypeBanner";
 import { WarningsGrid } from "@/components/WarningsGrid";
 import { WarningsLead } from "@/components/WarningsLead";
 import { AREAS_AVISO, AVISOS } from "@/lib/data";
@@ -11,7 +10,6 @@ export default function AvisosPage() {
   const ativos = AVISOS.filter((a) => a.nivel !== "green");
   return (
     <div className="wrap">
-      <PrototypeBanner />
       <div className="page-head">
         <span className="label">Próximos 3 dias</span>
         <h1>Avisos meteorológicos</h1>

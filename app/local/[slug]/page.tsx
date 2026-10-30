@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ForecastView } from "@/components/ForecastView";
 import { LocalPicker } from "@/components/LocalPicker";
-import { PrototypeBanner } from "@/components/PrototypeBanner";
 import { getLocal, getPrevisao, LOCAIS } from "@/lib/data";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -26,7 +25,6 @@ export default async function LocalPage({ params }: Props) {
 
   return (
     <div className="wrap">
-      <PrototypeBanner />
       {p ? (
         <ForecastView p={p} />
       ) : (
@@ -39,7 +37,7 @@ export default async function LocalPage({ params }: Props) {
             <h1>{local.nome}</h1>
           </div>
           <div className="empty">
-            <p>No protótipo só Lisboa tem dados. A previsão de {local.nome} aparece aqui quando o site estiver ligado à API do IPMA.</p>
+            <p>A previsão de {local.nome} ainda não está disponível. Volte a consultar mais tarde.</p>
             <Link className="more" href="/local/lisboa">Ver Lisboa →</Link>
           </div>
         </>

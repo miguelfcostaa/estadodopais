@@ -27,12 +27,13 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="wrap bar">
         <Link className="brand" href="/">
-          aberta<b>.</b>
+          <img className="brand-mark" src="/logo.svg" alt="" width="28" height="28" />
+          <span>aberta<b>.</b></span>
         </Link>
         <span className="status mono">
           <span className="dot" />
-          <span>exemplo</span>
-          <span className="when">· previsão IPMA de 30/10, 09:31</span>
+          <span>atualizado</span>
+          <span className="when">30/10, 09:31</span>
         </span>
         <button
           className="icon-btn menu-btn"

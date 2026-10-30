@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { PrototypeBanner } from "@/components/PrototypeBanner";
 import { MAR_COSTA } from "@/lib/data";
 import { num } from "@/lib/format";
 
@@ -8,7 +7,6 @@ export const metadata: Metadata = { title: "Mar" };
 export default function MarPage() {
   return (
     <div className="wrap">
-      <PrototypeBanner />
       <div className="page-head">
         <span className="label">Hoje</span>
         <h1>Estado do mar</h1>

@@ -20,8 +20,6 @@ export default function SobrePage() {
         <p>
           O IPMA permite usar os seus dados <strong>sem fins lucrativos</strong>, desde que se indique sempre a fonte e a ligação ao site do instituto.
         </p>
-        <h2>Estado do projeto</h2>
-        <p>Protótipo. Os valores que vê são uma amostra real recolhida a 30 de outubro de 2026 e ainda não se atualizam sozinhos.</p>
       </div>
     </div>
   );
