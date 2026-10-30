@@ -17,7 +17,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const local = getLocal(slug);
-  return { title: local ? `10 dias em ${local.nome}` : "Local não encontrado" };
+  return { title: local ? `Previsão - ${local.nome}` : "Local não encontrado" };
 }
 
 export default async function DiasPage({ params }: Props) {
@@ -31,7 +31,7 @@ export default async function DiasPage({ params }: Props) {
     <div className="wrap">
       <div className="page-head">
         <Link className="back mono" href={`/local/${local.slug}`}>← Voltar para {local.nome}</Link>
-        <h1>{p.dias.length} dias em {local.nome}</h1>
+        <h1>Previsão - {local.nome}</h1>
         <p>Previsão dia a dia: tempo, temperaturas mínima e máxima, chuva e vento.</p>
         <p className="source mono">Previsão do IPMA atualizada às {horaDe(p.atualizado)}</p>
       </div>
