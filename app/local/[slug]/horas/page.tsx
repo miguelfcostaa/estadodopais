@@ -31,7 +31,7 @@ export default async function HorasPage({ params }: Props) {
   return (
     <div className="wrap">
       <div className="page-head">
-        <BackLink slug={local.slug} nome={local.nome} />
+        <BackLink href={`/local/${local.slug}`} label={`Voltar para ${local.nome}`} />
         <h1>Hora a hora em {local.nome}</h1>
         <p>Temperatura, chuva, vento e humidade nas próximas 48 horas.</p>
       </div>

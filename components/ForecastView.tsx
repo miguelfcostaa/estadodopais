@@ -10,8 +10,7 @@ import { LocalPicker } from "./LocalPicker";
 import { WarningsGrid } from "./WarningsGrid";
 import { WarningsLead } from "./WarningsLead";
 
-export function ForecastView({ p, avisos, naInicio = false }: { p: Previsao; avisos: Aviso[]; naInicio?: boolean }) {
-  const sufixo = naInicio ? "?de=inicio" : "";
+export function ForecastView({ p, avisos }: { p: Previsao; avisos: Aviso[] }) {
   const { local, resumo, atual, mar } = p;
   type Facto = { icone: NomeIcone; label: string; valor: string; unidade: string };
   const factos: (Facto | null)[] = [
@@ -58,10 +57,10 @@ export function ForecastView({ p, avisos, naInicio = false }: { p: Previsao; avi
           <h2 id="h-10">Próximos dias</h2>
           <span className="label">hoje e os 4 dias seguintes</span>
         </div>
-        <DayColumns dias={p.dias.slice(0, 5)} slug={local.slug} sufixo={sufixo} />
+        <DayColumns dias={p.dias.slice(0, 5)} slug={local.slug} />
         <div className="after-days">
-          <Link className="btn" href={`/local/${local.slug}/dias${sufixo}`}>Ver mais dias</Link>
-          <Link className="more" href={`/local/${local.slug}/horas${sufixo}`}>Ver previsão das próximas 48 horas →</Link>
+          <Link className="btn" href={`/local/${local.slug}/dias`}>Ver mais dias</Link>
+          <Link className="more" href={`/local/${local.slug}/horas`}>Ver previsão das próximas 48 horas →</Link>
         </div>
       </section>
 

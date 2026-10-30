@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BackLink } from "@/components/BackLink";
 import { AREAS_AVISO, LOCAIS, type NivelAviso } from "@/lib/data";
 import { intervalo, nomeNivel } from "@/lib/avisos";
 import { getTodosAvisos } from "@/lib/ipma";
@@ -37,7 +38,7 @@ export default async function AreaPage({ params }: Props) {
   return (
     <div className="wrap">
       <div className="page-head">
-        <Link className="back mono" href="/avisos">← Voltar para avisos</Link>
+        <BackLink href="/avisos" label="Voltar para avisos" />
         <span className="label"><i className={`lvl ${pior}`} /> {info.regiao}</span>
         <h1>{info.nome}</h1>
         <p className="warn-lead">

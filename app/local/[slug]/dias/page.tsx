@@ -30,7 +30,7 @@ export default async function DiasPage({ params }: Props) {
   return (
     <div className="wrap">
       <div className="page-head">
-        <BackLink slug={local.slug} nome={local.nome} />
+        <BackLink href={`/local/${local.slug}`} label={`Voltar para ${local.nome}`} />
         <h1>Previsão - {local.nome}</h1>
         <p>Previsão dia a dia: tempo, temperaturas mínima e máxima, chuva e vento.</p>
       </div>

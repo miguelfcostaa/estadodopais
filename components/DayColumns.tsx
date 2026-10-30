@@ -10,7 +10,7 @@ const MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "o
 
 // Dias em colunas. Cada coluna abre a página desse dia.
 // A barra de temperatura usa a mesma escala em todos os dias mostrados.
-export function DayColumns({ dias, slug, atual, sufixo = "" }: { dias: Dia[]; slug: string; atual?: string; sufixo?: string }) {
+export function DayColumns({ dias, slug, atual }: { dias: Dia[]; slug: string; atual?: string }) {
   const lo = Math.floor(Math.min(...dias.map((d) => d.tMin))) - 1;
   const hi = Math.ceil(Math.max(...dias.map((d) => d.tMax))) + 1;
   const pct = (t: number) => ((t - lo) / (hi - lo)) * 100;
@@ -23,8 +23,8 @@ export function DayColumns({ dias, slug, atual, sufixo = "" }: { dias: Dia[]; sl
         const curto = cap(i === 0 ? "Hoje" : diaSemana(d.data, true));
         const [, mes, dia] = d.data.split("-").map(Number);
         return (
-          <li key={d.data} className={`day${i === 0 ? " today" : ""}${atual === d.data ? " current" : ""}`}>
-            <Link className="day-link" href={`/local/${slug}/dia/${d.data}${sufixo}`} aria-label={`${nome}, ${dia} de ${MESES[mes - 1]}: ver detalhes`}>
+          <li key={d.data} className={`day${(atual ? atual === d.data : i === 0) ? " today" : ""}`} aria-current={atual === d.data ? "page" : undefined}>
+            <Link className="day-link" href={`/local/${slug}/dia/${d.data}`} aria-label={`${nome}, ${dia} de ${MESES[mes - 1]}: ver detalhes`}>
               <div className="day-head">
                 <span className="day-name">
                   <span className="nome-longo">{nome}</span>

@@ -1,24 +1,41 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-// "← Voltar" quando se chegou a partir da página inicial (?de=inicio);
-// "← Voltar para <cidade>" quando se navega nas páginas de uma cidade.
-function Conteudo({ slug, nome }: { slug: string; nome: string }) {
-  const vemDoInicio = useSearchParams().get("de") === "inicio";
-  return vemDoInicio ? (
-    <Link className="back mono" href="/">← Voltar</Link>
-  ) : (
-    <Link className="back mono" href={`/local/${slug}`}>← Voltar para {nome}</Link>
-  );
-}
+// Volta à página anterior quando se chegou a partir de outra página do site.
+// Se a página foi aberta diretamente, leva ao destino de recurso (por exemplo, a cidade).
+export function BackLink({ href, label }: { href: string; label: string }) {
+  const router = useRouter();
+  const [anterior, setAnterior] = useState<string | null>(null);
 
-export function BackLink({ slug, nome }: { slug: string; nome: string }) {
+  useEffect(() => {
+    try {
+      const a = sessionStorage.getItem("nav:anterior");
+      const aqui = window.location.pathname + window.location.search;
+      if (a && a !== aqui) setAnterior(a);
+    } catch {}
+  }, []);
+
+  if (anterior) {
+    return (
+      <Link
+        className="back mono"
+        href={anterior}
+        onClick={(e) => {
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+          e.preventDefault();
+          router.back();
+        }}
+      >
+        ← Voltar
+      </Link>
+    );
+  }
   return (
-    <Suspense fallback={<Link className="back mono" href={`/local/${slug}`}>← Voltar para {nome}</Link>}>
-      <Conteudo slug={slug} nome={nome} />
-    </Suspense>
+    <Link className="back mono" href={href}>
+      ← {label}
+    </Link>
   );
 }

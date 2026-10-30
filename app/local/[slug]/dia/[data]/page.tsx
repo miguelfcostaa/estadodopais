@@ -68,7 +68,7 @@ export default async function DiaPage({ params }: Props) {
   return (
     <div className="wrap">
       <div className="page-head">
-        <BackLink slug={local.slug} nome={local.nome} />
+        <BackLink href={`/local/${local.slug}`} label={`Voltar para ${local.nome}`} />
         <div className="dia-titulo">
           <div>
             <h1>{dataExtensa(data)}</h1>

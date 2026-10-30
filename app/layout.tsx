@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, IBM_Plex_Mono, Parkinsans } from "next/font/google";
 import { SiteFooter } from "@/components/SiteFooter";
+import { NavHistory } from "@/components/NavHistory";
 import { SiteHeader } from "@/components/SiteHeader";
 import { horaMinutoAtual } from "@/lib/format";
 import "./globals.css";
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: temaInicial }} />
       </head>
       <body>
+        <NavHistory />
         <SiteHeader atualizado={horaMinutoAtual()} />
         <main className="site-main">{children}</main>
         <SiteFooter />
