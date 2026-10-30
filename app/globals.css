@@ -329,3 +329,33 @@ table.data .r { text-align: right; }
 
 .facts dt { display: flex; align-items: center; gap: 8px; }
 .fact-icon { color: var(--accent); flex: none; }
+
+/* Ligação para a página hora a hora, por baixo dos próximos dias */
+.after-days { margin-top: 20px; display: flex; align-items: center; gap: 12px 24px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; padding: 9px 16px; border: 1px solid var(--accent); border-radius: 3px; color: var(--ink); text-decoration: none; font-weight: 500; font-size: 14.5px; }
+.btn:hover { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+/* 10 dias: duas filas de 5 colunas */
+.days5 .day:nth-child(n + 6) { border-top: 1px solid var(--line); }
+.days5 .day:nth-child(5n + 1) { border-left: 0; }
+
+/* Página hora a hora */
+.back { display: inline-block; margin-bottom: 20px; color: var(--muted); text-decoration: none; }
+.back:hover { color: var(--ink); }
+.page-head .label + h1 { margin-top: 8px; }
+table.hourly { min-width: 640px; }
+table.hourly td { padding-block: 9px; }
+table.hourly .day-row td { padding: 22px 0 8px; font-family: var(--display); font-size: 18px; font-weight: 500; border-bottom: 1px solid var(--line); }
+table.hourly .day-row:first-child td { padding-top: 4px; }
+table.hourly .day-row .mono { color: var(--muted); margin-left: 10px; font-family: var(--mono); font-size: 12px; font-weight: 400; }
+table.hourly td:first-child { font-weight: 400; color: var(--muted); width: 70px; }
+table.hourly tr.now td { color: var(--ink); }
+table.hourly tr.now td:first-child { color: var(--accent); }
+table.hourly .wx-cell { width: 34px; padding-right: 6px; }
+table.hourly .wx-cell svg { display: block; }
+table.hourly .wx-desc { color: var(--muted); font-size: 14.5px; }
+table.hourly .temp { font-family: var(--display); font-size: 18px; font-weight: 500; }
+table.hourly .wet { color: var(--accent); }
+table.hourly .wind-cell { white-space: nowrap; }
+table.hourly .wind-cell svg { margin-right: 6px; vertical-align: -1px; }
+table.hourly .wind-cell .mono { color: var(--muted); margin-left: 4px; }
+@media (max-width: 760px) { table.hourly .wx-desc { display: none; } table.hourly { min-width: 0; } }

@@ -119,6 +119,7 @@ export async function getPrevisao(slug: string): Promise<Previsao | null> {
       vento: n(a.ffVento) ?? 0,
       dirVento: a.ddVento ?? "",
       tipoTempo: a.idTipoTempo ?? 0,
+      humidade: n(a.hR),
     }));
 
   const diarias = agregado.filter((a) => a.idPeriodo === 24);

@@ -15,6 +15,7 @@ export type Hora = {
   vento: number; // km/h
   dirVento: string;
   tipoTempo: number;
+  humidade: number | null;
 };
 
 export type Dia = {

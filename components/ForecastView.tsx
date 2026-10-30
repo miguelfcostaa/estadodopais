@@ -7,7 +7,6 @@ import { dataLonga, graus, hora, horaDe, num, nivelUV } from "@/lib/format";
 import { DayColumns } from "./DayColumns";
 import { FactIcon, type NomeIcone } from "./FactIcon";
 import { LocalPicker } from "./LocalPicker";
-import { Meteogram } from "./Meteogram";
 import { WarningsGrid } from "./WarningsGrid";
 import { WarningsLead } from "./WarningsLead";
 
@@ -54,24 +53,16 @@ export function ForecastView({ p, avisos }: { p: Previsao; avisos: Aviso[] }) {
         </dl>
       </div>
 
-      <section className="section" aria-labelledby="h-48">
-        <div className="sec-head">
-          <h2 id="h-48">Próximas 48 horas</h2>
-          <span className="label">{local.nome} · hora a hora</span>
-        </div>
-        <Meteogram horas={p.horas} agora={p.agora} fuso={p.fuso} />
-        <p className="caption">
-          <svg width="18" height="12" viewBox="0 0 18 12" aria-hidden="true"><path d="M1 8c3 0 3-6 6-6s3 8 6 8 3-4 4-4" fill="none" stroke="currentColor" strokeWidth="1.4" /></svg>
-          Um meteograma: a linha é a temperatura prevista, as barras a probabilidade de chuva e as setas mostram para onde sopra o vento. O ponto marca a hora atual.
-        </p>
-      </section>
-
       <section className="section" aria-labelledby="h-10">
         <div className="sec-head">
           <h2 id="h-10">Próximos dias</h2>
           <span className="label">hoje e os 4 dias seguintes</span>
         </div>
         <DayColumns dias={p.dias.slice(0, 5)} />
+        <div className="after-days">
+          <Link className="btn" href={`/local/${local.slug}/dias`}>Ver mais dias</Link>
+          <Link className="more" href={`/local/${local.slug}/horas`}>Ver previsão das próximas 48 horas →</Link>
+        </div>
       </section>
 
       <section className="section" aria-labelledby="h-av">
