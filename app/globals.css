@@ -351,8 +351,6 @@ table.data .r { text-align: right; }
 
 /* Ligação para a página hora a hora, por baixo dos próximos dias */
 .after-days { margin-top: 20px; display: flex; align-items: center; gap: 12px 24px; flex-wrap: wrap; }
-.btn { display: inline-flex; align-items: center; padding: 9px 16px; border: 1px solid var(--accent); border-radius: 3px; color: var(--ink); text-decoration: none; font-weight: 500; font-size: 14.5px; }
-.btn:hover { background: color-mix(in srgb, var(--accent) 14%, transparent); }
 
 
 /* Página hora a hora */

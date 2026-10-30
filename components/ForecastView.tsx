@@ -55,11 +55,10 @@ export function ForecastView({ p, avisos }: { p: Previsao; avisos: Aviso[] }) {
       <section className="section" aria-labelledby="h-10">
         <div className="sec-head">
           <h2 id="h-10">Próximos dias</h2>
-          <span className="label">hoje e os 4 dias seguintes</span>
+          <span className="label">próximos {p.dias.length} dias</span>
         </div>
-        <DayColumns dias={p.dias.slice(0, 5)} slug={local.slug} />
+        <DayColumns dias={p.dias} slug={local.slug} carrossel />
         <div className="after-days">
-          <Link className="btn" href={`/local/${local.slug}/dias`}>Ver mais dias</Link>
           <Link className="more" href={`/local/${local.slug}/horas`}>Ver previsão das próximas 48 horas →</Link>
         </div>
       </section>
