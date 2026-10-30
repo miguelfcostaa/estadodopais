@@ -5,6 +5,7 @@ import type { Previsao } from "@/lib/ipma";
 import { direcaoExtenso } from "@/lib/ipma";
 import { dataLonga, graus, hora, horaDe, num, nivelUV } from "@/lib/format";
 import { DayList } from "./DayList";
+import { FactIcon, type NomeIcone } from "./FactIcon";
 import { LocalPicker } from "./LocalPicker";
 import { Meteogram } from "./Meteogram";
 import { WarningsGrid } from "./WarningsGrid";
@@ -12,14 +13,16 @@ import { WarningsLead } from "./WarningsLead";
 
 export function ForecastView({ p, avisos }: { p: Previsao; avisos: Aviso[] }) {
   const { local, resumo, atual, mar } = p;
-  const factos: { label: string; valor: string; unidade: string }[] = [
-    { label: `Às ${hora(p.agora)}h`, valor: graus(atual.temp), unidade: "previsto" },
-    atual.humidade !== null ? { label: "Humidade", valor: String(Math.round(atual.humidade)), unidade: "%" } : null,
-    atual.vento !== null ? { label: "Vento", valor: String(Math.round(atual.vento)), unidade: `km/h · ${atual.dirVento}` } : null,
-    p.uv !== null ? { label: "Índice UV", valor: num(p.uv), unidade: nivelUV(p.uv) } : null,
-    mar ? { label: "Ondas", valor: num(mar.onda), unidade: `m · ${mar.dirOnda}` } : atual.sensacao !== null ? { label: "Sensação", valor: graus(atual.sensacao), unidade: "térmica" } : null,
-    mar?.agua != null ? { label: "Água do mar", valor: graus(mar.agua), unidade: "" } : p.probChuvaHoje !== null ? { label: "Chuva hoje", valor: String(Math.round(p.probChuvaHoje)), unidade: "%" } : null,
-  ].filter((f): f is { label: string; valor: string; unidade: string } => f !== null);
+  type Facto = { icone: NomeIcone; label: string; valor: string; unidade: string };
+  const factos: (Facto | null)[] = [
+    { icone: "temperatura", label: `Às ${hora(p.agora)}h`, valor: graus(atual.temp), unidade: "previsto" },
+    atual.humidade !== null ? { icone: "humidade", label: "Humidade", valor: String(Math.round(atual.humidade)), unidade: "%" } : null,
+    atual.vento !== null ? { icone: "vento", label: "Vento", valor: String(Math.round(atual.vento)), unidade: `km/h · ${atual.dirVento}` } : null,
+    p.uv !== null ? { icone: "uv", label: "Índice UV", valor: num(p.uv), unidade: nivelUV(p.uv) } : null,
+    mar ? { icone: "ondas", label: "Ondas", valor: num(mar.onda), unidade: `m · ${mar.dirOnda}` } : atual.sensacao !== null ? { icone: "sensacao", label: "Sensação", valor: graus(atual.sensacao), unidade: "térmica" } : null,
+    mar?.agua != null ? { icone: "agua", label: "Água do mar", valor: graus(mar.agua), unidade: "" } : p.probChuvaHoje !== null ? { icone: "chuva", label: "Chuva hoje", valor: String(Math.round(p.probChuvaHoje)), unidade: "%" } : null,
+  ];
+  const visiveis = factos.filter((f): f is Facto => f !== null);
 
   return (
     <>
@@ -36,9 +39,12 @@ export function ForecastView({ p, avisos }: { p: Previsao; avisos: Aviso[] }) {
           <p className="source mono">Previsão do IPMA atualizada às {horaDe(p.atualizado)}</p>
         </div>
         <dl className="facts">
-          {factos.map((f) => (
+          {visiveis.map((f) => (
             <div key={f.label}>
-              <dt className="label">{f.label}</dt>
+              <dt className="label">
+                <FactIcon nome={f.icone} />
+                {f.label}
+              </dt>
               <dd className="num">
                 {f.valor}
                 {f.unidade && <small>{f.unidade}</small>}

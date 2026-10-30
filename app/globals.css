@@ -305,3 +305,6 @@ table.data .r { text-align: right; }
 .calm-group { padding: 0 14px 14px; display: grid; gap: 8px; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .chip { font-size: 13px; color: var(--muted); padding: 3px 9px; border: 1px solid var(--line); border-radius: 999px; }
+
+.facts dt { display: flex; align-items: center; gap: 8px; }
+.fact-icon { color: var(--accent); flex: none; }
