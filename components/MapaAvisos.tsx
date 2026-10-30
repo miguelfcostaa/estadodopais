@@ -1,16 +1,12 @@
 import Link from "next/link";
 import type { Aviso, NivelAviso } from "@/lib/data";
 import { AREAS_AVISO, NIVEIS } from "@/lib/data";
-import { avisosDaArea, nivelDaArea } from "@/lib/avisos";
+import { nivelDaArea } from "@/lib/avisos";
 import { PAINEIS, type Painel } from "@/lib/mapa";
 import { AREAS_MAPA, type AreaMapa } from "@/lib/mapa-avisos";
 
 const ORDEM: NivelAviso[] = ["green", "yellow", "orange", "red"];
 const pior = (ns: NivelAviso[]) => ns.reduce((m, n) => (ORDEM.indexOf(n) > ORDEM.indexOf(m) ? n : m), "green" as NivelAviso);
-
-function tipos(avisos: Aviso[], id: string) {
-  return [...new Set(avisosDaArea(avisos, id).map((a) => a.tipo.toLowerCase()))];
-}
 
 // Nível com que se pinta cada forma (a ilha da Madeira junta as três zonas que tem)
 function nivelForma(avisos: Aviso[], id: string): NivelAviso {
@@ -18,37 +14,32 @@ function nivelForma(avisos: Aviso[], id: string): NivelAviso {
 }
 
 // Parte do painel a mostrar, em unidades do painel (o mapa do mar precisa do mar à esquerda; este não)
-const RECORTE: Record<string, [number, number]> = { continente: [215, 673] };
+const RECORTE: Record<string, [number, number, number, number]> = { continente: [215, 673, 0, 825] }; // x0, x1, y0, y1
 
-function Etiqueta({ a, painel, avisos, x0, w }: { a: AreaMapa; painel: Painel; avisos: Aviso[]; x0: number; w: number }) {
-  if (a.id === "MADEIRA" || a.id === "DESERTAS") return null;
+// Zonas da ilha da Madeira: um ponto clicável em cada uma (a ilha é uma só forma no mapa)
+function PontoZona({ a, painel, avisos }: { a: AreaMapa; painel: Painel; avisos: Aviso[] }) {
   const nivel = nivelDaArea(avisos, a.id);
-  const t = tipos(avisos, a.id);
-  // nos Açores e no Porto Santo o nome fica por baixo das ilhas
-  const abaixo = a.painel === "acores" || a.id === "MPS";
-  const margem = (a.c[0] - x0) / w < 0.12 ? " margem" : "";
   return (
     <Link
       href={`/avisos/${a.id.toLowerCase()}`}
-      className={`av-label ${nivel}${nivel !== "green" ? " ativo" : ""}${abaixo ? " abaixo" : ""}${margem}`}
-      style={{ left: `${((a.c[0] - x0) / w) * 100}%`, top: `${(a.c[1] / painel.h) * 100}%` }}
-    >
-      <b>{AREAS_AVISO[a.id]?.nome ?? a.id}</b>
-      {t.length > 0 && <span className="mono">{t.join(", ")}</span>}
-    </Link>
+      className={`av-ponto ${nivel}`}
+      style={{ left: `${(a.c[0] / painel.w) * 100}%`, top: `${(a.c[1] / painel.h) * 100}%` }}
+      title={AREAS_AVISO[a.id]?.nome}
+      aria-label={AREAS_AVISO[a.id]?.nome}
+    />
   );
 }
 
 function Mapa({ nome, titulo, avisos }: { nome: "continente" | "acores" | "madeira"; titulo?: string; avisos: Aviso[] }) {
   const painel = PAINEIS[nome];
   const areas = AREAS_MAPA.filter((a) => a.painel === nome);
-  const [x0, x1] = RECORTE[nome] ?? [0, painel.w];
-  const w = x1 - x0;
+  const [x0, x1, y0, y1] = RECORTE[nome] ?? [0, painel.w, 0, painel.h];
+  const w = x1 - x0, h = y1 - y0;
   return (
     <figure className={`mapa-painel mapa-${nome}`}>
       {titulo && <figcaption className="label">{titulo}</figcaption>}
-      <div className="mapa-box" style={{ aspectRatio: `${w} / ${painel.h}` }}>
-        <svg className="mapa-terra" viewBox={`${x0} 0 ${w} ${painel.h}`} role="img" aria-label={`Mapa de avisos: ${titulo ?? "Portugal continental"}`}>
+      <div className="mapa-box" style={{ aspectRatio: `${w} / ${h}` }}>
+        <svg className="mapa-terra" viewBox={`${x0} ${y0} ${w} ${h}`} role="img" aria-label={`Mapa de avisos: ${titulo ?? "Portugal continental"}`}>
           {painel.espanha && <path d={painel.espanha} className="mapa-es" />}
           {areas
             .filter((a) => a.d)
@@ -64,9 +55,11 @@ function Mapa({ nome, titulo, avisos }: { nome: "continente" | "acores" | "madei
               );
             })}
         </svg>
-        {areas.map((a) => (
-          <Etiqueta key={a.id} a={a} painel={painel} avisos={avisos} x0={x0} w={w} />
-        ))}
+        {areas
+          .filter((a) => !a.d)
+          .map((a) => (
+            <PontoZona key={a.id} a={a} painel={painel} avisos={avisos} />
+          ))}
       </div>
     </figure>
   );
