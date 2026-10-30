@@ -12,7 +12,7 @@
   --w-yellow: #e9bf2a;
   --w-orange: #f08a24;
   --w-red: #e0443a;
-  --display: "Clash Display", var(--font-sans), "Helvetica Neue", Arial, sans-serif;
+  --display: var(--font-display), "Avenir Next", "Segoe UI", sans-serif;
   --body: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
   --mono: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
   --max: 1240px;
