@@ -177,7 +177,7 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 
 /* Meteograma */
 .chart-scroll { overflow-x: auto; margin-inline: -4px; padding-inline: 4px; }
-.meteo { display: block; width: 100%; min-width: 760px; height: auto; }
+.meteo { display: block; width: 100%; height: auto; }
 .meteo text { font-family: var(--mono); font-size: 11px; fill: var(--muted); }
 .meteo .t-label { fill: var(--ink); font-size: 11.5px; }
 .meteo .day { fill: var(--ink); font-weight: 500; }
@@ -186,7 +186,19 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .legend span { display: inline-flex; align-items: center; gap: 8px; }
 .sw { width: 18px; height: 2px; background: var(--accent); display: inline-block; }
 .sw.rain { height: 9px; width: 9px; background: var(--rain); }
-.readout { min-height: 1.6em; color: var(--ink); margin-top: 10px; }
+.readout { color: var(--muted); margin: 10px 0 0; }
+.meteo-wrap { position: relative; min-width: 760px; }
+.meteo-tip {
+  position: absolute; top: 0; transform: translate(-50%, -6px); pointer-events: none; z-index: 2;
+  display: grid; gap: 2px; min-width: 170px; padding: 10px 14px; border-radius: 6px;
+  background: var(--surface); border: 1px solid var(--accent); box-shadow: 0 12px 30px rgba(0, 0, 0, .35);
+}
+.meteo-tip.left { transform: translate(-12%, -6px); }
+.meteo-tip.right { transform: translate(-88%, -6px); }
+.tip-when { color: var(--muted); }
+.tip-temp { font-family: var(--display); font-size: 32px; font-weight: 500; line-height: 1.1; color: var(--ink); }
+.tip-desc { font-size: 14.5px; color: var(--ink); }
+.tip-meta { display: grid; gap: 1px; margin-top: 4px; font-size: 13.5px; color: var(--muted); }
 @media (prefers-reduced-motion: no-preference) {
   .t-line { stroke-dasharray: 2000; stroke-dashoffset: 0; animation: draw 1.4s ease-out both; }
   @keyframes draw { from { stroke-dashoffset: 2000; } }
@@ -350,17 +362,6 @@ table.data .r { text-align: right; }
 .back:hover { color: var(--ink); }
 .page-head .label + h1 { margin-top: 8px; }
 /* Hora a hora: cartões por hora, agrupados por dia */
-.hours { display: grid; gap: 28px; }
-.hours-title { font-family: var(--display); font-size: 20px; font-weight: 500; margin: 0 0 12px; }
-.hours-title .mono { color: var(--muted); font-size: 12px; font-weight: 400; margin-left: 8px; }
-.hours-grid {
-  list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr));
-  border-top: 1px solid var(--line); border-left: 1px solid var(--line);
-}
-.hour {
-  display: grid; justify-items: center; gap: 8px; padding: 16px 8px 14px; text-align: center;
-  border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums;
-}
 .hour.now { background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 12%, transparent), transparent 80%); box-shadow: inset 0 2px 0 var(--accent); }
 .hour-time { color: var(--muted); }
 .hour.now .hour-time { color: var(--accent); font-weight: 500; }
@@ -374,12 +375,7 @@ table.data .r { text-align: right; }
 .hour-wind { display: inline-flex; align-items: center; gap: 4px; font-size: 13.5px; }
 .hour-wind small, .hour-hum small { color: var(--muted); font-size: 11px; }
 .hour-hum { color: var(--muted); font-size: 13px; }
-@media (max-width: 760px) {
-  .hours-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .hour { padding: 12px 4px; gap: 6px; }
-  .hour-temp { font-size: 22px; }
-  .hour-wind small { display: none; }
-}
+@media (max-width: 760px) { .hour-wind small { display: none; } }
 
 /* Página de um dia */
 .dia-titulo { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 18px; }
@@ -428,3 +424,39 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 .type-alerts { display: grid; gap: 12px; }
 .type-alerts .warn-item p { margin-top: 4px; }
 @media (max-width: 760px) { .types li { grid-template-columns: 1fr; gap: 8px; } }
+
+/* Carrossel */
+.carousel { position: relative; }
+.carousel-track { position: relative; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
+.carousel-track::-webkit-scrollbar { display: none; }
+.carousel-track:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.carousel-nav { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+.carousel-btn {
+  width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--ink);
+  font-size: 22px; line-height: 1; cursor: pointer; display: grid; place-items: center; padding: 0 0 3px;
+}
+.carousel-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.carousel-btn:disabled { opacity: .3; cursor: default; }
+
+/* Horas em carrossel */
+.hours-track { list-style: none; margin: 0; padding: 0; display: flex; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.hours-track .hour {
+  flex: 0 0 116px; scroll-snap-align: start; display: grid; justify-items: center; gap: 9px; padding: 14px 8px 16px; text-align: center;
+  border-left: 1px solid var(--line); font-variant-numeric: tabular-nums;
+}
+.hours-track .hour:first-child { border-left: 0; }
+.hours-track .hour.new-day { border-left: 1px solid var(--faint); }
+.hour-day { font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; min-height: 1.2em; white-space: nowrap; }
+.hour-time { font-size: 15px; color: var(--muted); font-weight: 500; }
+.hours-track .hour-icon { height: 36px; }
+.hours-track .hour-temp { font-size: 30px; }
+.hours-track .hour-rain, .hours-track .hour-wind { font-size: 14.5px; }
+.hours-track .hour-hum { font-size: 13.5px; }
+@media (max-width: 760px) { .hours-track .hour { flex-basis: 92px; } .hours-track .hour-temp { font-size: 24px; } }
+
+/* 10 dias em carrossel */
+.days5.days-track { display: flex; }
+.days-track .day { flex: 0 0 236px; scroll-snap-align: start; border-top: 0 !important; }
+.days-track .day:nth-child(5n + 1) { border-left: 1px solid var(--line); }
+.days-track .day:first-child { border-left: 0; }
+@media (max-width: 760px) { .days-track .day { flex-basis: 96px; } }

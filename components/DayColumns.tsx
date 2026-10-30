@@ -3,6 +3,7 @@ import type { Dia } from "@/lib/data";
 import { TIPOS_TEMPO } from "@/lib/data";
 import { INTENSIDADE_VENTO } from "@/lib/ipma";
 import { diaSemana, graus, num } from "@/lib/format";
+import { Carousel } from "./Carousel";
 import { WeatherIcon } from "./WeatherIcon";
 
 const DIRS: Record<string, number> = { N: 0, NE: 45, E: 90, SE: 135, S: 180, SW: 225, W: 270, NW: 315 };
@@ -10,14 +11,14 @@ const MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "o
 
 // Dias em colunas. Cada coluna abre a página desse dia.
 // A barra de temperatura usa a mesma escala em todos os dias mostrados.
-export function DayColumns({ dias, slug, atual }: { dias: Dia[]; slug: string; atual?: string }) {
+export function DayColumns({ dias, slug, atual, carrossel = false }: { dias: Dia[]; slug: string; atual?: string; carrossel?: boolean }) {
   const lo = Math.floor(Math.min(...dias.map((d) => d.tMin))) - 1;
   const hi = Math.ceil(Math.max(...dias.map((d) => d.tMax))) + 1;
   const pct = (t: number) => ((t - lo) / (hi - lo)) * 100;
   const cap = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
 
-  return (
-    <ol className="days5">
+  const lista = (
+    <ol className={carrossel ? "days5 days-track" : "days5"}>
       {dias.map((d, i) => {
         const nome = cap(i === 0 ? "Hoje" : i === 1 ? "Amanhã" : diaSemana(d.data));
         const curto = cap(i === 0 ? "Hoje" : diaSemana(d.data, true));
@@ -71,5 +72,12 @@ export function DayColumns({ dias, slug, atual }: { dias: Dia[]; slug: string; a
         );
       })}
     </ol>
+  );
+  return carrossel ? (
+    <Carousel label="Previsão dia a dia" inicio=".day.today">
+      {lista}
+    </Carousel>
+  ) : (
+    lista
   );
 }

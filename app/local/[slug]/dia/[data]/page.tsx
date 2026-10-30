@@ -148,7 +148,7 @@ export default async function DiaPage({ params }: Props) {
 
       <section className="section" aria-labelledby="h-outros">
         <div className="sec-head"><h2 id="h-outros">Outros dias</h2></div>
-        <DayColumns dias={p.dias} slug={local.slug} atual={data} />
+        <DayColumns dias={p.dias} slug={local.slug} atual={data} carrossel />
       </section>
     </div>
   );

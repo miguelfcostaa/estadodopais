@@ -40,7 +40,7 @@ export default async function DiasPage({ params }: Props) {
           <h2 id="h-dias">Dia a dia</h2>
           <span className="label">a mesma escala de temperatura em todos os dias</span>
         </div>
-        <DayColumns dias={p.dias} slug={local.slug} />
+        <DayColumns dias={p.dias} slug={local.slug} carrossel />
         <div className="after-days">
           <Link className="more" href={`/local/${local.slug}/horas`}>Ver previsão das próximas 48 horas →</Link>
         </div>

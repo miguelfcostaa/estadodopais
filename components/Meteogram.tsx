@@ -53,6 +53,7 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
   return (
     <>
       <div className="chart-scroll">
+        <div className="meteo-wrap">
         <svg className="meteo" viewBox="0 0 1000 300" role="img" aria-label="Meteograma: temperatura, probabilidade de chuva e vento hora a hora" onMouseLeave={() => setSel(null)}>
           {grelha.map((t) => (
             <g key={t}>
@@ -114,12 +115,24 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
             <rect key={`h${hh.hora}`} className="hit" x={x(i) - step / 2} y={0} width={step} height={300} onMouseEnter={() => setSel(i)} onTouchStart={() => setSel(i)} />
           ))}
         </svg>
+        {h && sel !== null && (
+          <div
+            className={`meteo-tip${x(sel) < 160 ? " left" : x(sel) > 840 ? " right" : ""}`}
+            style={{ left: `${(x(sel) / 1000) * 100}%` }}
+            aria-live="polite"
+          >
+            <span className="tip-when mono">{diaSemana(h.hora, true)} · {String(hora(h.hora)).padStart(2, "0")}h</span>
+            <span className="tip-temp num">{num(h.temp)}°</span>
+            <span className="tip-desc">{TIPOS_TEMPO[h.tipoTempo] ?? ""}</span>
+            <span className="tip-meta num">
+              <span>Chuva {h.probChuva === null ? "—" : `${Math.round(h.probChuva)}%`}</span>
+              <span>Vento {Math.round(h.vento)} km/h {h.dirVento}</span>
+            </span>
+          </div>
+        )}
+        </div>
       </div>
-      <div className="readout mono num" aria-live="polite">
-        {h
-          ? `${diaSemana(h.hora, true)} ${String(hora(h.hora)).padStart(2, "0")}h  ·  ${num(h.temp)}°  ·  ${TIPOS_TEMPO[h.tipoTempo] ?? ""}  ·  vento ${num(h.vento)} km/h ${h.dirVento}  ·  chuva ${h.probChuva === null ? "sem valor" : `${h.probChuva}%`}`
-          : "Passe por cima do gráfico para ver cada hora."}
-      </div>
+      <p className="readout mono">Passe por cima do gráfico, ou toque nele, para ver cada hora.</p>
       <div className="legend mono">
         <span><i className="sw" />temperatura</span>
         <span><i className="sw rain" />probabilidade de chuva</span>
