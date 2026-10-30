@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DayColumns } from "@/components/DayColumns";
 import { getLocal, LOCAIS } from "@/lib/data";
-import { dataLonga, horaDe } from "@/lib/format";
+import { horaDe } from "@/lib/format";
 import { getPrevisao } from "@/lib/ipma";
 
 export const revalidate = 43200; // 12 horas
@@ -30,8 +30,7 @@ export default async function DiasPage({ params }: Props) {
   return (
     <div className="wrap">
       <div className="page-head">
-        <Link className="back mono" href={`/local/${local.slug}`}>← {local.nome}</Link>
-        <span className="label">{dataLonga(p.agora)}</span>
+        <Link className="back mono" href={`/local/${local.slug}`}>← Voltar para {local.nome}</Link>
         <h1>{p.dias.length} dias em {local.nome}</h1>
         <p>Previsão dia a dia: tempo, temperaturas mínima e máxima, chuva e vento.</p>
         <p className="source mono">Previsão do IPMA atualizada às {horaDe(p.atualizado)}</p>

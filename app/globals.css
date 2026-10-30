@@ -339,7 +339,7 @@ table.data .r { text-align: right; }
 .days5 .day:nth-child(5n + 1) { border-left: 0; }
 
 /* Página hora a hora */
-.back { display: inline-block; margin-bottom: 20px; color: var(--muted); text-decoration: none; }
+.back { display: block; width: fit-content; margin-bottom: 20px; color: var(--muted); text-decoration: none; }
 .back:hover { color: var(--ink); }
 .page-head .label + h1 { margin-top: 8px; }
 table.hourly { min-width: 640px; }
