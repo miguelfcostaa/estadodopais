@@ -30,7 +30,7 @@ export function SiteFooter() {
       </div>
       <div className="wrap base mono">
         <span>Dados: Instituto Português do Mar e da Atmosfera. Este site não é do IPMA.</span>
-        <span>© 2026 aberta</span>
+        <span>© 2026 aberta.pt</span>
       </div>
     </footer>
   );

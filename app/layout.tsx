@@ -10,7 +10,7 @@ const sans = Parkinsans({ subsets: ["latin"], weight: ["300", "400", "500", "600
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
-  title: { default: "aberta · o tempo em Portugal", template: "%s · aberta" },
+  title: { default: "aberta.pt · o tempo em Portugal", template: "%s · aberta.pt" },
   description: "Previsão do tempo, avisos e estado do mar em Portugal, explicados de forma simples. Dados do IPMA.",
 };
 
