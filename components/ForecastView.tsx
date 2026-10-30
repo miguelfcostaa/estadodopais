@@ -9,7 +9,7 @@ import { FactIcon, type NomeIcone } from "./FactIcon";
 import { LocalPicker } from "./LocalPicker";
 import { WarningsGrid } from "./WarningsGrid";
 
-export function ForecastView({ p, avisos }: { p: Previsao; avisos: Aviso[] }) {
+export function ForecastView({ p, avisos, distancia }: { p: Previsao; avisos: Aviso[]; distancia?: number }) {
   const { local, resumo, atual, mar } = p;
   type Facto = { icone: NomeIcone; label: string; valor: string; unidade: string };
   const factos: (Facto | null)[] = [
@@ -27,6 +27,7 @@ export function ForecastView({ p, avisos }: { p: Previsao; avisos: Aviso[] }) {
       <div className="place place-top">
         <span className="label">{dataLonga(p.agora)}</span>
         <LocalPicker atual={local.slug} />
+        {distancia !== undefined && <span className="perto mono">Local mais próximo de si, a {distancia} km</span>}
       </div>
       <div className="lead">
         <div>

@@ -150,3 +150,19 @@ export const NIVEIS: { id: NivelAviso; nome: string; sentido: string }[] = [
 ];
 
 export const RISCO_INCENDIO = ["Reduzido", "Moderado", "Elevado", "Muito elevado", "Máximo"];
+
+// Local do IPMA mais próximo de umas coordenadas (distância em linha reta, em km)
+export function localMaisProximo(lat: number, lon: number): { local: Local; km: number } {
+  const rad = Math.PI / 180;
+  const dist = (l: Local) => {
+    const dLat = (l.lat - lat) * rad, dLon = (l.lon - lon) * rad;
+    const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat * rad) * Math.cos(l.lat * rad) * Math.sin(dLon / 2) ** 2;
+    return 2 * 6371 * Math.asin(Math.sqrt(a));
+  };
+  let melhor = LOCAIS[0], km = dist(melhor);
+  for (const l of LOCAIS) {
+    const d = dist(l);
+    if (d < km) { melhor = l; km = d; }
+  }
+  return { local: melhor, km };
+}

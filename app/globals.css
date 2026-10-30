@@ -467,3 +467,7 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
   .big { font-size: 40px; }
   .trio h3 { margin-bottom: 8px; }
 }
+
+/* Localização */
+.perto { color: var(--muted); }
+.geo-aviso { color: var(--muted); margin: 0 0 24px; }

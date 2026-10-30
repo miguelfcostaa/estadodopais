@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { LOCAIS, type Local } from "@/lib/data";
+import { guardarLocal } from "@/lib/preferencias";
 
 type Regiao = Local["regiao"];
 const REGIOES: Regiao[] = ["Continente", "Madeira", "Açores"];
@@ -95,6 +96,7 @@ export function LocalPicker({ atual }: { atual: string }) {
                         className="pk-item"
                         href={`/local/${l.slug}`}
                         aria-current={l.slug === atual ? "page" : undefined}
+                        onClick={() => guardarLocal(l.slug)}
                         autoFocus={r !== "Continente" && i === 0}
                       >
                         {l.nome}
