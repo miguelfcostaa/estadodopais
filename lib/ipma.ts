@@ -188,11 +188,12 @@ export async function getPrevisao(slug: string): Promise<Previsao | null> {
 
 type AvisoRaw = { idAreaAviso: string; awarenessTypeName: string; awarenessLevelID: NivelAviso; startTime: string; endTime: string; text: string };
 
-export async function getAvisos(): Promise<Aviso[]> {
+// Todos os avisos ainda válidos, incluindo os verdes (um por tipo e área)
+export async function getTodosAvisos(): Promise<Aviso[]> {
   const raw = await obter<AvisoRaw[]>(`${OPEN}/forecast/warnings/warnings_www.json`);
   const agora = horaAtual();
   return raw
-    .filter((a) => a.awarenessLevelID !== "green" && a.endTime.slice(0, 16) > agora)
+    .filter((a) => a.endTime.slice(0, 16) > agora)
     .map((a) => ({
       idAreaAviso: a.idAreaAviso,
       tipo: a.awarenessTypeName,
@@ -202,6 +203,11 @@ export async function getAvisos(): Promise<Aviso[]> {
       texto: a.text,
     }))
     .sort((a, b) => a.inicio.localeCompare(b.inicio));
+}
+
+// Só os avisos amarelos, laranja e vermelhos
+export async function getAvisos(): Promise<Aviso[]> {
+  return (await getTodosAvisos()).filter((a) => a.nivel !== "green");
 }
 
 const ORDEM_REGIOES: Local["regiao"][] = ["Continente", "Madeira", "Açores"];

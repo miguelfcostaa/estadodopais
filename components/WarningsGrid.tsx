@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Aviso } from "@/lib/data";
 import { AREAS_AVISO, NIVEIS } from "@/lib/data";
 import { areasPorRegiao, avisosDaArea, nivelDaArea, nomeNivel } from "@/lib/avisos";
@@ -25,11 +26,11 @@ export function WarningsGrid({ avisos }: { avisos: Aviso[] }) {
                 const nivel = nivelDaArea(avisos, id);
                 const tipos = tiposDaArea(avisos, id);
                 return (
-                  <div key={id} className={`area${nivel !== "green" ? " alert" : ""}`}>
+                  <Link key={id} href={`/avisos/${id.toLowerCase()}`} className={`area${nivel !== "green" ? " alert" : ""}`}>
                     <span className={`lvl ${nivel}`} />
                     <span>{AREAS_AVISO[id].nome}</span>
                     {tipos.length > 0 && <span className={`why mono ${nivel}`}>{tipos.length > 1 ? `${tipos[0]} +${tipos.length - 1}` : tipos[0]}</span>}
-                  </div>
+                  </Link>
                 );
               })}
             </div>
@@ -45,12 +46,14 @@ export function WarningsGrid({ avisos }: { avisos: Aviso[] }) {
               const nivel = nivelDaArea(avisos, id);
               return (
                 <li key={id} className={nivel}>
+                  <Link className="alert-link" href={`/avisos/${id.toLowerCase()}`}>
                   <span className={`lvl ${nivel}`} />
                   <span className="alert-name">
                     {AREAS_AVISO[id].nome}
                     <span className="label">{AREAS_AVISO[id].regiao} · {nomeNivel(nivel)}</span>
                   </span>
                   <span className={`why mono ${nivel}`}>{tiposDaArea(avisos, id).join(", ")}</span>
+                  </Link>
                 </li>
               );
             })}
@@ -69,7 +72,7 @@ export function WarningsGrid({ avisos }: { avisos: Aviso[] }) {
                   <span className="label">{r.regiao}</span>
                   <div className="chips">
                     {r.areas.map((id) => (
-                      <span key={id} className="chip">{AREAS_AVISO[id].nome}</span>
+                      <Link key={id} className="chip chip-link" href={`/avisos/${id.toLowerCase()}`}>{AREAS_AVISO[id].nome}</Link>
                     ))}
                   </div>
                 </div>
