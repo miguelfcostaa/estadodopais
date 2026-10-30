@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { BackLink } from "@/components/BackLink";
 import { DayColumns } from "@/components/DayColumns";
 import { FactIcon, type NomeIcone } from "@/components/FactIcon";
-import { HourlyTable } from "@/components/HourlyTable";
 import { Meteogram } from "@/components/Meteogram";
 import { WeatherIcon } from "@/components/WeatherIcon";
 import { AREAS_AVISO, getLocal, RISCO_INCENDIO, TIPOS_TEMPO } from "@/lib/data";
@@ -125,9 +124,6 @@ export default async function DiaPage({ params }: Props) {
           <section className="section" aria-labelledby="h-grafico">
             <div className="sec-head"><h2 id="h-grafico">{passo === 3 ? "De 3 em 3 horas" : "Hora a hora"}</h2><span className="label">{local.nome}</span></div>
             <Meteogram horas={pontos} agora={p.agora} fuso={p.fuso} aPartirDeAgora={false} />
-            <div className="dia-tabela">
-              <HourlyTable horas={pontos} agora={p.agora} fuso={p.fuso} aPartirDeAgora={false} />
-            </div>
           </section>
         </>
       ) : (

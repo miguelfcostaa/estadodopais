@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BackLink } from "@/components/BackLink";
-import { HourlyTable } from "@/components/HourlyTable";
 import { Meteogram } from "@/components/Meteogram";
 import { getLocal, LOCAIS } from "@/lib/data";
 import { getPrevisao } from "@/lib/ipma";
@@ -46,14 +45,6 @@ export default async function HorasPage({ params }: Props) {
           <svg width="18" height="12" viewBox="0 0 18 12" aria-hidden="true"><path d="M1 8c3 0 3-6 6-6s3 8 6 8 3-4 4-4" fill="none" stroke="currentColor" strokeWidth="1.4" /></svg>
           Um meteograma: a linha é a temperatura prevista, as barras a probabilidade de chuva e as setas mostram para onde sopra o vento. O ponto marca a hora atual.
         </p>
-      </section>
-
-      <section className="section" aria-labelledby="h-tab">
-        <div className="sec-head">
-          <h2 id="h-tab">Em detalhe</h2>
-          <span className="label">hora a hora</span>
-        </div>
-        <HourlyTable horas={p.horas} agora={p.agora} fuso={p.fuso} />
       </section>
     </div>
   );

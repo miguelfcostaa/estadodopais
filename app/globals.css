@@ -370,20 +370,6 @@ table.data .r { text-align: right; }
 .back:hover { color: var(--ink); }
 .page-head .label + h1 { margin-top: 8px; }
 /* Hora a hora: cartões por hora, agrupados por dia */
-.hour.now { background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 12%, transparent), transparent 80%); box-shadow: inset 0 2px 0 var(--accent); }
-.hour-time { color: var(--muted); }
-.hour.now .hour-time { color: var(--accent); font-weight: 500; }
-.hour-icon { display: grid; place-items: center; height: 32px; }
-.hour-temp { font-family: var(--display); font-size: 26px; font-weight: 500; line-height: 1; }
-.hour-rain { display: grid; justify-items: center; gap: 4px; font-size: 13.5px; color: var(--muted); min-height: 30px; }
-.hour-rain.wet { color: var(--accent); font-weight: 500; }
-.hour-bar { width: 44px; height: 3px; background: var(--line); border-radius: 2px; overflow: hidden; }
-.hour-bar i { display: block; height: 100%; background: var(--accent); }
-.hour-empty { color: var(--faint); align-self: end; }
-.hour-wind { display: inline-flex; align-items: center; gap: 4px; font-size: 13.5px; }
-.hour-wind small, .hour-hum small { color: var(--muted); font-size: 11px; }
-.hour-hum { color: var(--muted); font-size: 13px; }
-@media (max-width: 760px) { .hour-wind small { display: none; } }
 
 /* Página de um dia */
 .dia-titulo { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 18px; }
@@ -403,7 +389,6 @@ table.data .r { text-align: right; }
 .moment-temp { font-family: var(--display); font-size: 30px; font-weight: 500; }
 .moment-meta { display: grid; gap: 4px; color: var(--muted); font-size: 14px; }
 .moment-meta .wet { color: var(--accent); }
-.dia-tabela { margin-top: 28px; }
 @media (max-width: 760px) {
   .dia-titulo svg { width: 64px; height: 64px; }
   .moments { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -446,21 +431,6 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 .carousel-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
 .carousel-btn:disabled { opacity: .3; cursor: default; }
 
-/* Horas em carrossel */
-.hours-track { list-style: none; margin: 0; padding: 0 1px 0 0; display: flex; }
-.hours-track .hour {
-  flex: 0 0 10%; min-width: 0; scroll-snap-align: start; display: grid; justify-items: center; gap: 9px; padding: 14px 8px 16px; text-align: center;
-  border-left: 1px solid var(--line); border-right: 1px solid var(--line); margin-right: -1px; font-variant-numeric: tabular-nums;
-}
-.hours-track .hour.new-day { border-left: 1px solid var(--faint); }
-.hour-day { font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; min-height: 1.2em; white-space: nowrap; }
-.hour-time { font-size: 15px; color: var(--muted); font-weight: 500; }
-.hours-track .hour-icon { height: 36px; }
-.hours-track .hour-temp { font-size: 30px; }
-.hours-track .hour-rain, .hours-track .hour-wind { font-size: 14.5px; }
-.hours-track .hour-hum { font-size: 13.5px; }
-@media (max-width: 1100px) { .hours-track .hour { flex-basis: calc(100% / 7); } }
-@media (max-width: 760px) { .hours-track .hour { flex-basis: 25%; } .hours-track .hour-temp { font-size: 24px; } }
 
 /* 10 dias em carrossel */
 .days5.days-track { display: flex; }
