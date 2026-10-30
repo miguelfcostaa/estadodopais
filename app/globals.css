@@ -349,43 +349,36 @@ table.data .r { text-align: right; }
 .back { display: block; width: fit-content; margin-bottom: 20px; color: var(--muted); text-decoration: none; }
 .back:hover { color: var(--ink); }
 .page-head .label + h1 { margin-top: 8px; }
-/* Tabela hora a hora */
-.hourly { font-variant-numeric: tabular-nums; max-width: 900px; }
-.hr-list { list-style: none; margin: 0; padding: 0; }
-.hr-row {
-  display: grid; align-items: center; column-gap: 20px;
-  grid-template-columns: 64px minmax(0, 1fr) 56px 120px 150px 76px;
-  padding: 9px 12px; border-bottom: 1px solid var(--line);
+/* Hora a hora: cartões por hora, agrupados por dia */
+.hours { display: grid; gap: 28px; }
+.hours-title { font-family: var(--display); font-size: 20px; font-weight: 500; margin: 0 0 12px; }
+.hours-title .mono { color: var(--muted); font-size: 12px; font-weight: 400; margin-left: 8px; }
+.hours-grid {
+  list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr));
+  border-top: 1px solid var(--line); border-left: 1px solid var(--line);
 }
-.hr-head { border-bottom-color: var(--faint); padding-block: 0 10px; }
-.hr-row .r { text-align: right; justify-content: flex-end; }
-.hr-day { padding: 26px 12px 10px; font-family: var(--display); font-size: 19px; font-weight: 500; border-bottom: 1px solid var(--line); }
-.hr-list li:first-child .hr-day { padding-top: 14px; }
-.hr-day .mono { color: var(--muted); font-size: 12px; margin-left: 8px; font-weight: 400; }
-.hr-hour { color: var(--muted); }
-.hr-row.now { background: color-mix(in srgb, var(--accent) 10%, transparent); box-shadow: inset 2px 0 0 var(--accent); }
-.hr-row.now .hr-hour { color: var(--accent); }
-.hr-wx { display: flex; align-items: center; gap: 12px; min-width: 0; }
-.hr-wx svg { flex: none; }
-.hr-desc { color: var(--muted); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.hr-temp { font-family: var(--display); font-size: 19px; font-weight: 500; }
-.hr-rain { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 15px; }
-.hr-rain.wet { color: var(--accent); font-weight: 500; }
-.hr-bar { width: 56px; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
-.hr-bar i { display: block; height: 100%; background: var(--accent); }
-.hr-wind { display: flex; align-items: center; gap: 6px; font-size: 15px; white-space: nowrap; }
-.hr-wind small { color: var(--muted); font-size: 12.5px; }
-.hr-wind .mono { color: var(--muted); }
-.hr-hum { color: var(--muted); font-size: 15px; }
-.hr-head .hr-hum { font-size: 11.5px; }
+.hour {
+  display: grid; justify-items: center; gap: 8px; padding: 16px 8px 14px; text-align: center;
+  border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums;
+}
+.hour.now { background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 12%, transparent), transparent 80%); box-shadow: inset 0 2px 0 var(--accent); }
+.hour-time { color: var(--muted); }
+.hour.now .hour-time { color: var(--accent); font-weight: 500; }
+.hour-icon { display: grid; place-items: center; height: 32px; }
+.hour-temp { font-family: var(--display); font-size: 26px; font-weight: 500; line-height: 1; }
+.hour-rain { display: grid; justify-items: center; gap: 4px; font-size: 13.5px; color: var(--muted); min-height: 30px; }
+.hour-rain.wet { color: var(--accent); font-weight: 500; }
+.hour-bar { width: 44px; height: 3px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.hour-bar i { display: block; height: 100%; background: var(--accent); }
+.hour-empty { color: var(--faint); align-self: end; }
+.hour-wind { display: inline-flex; align-items: center; gap: 4px; font-size: 13.5px; }
+.hour-wind small, .hour-hum small { color: var(--muted); font-size: 11px; }
+.hour-hum { color: var(--muted); font-size: 13px; }
 @media (max-width: 760px) {
-  .hr-row { grid-template-columns: 48px 26px 44px minmax(0, 1fr) 96px; column-gap: 10px; padding-inline: 4px; }
-  .hr-head span:nth-child(2) { visibility: hidden; }
-  .hr-desc, .hr-hum, .hr-bar { display: none; }
-  .hr-rain { justify-content: flex-end; }
-  .hr-temp { font-size: 17px; }
-  .hr-wind { font-size: 14px; }
-  .hr-wind small { display: none; }
+  .hours-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .hour { padding: 12px 4px; gap: 6px; }
+  .hour-temp { font-size: 22px; }
+  .hour-wind small { display: none; }
 }
 
 /* Página de um dia */
