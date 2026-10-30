@@ -1,4 +1,4 @@
-export type NomeIcone = "temperatura" | "humidade" | "vento" | "uv" | "ondas" | "agua" | "sensacao" | "chuva" | "fogo";
+export type NomeIcone = "temperatura" | "humidade" | "vento" | "uv" | "ondas" | "agua" | "sensacao" | "chuva" | "fogo" | "nascer" | "por";
 
 // Ícones de traço simples, na cor de destaque, para os números principais
 export function FactIcon({ nome }: { nome: NomeIcone }) {
@@ -42,6 +42,12 @@ export function FactIcon({ nome }: { nome: NomeIcone }) {
         <g {...s}>
           <circle cx="12" cy="5" r="2" />
           <path d="M12 8v6M12 14l-3 6.5M12 14l3 6.5M7.5 10.5h9" />
+        </g>
+      )}
+      {(nome === "nascer" || nome === "por") && (
+        <g {...s}>
+          <path d="M7 17a5 5 0 0 1 10 0M3 20.5h18M4.5 17h1M18.5 17h1M6.7 12.2l.7.7M16.6 12.9l.7-.7" />
+          <path d={nome === "nascer" ? "M12 9.5V3.5M9.5 6l2.5-2.5L14.5 6" : "M12 3.5v6M9.5 7l2.5 2.5L14.5 7"} />
         </g>
       )}
       {nome === "fogo" && <path {...s} d="M12 21a6 6 0 0 0 6-6c0-4-3-5.5-3.5-9.5C12 7 10 9.5 10.5 12 9 11.5 8.5 10 8.5 9 7 10.5 6 12.5 6 15a6 6 0 0 0 6 6Z" />}

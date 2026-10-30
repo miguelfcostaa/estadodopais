@@ -11,7 +11,8 @@ import { AREAS_AVISO, getLocal, RISCO_INCENDIO, TIPOS_TEMPO } from "@/lib/data";
 import { intervalo as quandoAviso, nomeNivel } from "@/lib/avisos";
 import { estatisticas, INTENSIDADE_CHUVA, momentosDoDia, pontosDoDia, resumoDia } from "@/lib/dia";
 import { dataExtensa, graus, num, nivelUV } from "@/lib/format";
-import { direcaoExtenso, getAvisos, getPrevisao, INTENSIDADE_VENTO } from "@/lib/ipma";
+import { direcaoExtenso, fuso, getAvisos, getPrevisao, INTENSIDADE_VENTO } from "@/lib/ipma";
+import { solDoDia } from "@/lib/sol";
 
 export const revalidate = 43200; // 12 horas
 
@@ -49,6 +50,10 @@ export default async function DiaPage({ params }: Props) {
   const seguinte = p.dias[indice + 1];
   const avisosDia = avisos.filter((a) => a.idAreaAviso === local.idAreaAviso && a.inicio < `${data}T24:00` && a.fim > `${data}T00:00`);
 
+  const sol = solDoDia(data, local.lat, local.lon, fuso(local));
+  const hm = (m: number) => `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
+  const luz = sol ? sol.por - sol.nascer : 0;
+
   const factos: ({ icone: NomeIcone; label: string; valor: string; unidade?: string; nota?: string } | null)[] = [
     { icone: "temperatura", label: "Máxima", valor: graus(dia.tMax) },
     { icone: "temperatura", label: "Mínima", valor: graus(dia.tMin) },
@@ -61,6 +66,8 @@ export default async function DiaPage({ params }: Props) {
     dia.uv != null ? { icone: "uv", label: "Índice UV", valor: num(dia.uv), unidade: nivelUV(dia.uv) } : null,
     est.onda ? { icone: "ondas", label: "Ondas", valor: intervaloTexto([est.onda[0] * 10, est.onda[1] * 10])!.replace(/(\d+)/g, (x) => num(Number(x) / 10)), unidade: `m · ${est.dirOnda}`, nota: est.periodoOnda ? `período de ${intervaloTexto(est.periodoOnda, " s")}` : undefined } : null,
     est.agua ? { icone: "agua", label: "Água do mar", valor: intervaloTexto(est.agua, "°")! } : null,
+    sol ? { icone: "nascer", label: "Nascer do sol", valor: hm(sol.nascer) } : null,
+    sol ? { icone: "por", label: "Pôr do sol", valor: hm(sol.por), nota: `${Math.floor(luz / 60)}h${String(luz % 60).padStart(2, "0")} de luz` } : null,
     dia.riscoIncendio ? { icone: "fogo", label: "Risco de incêndio", valor: RISCO_INCENDIO[dia.riscoIncendio - 1], nota: `nível ${dia.riscoIncendio} em 5` } : null,
   ];
   const visiveis = factos.filter((f) => f !== null);
