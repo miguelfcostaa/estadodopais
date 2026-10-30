@@ -9,7 +9,6 @@ const LINKS = [
   { href: "/", label: "Hoje" },
   { href: "/avisos", label: "Avisos" },
   { href: "/mar", label: "Mar" },
-  { href: "/sobre", label: "Sobre" },
 ];
 
 export function SiteHeader({ atualizado }: { atualizado: string }) {
