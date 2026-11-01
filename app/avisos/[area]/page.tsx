@@ -34,8 +34,6 @@ export default async function AreaPage({ params }: Props) {
   const ativos = todos.filter((a) => a.nivel !== "green");
   const pior = ativos.reduce<NivelAviso>((m, a) => (ORDEM.indexOf(a.nivel) > ORDEM.indexOf(m) ? a.nivel : m), "green");
   const locais = LOCAIS.filter((l) => l.idAreaAviso === id);
-  const artigo = id === "MRM" ? "as" : id === "MCN" || id === "MCS" ? "a" : "o";
-  const nomeArea = info.regiao === "Continente" ? `o distrito de ${info.nome}` : `${artigo} ${info.nome} (${info.regiao})`;
 
   return (
     <div className="wrap">
@@ -46,7 +44,7 @@ export default async function AreaPage({ params }: Props) {
         <h1>{info.nome}</h1>
         <p className="warn-lead">
           {ativos.length === 0 ? (
-            `Sem avisos para ${nomeArea} nos próximos 3 dias.`
+            "Sem avisos nos próximos 3 dias."
           ) : (
             <>
               {ativos.map((a, i) => (
