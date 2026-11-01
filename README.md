@@ -1,4 +1,4 @@
-# previsao.pt
+# estadodopais.pt
 
 Site de meteorologia para Portugal feito com os dados abertos do IPMA.
 

@@ -26,7 +26,7 @@ export function SiteHeader({ atualizado }: { atualizado: string }) {
     <header className="site-header">
       <div className="wrap bar">
         <Link className="brand" href="/">
-          <span>previsao<b>.pt</b></span>
+          <span>estadodopais<b>.pt</b></span>
         </Link>
         <span className="status mono">
           <span className="dot" />

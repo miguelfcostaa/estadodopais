@@ -8,7 +8,7 @@ export default function SobrePage() {
       <div className="page-head">
         <span className="label">Sobre</span>
         <h1>O tempo, sem complicar</h1>
-        <p>O previsao.pt mostra a previsão do tempo, os avisos e o estado do mar em Portugal, com frases simples e gráficos claros.</p>
+        <p>O estadodopais.pt mostra a previsão do tempo, os avisos e o estado do mar em Portugal, com frases simples e gráficos claros.</p>
       </div>
       <div className="prose">
         <h2>De onde vêm os dados</h2>

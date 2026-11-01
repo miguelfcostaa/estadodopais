@@ -6,7 +6,7 @@ export function SiteFooter() {
       <div className="wrap cols">
         <div>
           <Link className="brand" href="/">
-            <span>previsao<b>.pt</b></span>
+            <span>estadodopais<b>.pt</b></span>
           </Link>
           <p>O tempo em Portugal, explicado de forma simples. Feito com os dados abertos do IPMA.</p>
         </div>
@@ -30,7 +30,7 @@ export function SiteFooter() {
       </div>
       <div className="wrap base mono">
         <span>Dados: Instituto Português do Mar e da Atmosfera. Este site não é do IPMA.</span>
-        <span>© 2026 previsao.pt</span>
+        <span>© 2026 estadodopais.pt</span>
       </div>
     </footer>
   );

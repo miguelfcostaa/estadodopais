@@ -11,7 +11,7 @@ const sans = Parkinsans({ subsets: ["latin"], weight: ["300", "400", "500", "600
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
-  title: { default: "previsao.pt", template: "%s · previsao.pt" },
+  title: { default: "estadodopais.pt", template: "%s · estadodopais.pt" },
   description: "Previsão do tempo, avisos e estado do mar em Portugal, explicados de forma simples. Dados do IPMA.",
 };
 
