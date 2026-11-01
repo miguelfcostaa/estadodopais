@@ -312,6 +312,12 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-top: 16px; }
 .steps i { height: 6px; background: var(--line); border-radius: 1px; }
 .steps i.on { background: var(--accent); }
+/* Risco de incêndio: cada segmento na cor do seu nível (como a escala do IPMA) */
+.steps.cores i.on:nth-child(1) { background: var(--w-green); }
+.steps.cores i.on:nth-child(2) { background: var(--w-yellow); }
+.steps.cores i.on:nth-child(3) { background: var(--w-orange); }
+.steps.cores i.on:nth-child(4) { background: var(--w-red); }
+.steps.cores i.on:nth-child(5) { background: color-mix(in srgb, var(--w-red) 60%, #000); }
 .steps-l { display: flex; justify-content: space-between; margin-top: 6px; color: var(--faint); }
 
 .table-scroll { overflow-x: auto; }

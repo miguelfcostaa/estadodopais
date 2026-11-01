@@ -99,7 +99,7 @@ export function ForecastView({ p, avisos, distancia }: { p: Previsao; avisos: Av
               <div>
                 <span className="label">Risco de incêndio</span>
                 <div className="big texto">{RISCO_INCENDIO[p.riscoIncendio - 1]}</div>
-                <Steps n={p.riscoIncendio} />
+                <Steps n={p.riscoIncendio} cores />
                 <div className="steps-l mono"><span>reduzido</span><span>máximo</span></div>
                 <p>Nível {p.riscoIncendio} em 5 na escala do IPMA.</p>
               </div>
@@ -129,9 +129,9 @@ export function ForecastView({ p, avisos, distancia }: { p: Previsao; avisos: Av
   );
 }
 
-function Steps({ n }: { n: number }) {
+function Steps({ n, cores = false }: { n: number; cores?: boolean }) {
   return (
-    <div className="steps" aria-hidden="true">
+    <div className={cores ? "steps cores" : "steps"} aria-hidden="true">
       {[1, 2, 3, 4, 5].map((i) => (
         <i key={i} className={i <= n ? "on" : undefined} />
       ))}
