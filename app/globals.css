@@ -113,7 +113,7 @@ img, svg { max-width: 100%; }
 .page-head { padding-block: 48px 32px; }
 .page-head h1, .lead h1 {
   font-family: var(--display); font-weight: 500; font-size: clamp(42px, 6.4vw, 84px);
-  line-height: 1.02; letter-spacing: -.02em; margin: 0 0 20px; text-wrap: balance;
+  line-height: 1.02; letter-spacing: -.02em; margin: 0 0 20px; text-wrap: balance; overflow-wrap: break-word;
 }
 .page-head p { color: var(--muted); font-size: 17px; max-width: 60ch; margin: 0; }
 h1 em { font-style: normal; color: var(--accent); }

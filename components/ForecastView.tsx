@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Link from "next/link";
 import type { Aviso } from "@/lib/data";
 import { RISCO_INCENDIO } from "@/lib/data";
@@ -32,7 +33,11 @@ export function ForecastView({ p, avisos, distancia }: { p: Previsao; avisos: Av
       <div className="lead">
         <div>
           <h1>
-            {resumo.titulo} <em className="num">{resumo.destaque}</em>.
+            {/* Pode mudar de linha depois de "/" (ex.: "Chuva/aguaceiros"), para não invadir os números */}
+            {resumo.titulo.split("/").map((parte, i) => (
+              <Fragment key={i}>{i > 0 && <>/<wbr /></>}{parte}</Fragment>
+            ))}{" "}
+            <em className="num">{resumo.destaque}</em>.
           </h1>
           <p className="summary">{resumo.texto}</p>
         </div>
