@@ -108,7 +108,7 @@ export function ForecastView({ p, avisos, distancia }: { p: Previsao; avisos: Av
               <div>
                 <span className="label">Risco de incêndio</span>
                 <h3>Concelho de {local.nome}</h3>
-                <div className="big">{RISCO_INCENDIO[p.riscoIncendio - 1]}</div>
+                <div className="big texto">{RISCO_INCENDIO[p.riscoIncendio - 1]}</div>
                 <Steps n={p.riscoIncendio} />
                 <div className="steps-l mono"><span>reduzido</span><span>máximo</span></div>
                 <p>Nível {p.riscoIncendio} em 5 na escala do IPMA.</p>
