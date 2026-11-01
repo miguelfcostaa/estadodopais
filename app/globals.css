@@ -546,7 +546,7 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
   .area-mapa { width: 120px; height: 130px; }
   .area-mapa-continente { width: 90px; height: 165px; }
   .area-head:has(.area-mapa-acores), .area-head:has(.area-mapa-madeira) { grid-template-columns: 1fr; gap: 8px; }
-  .area-mapa-acores { width: min(100%, 260px); height: auto; aspect-ratio: 1.6; }
+  .area-mapa-acores { width: min(100%, 300px); height: auto; aspect-ratio: 1.65; }
   .area-mapa-madeira { width: min(100%, 220px); height: auto; aspect-ratio: 1.3; }
 }
 /* pontos das zonas da Madeira: ponto na cor do nível, contorno do fundo e halo suave */
