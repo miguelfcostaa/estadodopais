@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Sobre" };
+export const metadata: Metadata = {
+  title: "Sobre",
+  description: "O que é o estadodopais.pt, de onde vêm os dados e como tratamos a sua localização.",
+  alternates: { canonical: "/sobre" },
+};
 
 export default function SobrePage() {
   return (

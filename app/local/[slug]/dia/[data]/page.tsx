@@ -6,7 +6,7 @@ import { DayColumns } from "@/components/DayColumns";
 import { FactIcon, type NomeIcone } from "@/components/FactIcon";
 import { Meteogram } from "@/components/Meteogram";
 import { WeatherIcon } from "@/components/WeatherIcon";
-import { AREAS_AVISO, getLocal, RISCO_INCENDIO, TIPOS_TEMPO } from "@/lib/data";
+import { AREAS_AVISO, getLocal, RISCO_INCENDIO, TIPOS_TEMPO, emLocal, paraLocal } from "@/lib/data";
 import { intervalo as quandoAviso, nomeNivel } from "@/lib/avisos";
 import { estatisticas, INTENSIDADE_CHUVA, momentosDoDia, pontosDoDia, resumoDia } from "@/lib/dia";
 import { dataExtensa, graus, num, nivelUV } from "@/lib/format";
@@ -26,7 +26,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, data } = await params;
   const local = getLocal(slug);
   if (!local || !/^\d{4}-\d{2}-\d{2}$/.test(data)) return { title: "Dia não encontrado" };
-  return { title: `${dataExtensa(data)} - ${local.nome}` };
+  return {
+    title: `Tempo ${emLocal(local)}, ${dataExtensa(data).toLowerCase()}`,
+    description: `Previsão do tempo ${paraLocal(local)}, ${dataExtensa(data).toLowerCase()}: máxima e mínima, chuva, vento, nascer e pôr do sol. Dados do IPMA.`,
+    alternates: { canonical: `/local/${local.slug}/dia/${data}` },
+  };
 }
 
 const intervaloTexto = (v: [number, number] | null, unidade = "") =>

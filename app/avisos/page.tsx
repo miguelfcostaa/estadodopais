@@ -5,7 +5,11 @@ import { AREAS_AVISO } from "@/lib/data";
 import { intervalo, nomeNivel } from "@/lib/avisos";
 import { getAvisos } from "@/lib/ipma";
 
-export const metadata: Metadata = { title: "Avisos" };
+export const metadata: Metadata = {
+  title: "Avisos meteorológicos em Portugal",
+  description: "Mapa e lista dos avisos meteorológicos do IPMA para o continente, a Madeira e os Açores nos próximos 3 dias.",
+  alternates: { canonical: "/avisos" },
+};
 export const revalidate = 43200; // 12 horas
 
 export default async function AvisosPage() {

@@ -3,7 +3,11 @@ import { MapaMar } from "@/components/MapaMar";
 import { getMar } from "@/lib/ipma";
 import { dataLonga, num } from "@/lib/format";
 
-export const metadata: Metadata = { title: "Mar" };
+export const metadata: Metadata = {
+  title: "Estado do mar em Portugal",
+  description: "Altura e direção das ondas e temperatura da água em toda a costa de Portugal, Madeira e Açores. Dados do IPMA.",
+  alternates: { canonical: "/mar" },
+};
 export const revalidate = 43200; // 12 horas
 
 export default async function MarPage() {

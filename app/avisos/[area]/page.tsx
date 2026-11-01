@@ -22,7 +22,15 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { area } = await params;
   const a = AREAS_AVISO[area.toUpperCase()];
-  return { title: a ? `Avisos - ${a.nome}` : "Área não encontrada" };
+  if (!a) return { title: "Área não encontrada" };
+  const id = area.toUpperCase();
+  const artigo = id === "MRM" ? "as" : id === "MCN" || id === "MCS" ? "a" : "o";
+  const nome = a.regiao === "Continente" ? `o distrito de ${a.nome}` : `${artigo} ${a.nome} (${a.regiao})`;
+  return {
+    title: `Avisos meteorológicos: ${a.nome}`,
+    description: `Avisos do IPMA para ${nome} nos próximos 3 dias: chuva, vento, trovoada, nevoeiro, agitação marítima, neve, calor e frio.`,
+    alternates: { canonical: `/avisos/${area.toLowerCase()}` },
+  };
 }
 
 export default async function AreaPage({ params }: Props) {

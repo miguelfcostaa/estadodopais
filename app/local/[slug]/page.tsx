@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ForecastView } from "@/components/ForecastView";
 import { LocalPicker } from "@/components/LocalPicker";
-import { getLocal, LOCAIS } from "@/lib/data";
+import { getLocal, LOCAIS, emLocal, paraLocal } from "@/lib/data";
 import { getAvisos, getPrevisao } from "@/lib/ipma";
 
 export const revalidate = 43200; // 12 horas
@@ -17,7 +17,12 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const local = getLocal(slug);
-  return { title: local ? `Tempo em ${local.nome}` : "Local não encontrado" };
+  if (!local) return { title: "Local não encontrado" };
+  return {
+    title: `Tempo ${emLocal(local)}: hoje e próximos 10 dias`,
+    description: `Previsão do tempo ${paraLocal(local)} hoje e nos próximos 10 dias: temperatura, chuva, vento, avisos, índice ultravioleta e mais. Dados do IPMA.`,
+    alternates: { canonical: `/local/${local.slug}` },
+  };
 }
 
 export default async function LocalPage({ params }: Props) {

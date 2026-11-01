@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BackLink } from "@/components/BackLink";
 import { Meteogram } from "@/components/Meteogram";
-import { getLocal, LOCAIS } from "@/lib/data";
+import { getLocal, LOCAIS, emLocal, paraLocal } from "@/lib/data";
 import { getPrevisao } from "@/lib/ipma";
 
 export const revalidate = 43200; // 12 horas
@@ -17,7 +17,12 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const local = getLocal(slug);
-  return { title: local ? `Hora a hora em ${local.nome}` : "Local não encontrado" };
+  if (!local) return { title: "Local não encontrado" };
+  return {
+    title: `Tempo hora a hora ${emLocal(local)}`,
+    description: `Previsão hora a hora ${paraLocal(local)} nas próximas 48 horas: temperatura, probabilidade de chuva e vento. Dados do IPMA.`,
+    alternates: { canonical: `/local/${local.slug}/horas` },
+  };
 }
 
 export default async function HorasPage({ params }: Props) {
@@ -31,7 +36,7 @@ export default async function HorasPage({ params }: Props) {
     <div className="wrap">
       <div className="page-head">
         <BackLink href={`/local/${local.slug}`} label={`Voltar para ${local.nome}`} />
-        <h1>Hora a hora em {local.nome}</h1>
+        <h1>Hora a hora {emLocal(local)}</h1>
         <p>Temperatura, chuva, vento e humidade nas próximas 48 horas.</p>
       </div>
 

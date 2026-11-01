@@ -166,3 +166,21 @@ export function localMaisProximo(lat: number, lon: number): { local: Local; km: 
   }
   return { local: melhor, km };
 }
+
+// Artigo dos locais que o pedem ("no Porto", "na Horta", "nas Velas"); os outros não levam ("em Lisboa")
+const ARTIGO: Record<string, "o" | "a" | "os" | "as"> = {
+  porto: "o", funchal: "o", "porto-santo": "o", horta: "a", guarda: "a", madalena: "a", velas: "as", "penhas-douradas": "as",
+};
+const EM: Record<string, string> = { o: "no", a: "na", os: "nos", as: "nas" };
+
+// "em Lisboa", "no Porto"
+export function emLocal(l: Local): string {
+  const a = ARTIGO[l.slug];
+  return a ? `${EM[a]} ${l.nome}` : `em ${l.nome}`;
+}
+
+// "para Lisboa", "para o Porto"
+export function paraLocal(l: Local): string {
+  const a = ARTIGO[l.slug];
+  return a ? `para ${a} ${l.nome}` : `para ${l.nome}`;
+}
