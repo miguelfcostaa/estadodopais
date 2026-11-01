@@ -127,7 +127,7 @@ export function ForecastView({ p, avisos, distancia }: { p: Previsao; avisos: Av
 
 function Steps({ n, cores = false }: { n: number; cores?: boolean }) {
   return (
-    <div className={cores ? "steps cores" : "steps"} aria-hidden="true">
+    <div className={cores ? `steps cores n${n}` : "steps"} aria-hidden="true">
       {[1, 2, 3, 4, 5].map((i) => (
         <i key={i} className={i <= n ? "on" : undefined} />
       ))}
