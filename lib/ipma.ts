@@ -58,7 +58,8 @@ export type Previsao = {
   atual: { temp: number; humidade: number | null; vento: number | null; dirVento: string; sensacao: number | null };
   uv: number | null;
   probChuvaHoje: number | null;
-  mar: { onda: number; dirOnda: string; periodo: number | null; agua: number | null } | null;
+  // Ondas do próprio local; nos locais do interior, da zona de mar mais próxima (zona e ondaMin preenchidos)
+  mar: { onda: number; dirOnda: string; periodo: number | null; agua: number | null; zona?: string; ondaMin?: number } | null;
   riscoIncendio: number | null; // 1 a 5
   horas: Hora[];
   pontos: Hora[]; // horas e, depois delas, valores de 3 em 3 horas
@@ -181,7 +182,7 @@ export async function getPrevisao(slug: string): Promise<Previsao | null> {
     },
     uv: n(hojeD.iUv),
     probChuvaHoje: n(hojeD.probabilidadePrecipita),
-    mar: onda !== null ? { onda, dirOnda: atualH?.dirOndulacao ?? "", periodo: n(atualH?.periodOndulacao), agua: n(atualH?.tempAguaMar) } : null,
+    mar: onda !== null ? { onda, dirOnda: atualH?.dirOndulacao ?? "", periodo: n(atualH?.periodOndulacao), agua: n(atualH?.tempAguaMar) } : await marMaisProximo(local),
     riscoIncendio: rcm?.local[dico]?.data.rcm ?? null,
     horas,
     pontos,
@@ -216,6 +217,16 @@ export async function getAvisos(): Promise<Aviso[]> {
 const ORDEM_REGIOES: Local["regiao"][] = ["Continente", "Madeira", "Açores"];
 
 export type ZonaMar = { id: number; zona: string; regiao: Local["regiao"]; lon: number; ondaMin: number; ondaMax: number; dir: string; aguaMin: number | null; aguaMax: number | null; lat: number };
+
+// Zona de mar mais próxima de um local do interior (na mesma região), a partir da previsão diária do mar
+async function marMaisProximo(local: Local): Promise<Previsao["mar"]> {
+  const zonas = (await getMar().catch(() => null))?.zonas.filter((z) => z.regiao === local.regiao) ?? [];
+  if (zonas.length === 0) return null;
+  const cos = Math.cos((local.lat * Math.PI) / 180);
+  const dist = (z: ZonaMar) => (z.lat - local.lat) ** 2 + ((z.lon - local.lon) * cos) ** 2;
+  const z = zonas.reduce((m, x) => (dist(x) < dist(m) ? x : m));
+  return { onda: z.ondaMax, ondaMin: z.ondaMin, dirOnda: z.dir, periodo: null, agua: z.aguaMax, zona: z.zona };
+}
 
 export async function getMar(): Promise<{ data: string; zonas: ZonaMar[] }> {
   type Loc = { globalIdLocal: number; local: string; latitude: string; longitude: string; idRegiao: number };

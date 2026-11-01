@@ -76,7 +76,7 @@ export default async function AreaPage({ params }: Props) {
                   <div className="type-alerts">
                     {comAviso.map((a, i) => (
                       <div key={i} className={`warn-item ${a.nivel}`}>
-                        <span className="label">{nomeNivel(a.nivel)} · {intervalo(a)}</span>
+                        <span className="label">{intervalo(a)}</span>
                         {a.texto && <p>{a.texto}</p>}
                       </div>
                     ))}

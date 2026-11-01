@@ -429,11 +429,9 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 .page-head .label .lvl { vertical-align: -1px; margin-right: 4px; }
 .types { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
 .types li { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 16px; padding-block: 14px; border-bottom: 1px solid var(--line); align-items: start; }
-.type-name { font-weight: 500; display: inline-flex; align-items: center; gap: 10px; }
+.type-name { font-weight: 400; color: var(--muted); display: inline-flex; align-items: center; gap: 10px; }
 .type-name .aviso-icon { flex: none; }
-.types li.alert .aviso-icon { color: var(--accent); }
 .types li:last-child { border-bottom: 0; }
-.types li:not(.alert) .type-name { color: var(--muted); font-weight: 400; }
 .type-state { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 14.5px; }
 .type-state .lvl { opacity: .55; }
 .type-alerts { display: grid; gap: 12px; }

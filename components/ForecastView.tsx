@@ -12,14 +12,18 @@ import { WarningsGrid } from "./WarningsGrid";
 
 export function ForecastView({ p, avisos, distancia }: { p: Previsao; avisos: Aviso[]; distancia?: number }) {
   const { local, resumo, atual, mar } = p;
+  // Título da secção do mar, sol e fogo: só o que aparece, pela ordem em que aparece
+  const partes = [mar && "mar", p.uv !== null && "sol", p.riscoIncendio !== null && "fogo"].filter(Boolean) as string[];
+  const lista = partes.length > 1 ? `${partes.slice(0, -1).join(", ")} e ${partes[partes.length - 1]}` : (partes[0] ?? "");
+  const titulo = lista.charAt(0).toUpperCase() + lista.slice(1);
   type Facto = { icone: NomeIcone; label: string; valor: string; unidade: string };
   const factos: (Facto | null)[] = [
     { icone: "temperatura", label: `Às ${hora(p.agora)}h`, valor: graus(atual.temp), unidade: "previsto" },
     atual.humidade !== null ? { icone: "humidade", label: "Humidade", valor: String(Math.round(atual.humidade)), unidade: "%" } : null,
     atual.vento !== null ? { icone: "vento", label: "Vento", valor: String(Math.round(atual.vento)), unidade: `km/h · ${atual.dirVento}` } : null,
     p.uv !== null ? { icone: "uv", label: "Índice UV", valor: num(p.uv), unidade: nivelUV(p.uv) } : null,
-    mar ? { icone: "ondas", label: "Ondas", valor: num(mar.onda), unidade: `m · ${mar.dirOnda}` } : atual.sensacao !== null ? { icone: "sensacao", label: "Sensação", valor: graus(atual.sensacao), unidade: "térmica" } : null,
-    mar?.agua != null ? { icone: "agua", label: "Água do mar", valor: graus(mar.agua), unidade: "" } : p.probChuvaHoje !== null ? { icone: "chuva", label: "Chuva hoje", valor: String(Math.round(p.probChuvaHoje)), unidade: "%" } : null,
+    mar && !mar.zona ? { icone: "ondas", label: "Ondas", valor: num(mar.onda), unidade: `m · ${mar.dirOnda}` } : atual.sensacao !== null ? { icone: "sensacao", label: "Sensação", valor: graus(atual.sensacao), unidade: "térmica" } : null,
+    mar?.agua != null && !mar.zona ? { icone: "agua", label: "Água do mar", valor: graus(mar.agua), unidade: "" } : p.probChuvaHoje !== null ? { icone: "chuva", label: "Chuva hoje", valor: String(Math.round(p.probChuvaHoje)), unidade: "%" } : null,
   ];
   const visiveis = factos.filter((f): f is Facto => f !== null);
 
@@ -79,26 +83,31 @@ export function ForecastView({ p, avisos, distancia }: { p: Previsao; avisos: Av
       {(mar || p.uv !== null || p.riscoIncendio !== null) && (
         <section className="section" aria-labelledby="h-mar">
           <div className="sec-head">
-            <h2 id="h-mar">Mar, sol e fogo</h2>
+            <h2 id="h-mar">{titulo}</h2>
             <Link className="more" href="/mar">Toda a costa →</Link>
           </div>
           <div className="trio">
             {mar && (
               <div>
                 <span className="label">Estado do mar</span>
-                <h3>Costa de {local.nome}</h3>
                 <div className="big num">{num(mar.onda)}<small>m</small></div>
-                <p>
-                  Ondulação de {direcaoExtenso(mar.dirOnda)}
-                  {mar.periodo !== null && ` com período de ${num(mar.periodo)} segundos`}.
-                  {mar.agua !== null && ` Água a ${num(mar.agua)}°.`}
-                </p>
+                {mar.zona ? (
+                  <p>
+                    Zona mais próxima: {mar.zona}. Ondas entre {num(mar.ondaMin ?? mar.onda)} e {num(mar.onda)} m, de {direcaoExtenso(mar.dirOnda)}.
+                    {mar.agua !== null && ` Água a ${num(mar.agua)}°.`}
+                  </p>
+                ) : (
+                  <p>
+                    Ondulação de {direcaoExtenso(mar.dirOnda)}
+                    {mar.periodo !== null && ` com período de ${num(mar.periodo)} segundos`}.
+                    {mar.agua !== null && ` Água a ${num(mar.agua)}°.`}
+                  </p>
+                )}
               </div>
             )}
             {p.uv !== null && (
               <div>
-                <span className="label">Radiação ultravioleta</span>
-                <h3>Índice UV</h3>
+                <span className="label">Índice ultravioleta</span>
                 <div className="big num">{num(p.uv)}<small>{nivelUV(p.uv)}</small></div>
                 <Steps n={Math.min(5, Math.max(1, Math.ceil(p.uv / 2.2)))} />
                 <div className="steps-l mono"><span>baixo</span><span>extremo</span></div>
@@ -107,7 +116,6 @@ export function ForecastView({ p, avisos, distancia }: { p: Previsao; avisos: Av
             {p.riscoIncendio !== null && (
               <div>
                 <span className="label">Risco de incêndio</span>
-                <h3>Concelho de {local.nome}</h3>
                 <div className="big texto">{RISCO_INCENDIO[p.riscoIncendio - 1]}</div>
                 <Steps n={p.riscoIncendio} />
                 <div className="steps-l mono"><span>reduzido</span><span>máximo</span></div>
