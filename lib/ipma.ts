@@ -58,7 +58,7 @@ export type Previsao = {
   atual: { temp: number; humidade: number | null; vento: number | null; dirVento: string; sensacao: number | null };
   uv: number | null;
   probChuvaHoje: number | null;
-  // Ondas do próprio local; nos locais do interior, da zona de mar mais próxima (zona e ondaMin preenchidos)
+  // Ondas do próprio local; nos da costa sem ondas próprias, da zona de mar mais próxima (zona e ondaMin preenchidos)
   mar: { onda: number; dirOnda: string; periodo: number | null; agua: number | null; zona?: string; ondaMin?: number } | null;
   riscoIncendio: number | null; // 1 a 5
   horas: Hora[];
@@ -218,8 +218,12 @@ const ORDEM_REGIOES: Local["regiao"][] = ["Continente", "Madeira", "Açores"];
 
 export type ZonaMar = { id: number; zona: string; regiao: Local["regiao"]; lon: number; ondaMin: number; ondaMax: number; dir: string; aguaMin: number | null; aguaMax: number | null; lat: number };
 
-// Zona de mar mais próxima de um local do interior (na mesma região), a partir da previsão diária do mar
+// Locais na costa para os quais o IPMA não dá ondas na previsão do local (os do interior ficam sem mar)
+const COSTA_SEM_ONDAS = ["porto", "faro", "aveiro", "portimao"];
+
+// Zona de mar mais próxima de um local da costa sem ondas próprias, a partir da previsão diária do mar
 async function marMaisProximo(local: Local): Promise<Previsao["mar"]> {
+  if (!COSTA_SEM_ONDAS.includes(local.slug)) return null;
   const zonas = (await getMar().catch(() => null))?.zonas.filter((z) => z.regiao === local.regiao) ?? [];
   if (zonas.length === 0) return null;
   const cos = Math.cos((local.lat * Math.PI) / 180);
