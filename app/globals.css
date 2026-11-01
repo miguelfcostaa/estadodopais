@@ -532,6 +532,7 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 .area-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 32px; align-items: center; }
 .area-mapa { margin: 0; width: 300px; height: 260px; }
 .area-mapa-acores { width: 420px; height: 262px; }
+.area-mapa-continente { width: 150px; }
 .area-mapa svg { display: block; width: 100%; height: 100%; max-width: none; }
 .am-forma { fill: color-mix(in srgb, var(--ink) 7%, var(--bg)); stroke: color-mix(in srgb, var(--ink) 22%, var(--bg)); stroke-width: 1; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .am-forma.sel { fill: color-mix(in srgb, var(--accent) 70%, var(--surface)); stroke: var(--accent); }
@@ -541,7 +542,9 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 .am-ponto { fill: var(--ink); stroke: var(--bg); stroke-width: 2; vector-effect: non-scaling-stroke; }
 @media (max-width: 700px) {
   .area-head { gap: 16px; align-items: start; }
+  .area-head:has(.area-mapa-continente) { align-items: center; }
   .area-mapa { width: 120px; height: 130px; }
+  .area-mapa-continente { width: 90px; height: 165px; }
   .area-head:has(.area-mapa-acores) { grid-template-columns: 1fr; gap: 8px; }
   .area-mapa-acores { width: min(100%, 260px); height: auto; aspect-ratio: 1.6; }
 }

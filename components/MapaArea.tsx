@@ -29,7 +29,7 @@ export function MapaArea({ id, nivel }: { id: string; nivel: NivelAviso }) {
 
   return (
     <figure className={`area-mapa area-mapa-${nome}`}>
-      <svg preserveAspectRatio="xMaxYMid meet" viewBox={`${x0} ${y0} ${w} ${h}`} role="img" aria-label={`Localização: ${AREAS_AVISO[id]?.nome ?? id}`}>
+      <svg preserveAspectRatio={nome === "continente" ? "xMidYMid meet" : "xMaxYMid meet"} viewBox={`${x0} ${y0} ${w} ${h}`} role="img" aria-label={`Localização: ${AREAS_AVISO[id]?.nome ?? id}`}>
         {formas.map((a) => (
           <path key={a.id} d={a.d} className={a.id === destacada ? `am-forma ${cor}` : "am-forma"} />
         ))}
