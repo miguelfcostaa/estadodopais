@@ -12,8 +12,8 @@ export function Carousel({ children, label, inicio }: { children: React.ReactNod
   const atualizar = useCallback(() => {
     const f = faixa.current;
     if (!f) return;
-    setPodeVoltar(f.scrollLeft > 4);
-    setPodeAvancar(f.scrollLeft + f.clientWidth < f.scrollWidth - 4);
+    setPodeVoltar(f.scrollLeft > 1);
+    setPodeAvancar(f.scrollLeft + f.clientWidth < f.scrollWidth - 1);
   }, []);
 
   useEffect(() => {
@@ -31,7 +31,13 @@ export function Carousel({ children, label, inicio }: { children: React.ReactNod
 
   function mover(sentido: 1 | -1) {
     const f = faixa.current;
-    if (f) f.scrollBy({ left: sentido * f.clientWidth, behavior: "smooth" });
+    if (!f) return;
+    // Se o que sobra for menos do que um passo, vai até à ponta (evita parar a poucos píxeis do fim)
+    const max = f.scrollWidth - f.clientWidth;
+    let alvo = f.scrollLeft + sentido * f.clientWidth;
+    if (alvo > max - 8) alvo = max;
+    if (alvo < 8) alvo = 0;
+    f.scrollTo({ left: alvo, behavior: "smooth" });
   }
 
   return (

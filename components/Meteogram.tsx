@@ -92,13 +92,19 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
   function atualizar() {
     const f = faixa.current;
     if (!f) return;
-    setPodeVoltar(f.scrollLeft > 4);
-    setPodeAvancar(f.scrollLeft + f.clientWidth < f.scrollWidth - 4);
+    setPodeVoltar(f.scrollLeft > 1);
+    setPodeAvancar(f.scrollLeft + f.clientWidth < f.scrollWidth - 1);
   }
 
   function mover(sentido: 1 | -1) {
     const f = faixa.current;
-    if (f) f.scrollBy({ left: sentido * f.clientWidth * 0.8, behavior: "smooth" });
+    if (!f) return;
+    // Se o que sobra for menos do que um passo, vai até à ponta (evita parar a poucos píxeis do fim)
+    const max = f.scrollWidth - f.clientWidth;
+    let alvo = f.scrollLeft + sentido * f.clientWidth * 0.8;
+    if (alvo > max - 8) alvo = max;
+    if (alvo < 8) alvo = 0;
+    f.scrollTo({ left: alvo, behavior: "smooth" });
   }
 
   if (n === 0) return null;
