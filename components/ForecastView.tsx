@@ -12,10 +12,6 @@ import { WarningsGrid } from "./WarningsGrid";
 
 export function ForecastView({ p, avisos, distancia }: { p: Previsao; avisos: Aviso[]; distancia?: number }) {
   const { local, resumo, atual, mar } = p;
-  // Título da secção: só o que aparece, pela ordem em que aparece
-  const partes = [p.uv !== null && "índice ultravioleta", p.riscoIncendio !== null && "risco de incêndio", mar && "estado do mar"].filter(Boolean) as string[];
-  const lista = partes.length > 1 ? `${partes.slice(0, -1).join(", ")} e ${partes[partes.length - 1]}` : (partes[0] ?? "");
-  const titulo = lista.charAt(0).toUpperCase() + lista.slice(1);
   type Facto = { icone: NomeIcone; label: string; valor: string; unidade: string };
   const factos: (Facto | null)[] = [
     { icone: "temperatura", label: `Às ${hora(p.agora)}h`, valor: graus(atual.temp), unidade: "previsto" },
@@ -83,7 +79,7 @@ export function ForecastView({ p, avisos, distancia }: { p: Previsao; avisos: Av
       {(mar || p.uv !== null || p.riscoIncendio !== null) && (
         <section className="section" aria-labelledby="h-mar">
           <div className="sec-head">
-            <h2 id="h-mar">{titulo}</h2>
+            <h2 id="h-mar">Mais informações</h2>
             <Link className="more" href="/mar">Toda a costa →</Link>
           </div>
           <div className="trio">
