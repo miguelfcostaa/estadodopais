@@ -34,7 +34,7 @@ export default async function MarPage() {
                 <th className="label col-wide">Região</th>
                 <th className="label r">Ondas</th>
                 <th className="label col-wide">Direção</th>
-                <th className="label r">Água</th>
+                <th className="label r">Temperatura da água</th>
               </tr>
             </thead>
             <tbody>
