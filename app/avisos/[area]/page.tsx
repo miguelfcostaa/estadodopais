@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AvisoIcon } from "@/components/AvisoIcon";
 import { BackLink } from "@/components/BackLink";
 import { MapaArea } from "@/components/MapaArea";
 import { AREAS_AVISO, LOCAIS, type NivelAviso } from "@/lib/data";
@@ -68,7 +69,7 @@ export default async function AreaPage({ params }: Props) {
             const comAviso = deste.filter((a) => a.nivel !== "green");
             return (
               <li key={t} className={comAviso.length ? "alert" : undefined}>
-                <span className="type-name">{t}</span>
+                <span className="type-name"><AvisoIcon tipo={t} />{t}</span>
                 {comAviso.length === 0 ? (
                   <span className="type-state"><i className="lvl green" /> sem aviso</span>
                 ) : (
