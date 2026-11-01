@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BackLink } from "@/components/BackLink";
+import { MapaArea } from "@/components/MapaArea";
 import { AREAS_AVISO, LOCAIS, type NivelAviso } from "@/lib/data";
 import { intervalo, nomeNivel } from "@/lib/avisos";
 import { getTodosAvisos } from "@/lib/ipma";
@@ -33,17 +34,19 @@ export default async function AreaPage({ params }: Props) {
   const ativos = todos.filter((a) => a.nivel !== "green");
   const pior = ativos.reduce<NivelAviso>((m, a) => (ORDEM.indexOf(a.nivel) > ORDEM.indexOf(m) ? a.nivel : m), "green");
   const locais = LOCAIS.filter((l) => l.idAreaAviso === id);
-  const nomeArea = info.regiao === "Continente" ? `distrito de ${info.nome}` : `${info.nome} (${info.regiao})`;
+  const artigo = id === "MRM" ? "as" : id === "MCN" || id === "MCS" ? "a" : "o";
+  const nomeArea = info.regiao === "Continente" ? `o distrito de ${info.nome}` : `${artigo} ${info.nome} (${info.regiao})`;
 
   return (
     <div className="wrap">
-      <div className="page-head">
+      <div className="page-head area-head">
+        <div>
         <BackLink href="/avisos" label="Voltar para avisos" />
         <span className="label"><i className={`lvl ${pior}`} /> {info.regiao}</span>
         <h1>{info.nome}</h1>
         <p className="warn-lead">
           {ativos.length === 0 ? (
-            `Sem avisos para o ${nomeArea} nos próximos 3 dias.`
+            `Sem avisos para ${nomeArea} nos próximos 3 dias.`
           ) : (
             <>
               {ativos.map((a, i) => (
@@ -55,6 +58,8 @@ export default async function AreaPage({ params }: Props) {
             </>
           )}
         </p>
+        </div>
+        <MapaArea id={id} nivel={pior} />
       </div>
 
       <section className="section" aria-labelledby="h-tipos">

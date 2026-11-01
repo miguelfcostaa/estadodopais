@@ -527,6 +527,24 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 .av-forma.red { fill: color-mix(in srgb, var(--w-red) 70%, var(--surface)); }
 .av-area:hover .av-forma, .av-area:focus-visible .av-forma { filter: brightness(1.35); stroke: var(--ink); }
 .av-forma.neutra { fill: var(--surface); }
+
+/* Página de cada área: silhueta com a área destacada */
+.area-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 32px; align-items: center; }
+.area-mapa { margin: 0; width: 300px; height: 260px; }
+.area-mapa-acores { width: 420px; height: 262px; }
+.area-mapa svg { display: block; width: 100%; height: 100%; max-width: none; }
+.am-forma { fill: color-mix(in srgb, var(--ink) 7%, var(--bg)); stroke: color-mix(in srgb, var(--ink) 22%, var(--bg)); stroke-width: 1; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.am-forma.sel { fill: color-mix(in srgb, var(--accent) 70%, var(--surface)); stroke: var(--accent); }
+.am-forma.yellow { fill: color-mix(in srgb, var(--w-yellow) 62%, var(--surface)); stroke: var(--w-yellow); }
+.am-forma.orange { fill: color-mix(in srgb, var(--w-orange) 66%, var(--surface)); stroke: var(--w-orange); }
+.am-forma.red { fill: color-mix(in srgb, var(--w-red) 70%, var(--surface)); stroke: var(--w-red); }
+.am-ponto { fill: var(--ink); stroke: var(--bg); stroke-width: 2; vector-effect: non-scaling-stroke; }
+@media (max-width: 700px) {
+  .area-head { gap: 16px; align-items: start; }
+  .area-mapa { width: 120px; height: 130px; }
+  .area-head:has(.area-mapa-acores) { grid-template-columns: 1fr; gap: 8px; }
+  .area-mapa-acores { width: min(100%, 260px); height: auto; aspect-ratio: 1.6; }
+}
 /* pontos das zonas da Madeira: ponto na cor do nível, contorno do fundo e halo suave */
 .av-ponto {
   --c: color-mix(in srgb, var(--w-green) 70%, var(--surface));
