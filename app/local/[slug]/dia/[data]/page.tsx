@@ -13,7 +13,7 @@ import { dataExtensa, graus, num, nivelUV } from "@/lib/format";
 import { direcaoExtenso, fuso, getAvisos, getPrevisao, INTENSIDADE_VENTO } from "@/lib/ipma";
 import { solDoDia } from "@/lib/sol";
 
-export const revalidate = 43200; // 12 horas
+export const revalidate = 1800; // 30 minutos (tem avisos)
 
 type Props = { params: Promise<{ slug: string; data: string }> };
 

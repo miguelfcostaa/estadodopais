@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Altura e direção das ondas e temperatura da água em toda a costa de Portugal, Madeira e Açores. Dados do IPMA.",
   alternates: { canonical: "/mar" },
 };
-export const revalidate = 43200; // 12 horas
+export const revalidate = 3600; // 1 hora (mar)
 
 export default async function MarPage() {
   const { data, zonas } = await getMar();

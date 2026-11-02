@@ -8,10 +8,17 @@ import { criarNoite } from "./sol";
 const OPEN = "https://api.ipma.pt/open-data";
 const PUBLIC = "https://api.ipma.pt/public-data";
 
-export const REVALIDAR = 43200; // 12 horas, em segundos
+// De quanto em quanto tempo se voltam a pedir os dados ao IPMA (em segundos)
+export const CACHE = {
+  avisos: 30 * 60, // podem mudar a qualquer hora
+  previsao: 60 * 60,
+  mar: 60 * 60,
+  incendio: 6 * 60 * 60, // o IPMA publica-o uma vez por dia
+  fixo: 24 * 60 * 60, // lista das zonas de mar
+};
 
-async function obter<T>(url: string): Promise<T> {
-  const res = await fetch(url, { next: { revalidate: REVALIDAR } });
+async function obter<T>(url: string, segundos: number): Promise<T> {
+  const res = await fetch(url, { next: { revalidate: segundos } });
   if (!res.ok) throw new Error(`IPMA respondeu ${res.status} para ${url}`);
   return res.json() as Promise<T>;
 }
@@ -107,9 +114,9 @@ export async function getPrevisao(slug: string): Promise<Previsao | null> {
 
   type Rcm = { dataPrev: string; local: Record<string, { data: { rcm: number } }> };
   const rcmDia = (d: 0 | 1) =>
-    local.regiao === "Continente" ? obter<Rcm>(`${OPEN}/forecast/meteorology/rcm/rcm-d${d}.json`).catch(() => null) : Promise.resolve(null);
+    local.regiao === "Continente" ? obter<Rcm>(`${OPEN}/forecast/meteorology/rcm/rcm-d${d}.json`, CACHE.incendio).catch(() => null) : Promise.resolve(null);
   const [agregado, rcm, rcm1] = await Promise.all([
-    obter<Agregado[]>(`${PUBLIC}/forecast/aggregate/${local.globalIdLocal}.json`),
+    obter<Agregado[]>(`${PUBLIC}/forecast/aggregate/${local.globalIdLocal}.json`, CACHE.previsao),
     rcmDia(0),
     rcmDia(1),
   ]);
@@ -194,7 +201,7 @@ type AvisoRaw = { idAreaAviso: string; awarenessTypeName: string; awarenessLevel
 
 // Todos os avisos ainda válidos, incluindo os verdes (um por tipo e área)
 export async function getTodosAvisos(): Promise<Aviso[]> {
-  const raw = await obter<AvisoRaw[]>(`${OPEN}/forecast/warnings/warnings_www.json`);
+  const raw = await obter<AvisoRaw[]>(`${OPEN}/forecast/warnings/warnings_www.json`, CACHE.avisos);
   const agora = horaAtual();
   return raw
     .filter((a) => a.endTime.slice(0, 16) > agora)
@@ -236,8 +243,8 @@ export async function getMar(): Promise<{ data: string; zonas: ZonaMar[] }> {
   type Loc = { globalIdLocal: number; local: string; latitude: string; longitude: string; idRegiao: number };
   type Prev = { globalIdLocal: number; waveHighMin: string; waveHighMax: string; predWaveDir: string; sstMin: string; sstMax: string };
   const [locs, prev] = await Promise.all([
-    obter<Loc[]>(`${OPEN}/sea-locations.json`),
-    obter<{ forecastDate: string; data: Prev[] }>(`${OPEN}/forecast/oceanography/daily/hp-daily-sea-forecast-day0.json`),
+    obter<Loc[]>(`${OPEN}/sea-locations.json`, CACHE.fixo),
+    obter<{ forecastDate: string; data: Prev[] }>(`${OPEN}/forecast/oceanography/daily/hp-daily-sea-forecast-day0.json`, CACHE.mar),
   ]);
   const regiao = (id: number): Local["regiao"] => (id >= 3000000 ? "Açores" : id >= 2000000 ? "Madeira" : "Continente");
   const zonas = prev.data

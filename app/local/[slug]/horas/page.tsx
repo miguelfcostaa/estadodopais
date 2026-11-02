@@ -6,7 +6,7 @@ import { Meteogram } from "@/components/Meteogram";
 import { getLocal, LOCAIS, emLocal, paraLocal } from "@/lib/data";
 import { getPrevisao } from "@/lib/ipma";
 
-export const revalidate = 43200; // 12 horas
+export const revalidate = 3600; // 1 hora (previsão)
 
 type Props = { params: Promise<{ slug: string }> };
 
