@@ -19,7 +19,7 @@ export function ForecastView({ p, avisos, distancia }: { p: Previsao; avisos: Av
   const factos: (Facto | null)[] = [
     // Temperatura medida na estação mais próxima, com a prevista ao lado; sem estação perto, só a prevista
     obs
-      ? { icone: "temperatura", label: `Medida às ${hora(obs.hora)}h`, valor: graus(obs.temp), unidade: `previsto ${graus(previstoObs)}`, nota: `${obs.estacao}${obs.km > 0 ? `, a ${obs.km} km` : ""}` }
+      ? { icone: "temperatura", label: `Medida às ${hora(obs.hora)}h`, valor: graus(obs.temp), unidade: `previsto ${graus(previstoObs)}` }
       : { icone: "temperatura", label: `Às ${hora(p.agora)}h`, valor: graus(atual.temp), unidade: "previsto" },
     atual.humidade !== null ? { icone: "humidade", label: "Humidade", valor: String(Math.round(atual.humidade)), unidade: "%" } : null,
     atual.vento !== null ? { icone: "vento", label: "Vento", valor: String(Math.round(atual.vento)), unidade: `km/h · ${atual.dirVento}` } : null,
