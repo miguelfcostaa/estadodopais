@@ -104,7 +104,7 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
     let alvo = f.scrollLeft + sentido * f.clientWidth * 0.8;
     if (alvo > max - 8) alvo = max;
     if (alvo < 8) alvo = 0;
-    f.scrollTo({ left: alvo, behavior: "smooth" });
+    f.scrollTo({ left: alvo, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   }
 
   if (n === 0) return null;

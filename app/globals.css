@@ -5,13 +5,16 @@
   --line: #1d3043;
   --ink: #e3edf6;
   --muted: #8ca1b5;
-  --faint: #4a6075;
+  --faint: #4a6075; /* só linhas e contornos */
+  --subtle: #748a9e; /* texto discreto, com contraste de pelo menos 4,5:1 */
   --accent: #58b0ff;
   --rain: #2f6aa3;
   --w-green: #4fa36a;
   --w-yellow: #e9bf2a;
   --w-orange: #f08a24;
   --w-red: #e0443a;
+  --w-yellow-txt: var(--w-yellow);
+  --w-orange-txt: var(--w-orange);
   --display: var(--font-display), "Avenir Next", "Segoe UI", sans-serif;
   --body: var(--font-sans), "Helvetica Neue", Arial, sans-serif;
   --mono: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
@@ -25,12 +28,15 @@
   --ink: #0f1f2f;
   --muted: #52687d;
   --faint: #9fb2c4;
-  --accent: #1e6fd0;
+  --subtle: #5a6f84;
+  --accent: #1d6cca;
   --rain: #8db8e2;
   --w-green: #2f8a4c;
   --w-yellow: #b98f00;
   --w-orange: #d26a00;
   --w-red: #c42d24;
+  --w-yellow-txt: #836b0f; /* amarelo e laranja como texto: mais escuros, para se lerem no fundo claro */
+  --w-orange-txt: #a5590b;
   color-scheme: light;
 }
 
@@ -86,7 +92,7 @@ img, svg { max-width: 100%; }
 .site-nav a { text-decoration: none; color: var(--muted); padding-block: 4px; border-bottom: 1px solid transparent; }
 .site-nav a:hover { color: var(--ink); }
 .site-nav a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
-.icon-btn { background: none; border: 0; color: var(--ink); padding: 6px; cursor: pointer; display: grid; place-items: center; border-radius: 4px; }
+.icon-btn { background: none; border: 0; color: var(--ink); padding: 6px; min-width: 44px; min-height: 44px; cursor: pointer; display: grid; place-items: center; border-radius: 4px; }
 .icon-btn:hover { background: var(--surface); }
 .menu-btn { display: none; }
 @media (max-width: 760px) {
@@ -301,8 +307,8 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 
 /* Avisos */
 .warn-lead { font-family: var(--display); font-size: clamp(21px, 2.3vw, 26px); font-weight: 400; max-width: 46ch; margin: 0 0 28px; line-height: 1.35; }
-.warn-lead b { font-weight: 400; color: var(--w-yellow); }
-.warn-lead b.orange { color: var(--w-orange); }
+.warn-lead b { font-weight: 400; color: var(--w-yellow-txt); }
+.warn-lead b.orange { color: var(--w-orange-txt); }
 .warn-lead b.red { color: var(--w-red); }
 .regions { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 32px; }
 @media (max-width: 900px) { .regions { grid-template-columns: 1fr; } }
@@ -316,8 +322,8 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .area .lvl.green { opacity: .55; }
 .area.alert { color: var(--ink); }
 .area .why { margin-left: auto; }
-.area .why.yellow { color: var(--w-yellow); }
-.area .why.orange { color: var(--w-orange); }
+.area .why.yellow { color: var(--w-yellow-txt); }
+.area .why.orange { color: var(--w-orange-txt); }
 .area .why.red { color: var(--w-red); }
 .scale { display: flex; justify-content: space-between; gap: 10px 18px; flex-wrap: wrap; margin-top: 22px; color: var(--muted); }
 .scale > span { display: inline-flex; gap: 8px; align-items: center; }
@@ -346,7 +352,7 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .steps.cores.n3 i.on { background: #e87722; }
 .steps.cores.n4 i.on { background: #cb333b; }
 .steps.cores.n5 i.on { background: #6f263d; }
-.steps-l { display: flex; justify-content: space-between; margin-top: 6px; color: var(--faint); }
+.steps-l { display: flex; justify-content: space-between; margin-top: 6px; color: var(--subtle); }
 
 .table-scroll { overflow-x: auto; }
 table.data { width: 100%; border-collapse: collapse; min-width: 560px; }
@@ -371,10 +377,10 @@ table.data .r { text-align: right; }
 .site-footer .cols { display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 1fr)); gap: 40px; padding-block: 44px 32px; }
 @media (max-width: 760px) { .site-footer .cols { grid-template-columns: 1fr; gap: 28px; } }
 .site-footer p { margin: 10px 0 0; color: var(--muted); font-size: 14.5px; max-width: 42ch; }
-.site-footer ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 8px; }
-.site-footer ul a { color: var(--muted); text-decoration: none; font-size: 14.5px; }
+.site-footer ul { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 0; }
+.site-footer ul a { display: inline-block; padding-block: 6px; color: var(--muted); text-decoration: none; font-size: 14.5px; }
 .site-footer ul a:hover { color: var(--ink); }
-.site-footer .base { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-block: 18px 32px; border-top: 1px solid var(--line); color: var(--faint); }
+.site-footer .base { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-block: 18px 32px; border-top: 1px solid var(--line); color: var(--subtle); }
 
 /* Avisos no telemóvel: áreas com aviso primeiro, as restantes recolhidas */
 .regions-compact { display: none; }
@@ -389,8 +395,8 @@ table.data .r { text-align: right; }
 .alert-list li:last-child { border-bottom: 0; }
 .alert-name { display: grid; gap: 2px; min-width: 0; }
 .alert-list .why { margin-left: auto; text-align: right; }
-.alert-list .why.yellow { color: var(--w-yellow); }
-.alert-list .why.orange { color: var(--w-orange); }
+.alert-list .why.yellow { color: var(--w-yellow-txt); }
+.alert-list .why.orange { color: var(--w-orange-txt); }
 .alert-list .why.red { color: var(--w-red); }
 /* Áreas sem aviso: mais uma fila da lista, sem caixa à volta */
 .calm { border-top: 1px solid var(--line); }
@@ -419,7 +425,7 @@ table.data .r { text-align: right; }
 
 
 /* Página hora a hora */
-.back { display: block; width: fit-content; margin-bottom: 20px; color: var(--muted); text-decoration: none; }
+.back { display: block; width: fit-content; padding-block: 12px; margin: -12px 0 8px; color: var(--muted); text-decoration: none; }
 .back:hover { color: var(--ink); }
 .page-head .label + h1 { margin-top: 8px; }
 /* Hora a hora: cartões por hora, agrupados por dia */
@@ -436,7 +442,7 @@ table.data .r { text-align: right; }
 .moments { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); }
 .moments li { display: grid; gap: 12px; align-content: start; padding: 18px; border-left: 1px solid var(--line); }
 .moments li:first-child { border-left: 0; }
-.moments .label .mono { color: var(--faint); margin-left: 6px; letter-spacing: 0; }
+.moments .label .mono { color: var(--subtle); margin-left: 6px; letter-spacing: 0; }
 .moment-wx { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; }
 .moment-wx svg { flex: none; color: var(--ink); }
 .moment-temp { font-family: var(--display); font-size: 30px; font-weight: 500; }
@@ -482,7 +488,7 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 .carousel-head { align-items: center; }
 .carousel-head .carousel-nav { margin-top: 0; }
 .carousel-btn {
-  width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--ink);
+  width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--ink);
   font-size: 22px; line-height: 1; cursor: pointer; display: grid; place-items: center; padding: 0 0 3px;
 }
 .carousel-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
@@ -551,7 +557,7 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 .baixoEsq .mapa-label { top: 18px; right: -8px; text-align: right; justify-items: end; }
 .baixoDir .mapa-label { top: 18px; left: -8px; }
 .cima .mapa-label { bottom: 18px; left: 0; transform: translateX(-50%); text-align: center; justify-items: center; }
-.mapa-nota { color: var(--faint); margin: 18px 0 0; }
+.mapa-nota { color: var(--subtle); margin: 18px 0 0; }
 @media (max-width: 900px) {
   .mapa { grid-template-columns: 1fr; }
 }
@@ -653,3 +659,28 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 /* Tipos de aviso em ícones, lado a lado, na cor do nível */
 .why.tipos { display: inline-flex; align-items: center; gap: 6px; flex: none; }
 .why.tipos .aviso-icon { flex: none; }
+
+/* Acessibilidade */
+
+/* Atalho para saltar o cabeçalho com o teclado: só aparece quando recebe o foco */
+.saltar { position: absolute; left: 16px; top: -100px; z-index: 100; padding: 10px 14px; background: var(--accent); color: var(--bg); border-radius: 3px; font-weight: 500; text-decoration: none; }
+.saltar:focus { top: 12px; }
+.site-main:focus { outline: none; }
+
+/* Pontos do mapa de avisos: o ponto continua pequeno, mas a área de toque tem 28 px */
+.av-ponto::before { content: ""; position: absolute; inset: -9px; border-radius: 50%; }
+
+/* Em ecrãs de toque, os botões de escolha têm pelo menos 44 px de altura */
+@media (pointer: coarse) {
+  .pk-btn, .dias-tabs button { min-height: 44px; }
+}
+
+/* Quem pede menos movimento no sistema: sem animações nem deslizes suaves */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+/* Página de erro */
+.erro-acoes { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+.pk-btn.sem-seta { padding-right: 14px; }
+.pk-btn.sem-seta::after { display: none; }

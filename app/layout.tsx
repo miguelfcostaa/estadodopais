@@ -47,9 +47,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: dadosSite }} />
       </head>
       <body>
+        <a className="saltar" href="#conteudo">Saltar para o conteúdo</a>
         <NavHistory />
         <SiteHeader atualizado={horaMinutoAtual()} />
-        <main className="site-main">{children}</main>
+        <main className="site-main" id="conteudo" tabIndex={-1}>{children}</main>
         <SiteFooter />
       </body>
     </html>
