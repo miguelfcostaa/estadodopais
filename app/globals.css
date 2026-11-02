@@ -137,6 +137,12 @@ h1 em { font-style: normal; color: var(--accent); }
 .pk-btn[aria-expanded="true"]::after { transform: translateY(-30%) rotate(-135deg); }
 .pk-btn:hover { border-color: var(--faint); color: var(--ink); }
 .pk-btn.on { color: var(--ink); border-color: var(--accent); }
+
+/* Escolha do dia (página do mar) */
+.dias-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 24px; }
+.dias-tabs button { background: transparent; color: var(--muted); border: 1px solid var(--line); font: 500 14px var(--body); padding: 7px 14px; border-radius: 3px; cursor: pointer; }
+.dias-tabs button:hover { border-color: var(--faint); color: var(--ink); }
+.dias-tabs button.on { color: var(--ink); border-color: var(--accent); }
 .pk-pop {
   position: absolute; z-index: 30; top: calc(100% + 6px); left: 0;
   width: max-content; min-width: 100%; max-width: calc(100vw - 32px);

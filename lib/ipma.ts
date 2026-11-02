@@ -288,12 +288,13 @@ async function marMaisProximo(local: Local): Promise<Previsao["mar"]> {
   return { onda: z.ondaMax, ondaMin: z.ondaMin, dirOnda: z.dir, periodo: null, agua: z.aguaMax, zona: z.zona };
 }
 
-export async function getMar(): Promise<{ data: string; zonas: ZonaMar[] }> {
+// Previsão do mar para hoje (0), amanhã (1) ou depois de amanhã (2)
+export async function getMar(dia: 0 | 1 | 2 = 0): Promise<{ data: string; zonas: ZonaMar[] }> {
   type Loc = { globalIdLocal: number; local: string; latitude: string; longitude: string; idRegiao: number };
   type Prev = { globalIdLocal: number; waveHighMin: string; waveHighMax: string; predWaveDir: string; sstMin: string; sstMax: string };
   const [locs, prev] = await Promise.all([
     obter<Loc[]>(`${OPEN}/sea-locations.json`, CACHE.fixo),
-    obter<{ forecastDate: string; data: Prev[] }>(`${OPEN}/forecast/oceanography/daily/hp-daily-sea-forecast-day0.json`, CACHE.mar),
+    obter<{ forecastDate: string; data: Prev[] }>(`${OPEN}/forecast/oceanography/daily/hp-daily-sea-forecast-day${dia}.json`, CACHE.mar),
   ]);
   const regiao = (id: number): Local["regiao"] => (id >= 3000000 ? "Açores" : id >= 2000000 ? "Madeira" : "Continente");
   const zonas = prev.data
