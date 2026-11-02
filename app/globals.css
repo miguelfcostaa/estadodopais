@@ -245,8 +245,8 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .day-temps { display: flex; align-items: baseline; gap: 10px; margin-top: 2px; }
 .day-temps .tmax { font-family: var(--display); font-size: 30px; font-weight: 500; line-height: 1; }
 .day-temps .tmin { font-size: 17px; color: var(--muted); }
-.day-range { position: relative; height: 4px; background: var(--line); border-radius: 2px; }
-.day-range i { position: absolute; top: 0; bottom: 0; border-radius: 2px; background: linear-gradient(90deg, var(--rain), var(--accent)); }
+.day-range { position: relative; height: 5px; background: var(--line); border-radius: 3px; }
+.day-range i { position: absolute; top: 0; bottom: 0; border-radius: 3px; }
 .day-meta { margin: 2px 0 0; display: grid; gap: 6px; }
 .day-meta div { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
 .day-meta dd { margin: 0; display: flex; align-items: center; gap: 6px; font-size: 14px; }
