@@ -11,6 +11,7 @@ const PUBLIC = "https://api.ipma.pt/public-data";
 // De quanto em quanto tempo se voltam a pedir os dados ao IPMA (em segundos)
 export const CACHE = {
   avisos: 30 * 60, // podem mudar a qualquer hora
+  observacao: 30 * 60, // as estações publicam de hora a hora
   previsao: 60 * 60,
   mar: 60 * 60,
   incendio: 6 * 60 * 60, // o IPMA publica-o uma vez por dia
@@ -56,8 +57,12 @@ type Agregado = {
   tempAguaMar?: string;
 };
 
+// Temperatura medida na estação do IPMA mais próxima do local (média da última hora com dados)
+export type Observacao = { temp: number; hora: string; estacao: string; km: number };
+
 export type Previsao = {
   local: Local;
+  observado: Observacao | null;
   atualizado: string; // dataUpdate do IPMA
   agora: string;
   fuso: string;
@@ -115,10 +120,11 @@ export async function getPrevisao(slug: string): Promise<Previsao | null> {
   type Rcm = { dataPrev: string; local: Record<string, { data: { rcm: number } }> };
   const rcmDia = (d: 0 | 1) =>
     local.regiao === "Continente" ? obter<Rcm>(`${OPEN}/forecast/meteorology/rcm/rcm-d${d}.json`, CACHE.incendio).catch(() => null) : Promise.resolve(null);
-  const [agregado, rcm, rcm1] = await Promise.all([
+  const [agregado, rcm, rcm1, observado] = await Promise.all([
     obter<Agregado[]>(`${PUBLIC}/forecast/aggregate/${local.globalIdLocal}.json`, CACHE.previsao),
     rcmDia(0),
     rcmDia(1),
+    getObservacao(local).catch(() => null),
   ]);
   if (!agregado.length) return null;
 
@@ -191,6 +197,7 @@ export async function getPrevisao(slug: string): Promise<Previsao | null> {
     probChuvaHoje: n(hojeD.probabilidadePrecipita),
     mar: onda !== null ? { onda, dirOnda: atualH?.dirOndulacao ?? "", periodo: n(atualH?.periodOndulacao), agua: n(atualH?.tempAguaMar) } : await marMaisProximo(local),
     riscoIncendio: rcm?.local[dico]?.data.rcm ?? null,
+    observado,
     horas,
     pontos,
     dias,
@@ -227,6 +234,48 @@ export type ZonaMar = { id: number; zona: string; regiao: Local["regiao"]; lon: 
 
 // Locais na costa para os quais o IPMA não dá ondas na previsão do local (os do interior ficam sem mar)
 const COSTA_SEM_ONDAS = ["porto", "faro", "aveiro", "portimao"];
+
+// Distância em linha reta, em km
+function distanciaKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const r = Math.PI / 180;
+  const a = Math.sin(((lat2 - lat1) * r) / 2) ** 2 + Math.cos(lat1 * r) * Math.cos(lat2 * r) * Math.sin(((lon2 - lon1) * r) / 2) ** 2;
+  return 2 * 6371 * Math.asin(Math.sqrt(a));
+}
+
+// Hora UTC "2026-11-02T17:00:00" na hora local do fuso indicado, como "2026-11-02T17:00"
+function utcParaLocal(utc: string, tz: string): string {
+  const p = Object.fromEntries(
+    new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
+      .formatToParts(new Date(`${utc.slice(0, 19)}Z`))
+      .map((x) => [x.type, x.value]),
+  );
+  return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;
+}
+
+const OBS_MAX_KM = 10; // mais longe do que isto, a estação já não representa o local
+
+// Estação mais próxima com temperatura válida nas últimas 3 horas.
+// A documentação do IPMA não indica o fuso; as horas são as mesmas para o continente e os Açores, por isso trata-se como UTC.
+async function getObservacao(local: Local): Promise<Observacao | null> {
+  type Obs = { geometry: { coordinates: [number, number] }; properties: { idEstacao: number; localEstacao: string; temperatura: number; time: string } };
+  const geo = await obter<{ features: Obs[] }>(`${OPEN}/observation/meteorology/stations/obs-surface.geojson`, CACHE.observacao);
+  const ultima = new Map<number, Obs>();
+  for (const f of geo.features) {
+    const p = f.properties;
+    if (p.temperatura === -99 || p.temperatura == null) continue;
+    const atual = ultima.get(p.idEstacao);
+    if (!atual || p.time > atual.properties.time) ultima.set(p.idEstacao, f);
+  }
+  let melhor: { f: Obs; km: number } | null = null;
+  for (const f of ultima.values()) {
+    const [lon, lat] = f.geometry.coordinates;
+    const km = distanciaKm(local.lat, local.lon, lat, lon);
+    if (km <= OBS_MAX_KM && (!melhor || km < melhor.km)) melhor = { f, km };
+  }
+  if (!melhor) return null;
+  const p = melhor.f.properties;
+  return { temp: p.temperatura, hora: utcParaLocal(p.time, fuso(local)), estacao: p.localEstacao, km: Math.round(melhor.km) };
+}
 
 // Zona de mar mais próxima de um local da costa sem ondas próprias, a partir da previsão diária do mar
 async function marMaisProximo(local: Local): Promise<Previsao["mar"]> {

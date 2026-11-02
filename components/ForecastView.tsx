@@ -12,9 +12,15 @@ import { WarningsGrid } from "./WarningsGrid";
 
 export function ForecastView({ p, avisos, distancia }: { p: Previsao; avisos: Aviso[]; distancia?: number }) {
   const { local, resumo, atual, mar } = p;
-  type Facto = { icone: NomeIcone; label: string; valor: string; unidade: string };
+  type Facto = { icone: NomeIcone; label: string; valor: string; unidade: string; nota?: string };
+  const obs = p.observado;
+  // Previsão para a mesma hora da medição, para comparar o que se previu com o que se mediu
+  const previstoObs = obs ? (p.horas.find((h) => h.hora === obs.hora)?.temp ?? atual.temp) : atual.temp;
   const factos: (Facto | null)[] = [
-    { icone: "temperatura", label: `Às ${hora(p.agora)}h`, valor: graus(atual.temp), unidade: "previsto" },
+    // Temperatura medida na estação mais próxima, com a prevista ao lado; sem estação perto, só a prevista
+    obs
+      ? { icone: "temperatura", label: `Medida às ${hora(obs.hora)}h`, valor: graus(obs.temp), unidade: `previsto ${graus(previstoObs)}`, nota: `${obs.estacao}${obs.km > 0 ? `, a ${obs.km} km` : ""}` }
+      : { icone: "temperatura", label: `Às ${hora(p.agora)}h`, valor: graus(atual.temp), unidade: "previsto" },
     atual.humidade !== null ? { icone: "humidade", label: "Humidade", valor: String(Math.round(atual.humidade)), unidade: "%" } : null,
     atual.vento !== null ? { icone: "vento", label: "Vento", valor: String(Math.round(atual.vento)), unidade: `km/h · ${atual.dirVento}` } : null,
     p.uv !== null ? { icone: "uv", label: "Índice UV", valor: num(p.uv), unidade: nivelUV(p.uv) } : null,
@@ -52,6 +58,7 @@ export function ForecastView({ p, avisos, distancia }: { p: Previsao; avisos: Av
                 {f.valor}
                 {f.unidade && <small>{f.unidade}</small>}
               </dd>
+              {f.nota && <dd className="fact-note">{f.nota}</dd>}
             </div>
           ))}
         </dl>

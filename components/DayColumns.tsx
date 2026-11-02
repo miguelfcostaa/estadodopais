@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Dia } from "@/lib/data";
 import { TIPOS_TEMPO } from "@/lib/data";
 import { INTENSIDADE_VENTO } from "@/lib/ipma";
-import { diaSemana, graus, num } from "@/lib/format";
+import { diaSemana, graus, nivelUV, num } from "@/lib/format";
 import { Carousel } from "./Carousel";
 import { WeatherIcon } from "./WeatherIcon";
 
@@ -93,6 +93,21 @@ export function DayColumns({ dias, slug, atual, carrossel = false }: { dias: Dia
                     </dd>
                   </div>
                 )}
+                {/* O IPMA só prevê o índice UV para os primeiros 5 dias; nos outros fica um traço, para os cartões ficarem alinhados */}
+                <div>
+                  <dt className="label">UV</dt>
+                  <dd className="num">
+                    {d.uv != null ? (
+                      <>
+                        <span className="uv-pre">UV </span>
+                        {num(d.uv)}
+                        <span className="uv-nivel"> {nivelUV(d.uv)}</span>
+                      </>
+                    ) : (
+                      "—"
+                    )}
+                  </dd>
+                </div>
               </dl>
             </Link>
           </li>
