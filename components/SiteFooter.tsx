@@ -15,7 +15,7 @@ export function SiteFooter() {
           <ul>
             <li><Link href="/">Previsão de hoje</Link></li>
             <li><Link href="/avisos">Avisos meteorológicos</Link></li>
-            <li><Link href="/mar">Mar, UV e incêndio</Link></li>
+            <li><Link href="/mar">Estado do mar</Link></li>
             <li><Link href="/sobre">Sobre o projeto</Link></li>
           </ul>
         </div>

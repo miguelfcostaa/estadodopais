@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: { default: `${SITE_NOME} · Tempo, avisos e mar em Portugal`, template: `%s · ${SITE_NOME}` },
   description: SITE_DESCRICAO,
   alternates: { canonical: "/" },
-  openGraph: { type: "website", locale: "pt_PT", siteName: SITE_NOME, url: "/" },
+  openGraph: { type: "website", locale: "pt_PT", siteName: SITE_NOME },
   twitter: { card: "summary_large_image" },
 };
 
