@@ -164,6 +164,11 @@ h1 em { font-style: normal; color: var(--accent); }
 .pk-empty { padding: 8px 10px; color: var(--muted); font-size: 14px; }
 @media (max-width: 480px) { .pk-pop.wide .pk-list { grid-template-columns: 1fr; } }
 .summary { max-width: 60ch; color: var(--muted); font-size: 17px; margin: 0; }
+/* No computador, o resumo encosta ao fundo da coluna, alinhado com o fundo dos números ao lado */
+@media (min-width: 901px) {
+  .lead > div:first-child { display: flex; flex-direction: column; }
+  .lead > div:first-child .summary { margin-top: auto; }
+}
 .source { color: var(--faint); margin: 16px 0 0; }
 
 /* Só linhas entre filas: cada número tem linha por cima; nada por baixo da última fila */
