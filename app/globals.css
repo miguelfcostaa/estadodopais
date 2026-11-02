@@ -590,3 +590,8 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 @media (max-width: 900px) {
   .mapa-avisos .mapa-continente .mapa-box { max-width: 230px; margin-inline: auto; }
 }
+
+/* Páginas curtas (404): o link fica no fundo, junto à linha do rodapé, em vez de deixar espaço vazio por baixo */
+.site-main:has(> .pagina-curta) { display: flex; flex-direction: column; padding-bottom: 0; }
+.pagina-curta { flex: 1; display: flex; flex-direction: column; width: 100%; }
+.pagina-curta .empty { margin-top: auto; padding-bottom: 0; }

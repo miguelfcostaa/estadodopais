@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="wrap">
+    <div className="wrap pagina-curta">
       <div className="page-head">
         <span className="label">Erro 404</span>
         <h1>Esta página não existe</h1>
