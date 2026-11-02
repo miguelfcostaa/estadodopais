@@ -37,7 +37,7 @@ export function Carousel({ children, label, inicio }: { children: React.ReactNod
     let alvo = f.scrollLeft + sentido * f.clientWidth;
     if (alvo > max - 8) alvo = max;
     if (alvo < 8) alvo = 0;
-    f.scrollTo({ left: alvo, behavior: "smooth" });
+    f.scrollTo({ left: alvo, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   }
 
   return (
