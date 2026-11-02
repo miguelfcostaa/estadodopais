@@ -11,8 +11,8 @@ export default function SobrePage() {
     <div className="wrap">
       <div className="page-head">
         <span className="label">Sobre</span>
-        <h1>O tempo, sem complicar</h1>
-        <p>O estadodopais.pt mostra a previsão do tempo, os avisos e o estado do mar em Portugal, com frases simples e gráficos claros.</p>
+        <h1>O que é o estadodopais.pt</h1>
+        <p>A previsão do tempo para 35 locais do continente e das ilhas, os avisos do IPMA, o estado do mar, o índice ultravioleta, o risco de incêndio e a temperatura medida nas estações, numa só página por local.</p>
       </div>
       <div className="prose">
         <h2>De onde vêm os dados</h2>

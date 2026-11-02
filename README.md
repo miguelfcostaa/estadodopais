@@ -1,6 +1,6 @@
 # estadodopais.pt
 
-O estado do tempo, do mar e dos riscos em Portugal, num só sítio e explicado de forma simples. Feito com os dados abertos do IPMA.
+O estado do tempo, do mar e dos riscos em Portugal, para 35 locais do continente, da Madeira e dos Açores. Feito com os dados abertos do IPMA.
 
 **Site:** https://www.estadodopais.pt
 

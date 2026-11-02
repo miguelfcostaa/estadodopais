@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!local) return { title: "Local não encontrado" };
   return {
     title: `Tempo ${emLocal(local)}: hoje e próximos 10 dias`,
-    description: `Previsão do tempo ${paraLocal(local)} hoje e nos próximos 10 dias: temperatura, chuva, vento, avisos, índice ultravioleta e mais. Dados do IPMA.`,
+    description: `Previsão do tempo ${paraLocal(local)} hoje e nos próximos 10 dias: temperatura, chuva, vento, avisos, índice ultravioleta e risco de incêndio. Dados do IPMA.`,
     alternates: { canonical: `/local/${local.slug}` },
   };
 }

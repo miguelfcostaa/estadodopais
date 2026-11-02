@@ -104,7 +104,7 @@ export function DayColumns({ dias, slug, atual, carrossel = false }: { dias: Dia
                         <span className="uv-nivel"> {nivelUV(d.uv)}</span>
                       </>
                     ) : (
-                      "—"
+                      "–"
                     )}
                   </dd>
                 </div>

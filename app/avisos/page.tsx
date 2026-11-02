@@ -19,7 +19,7 @@ export default async function AvisosPage() {
       <div className="page-head">
         <span className="label">Próximos 3 dias</span>
         <h1>Avisos meteorológicos</h1>
-        <p>O IPMA emite avisos por distrito no continente e por zona nas ilhas. A cor diz o grau de risco; o tipo diz porquê.</p>
+        <p>O IPMA emite avisos por distrito no continente e por zona nas ilhas. A cor indica o nível de risco e o tipo indica o fenómeno: chuva, vento, trovoada, nevoeiro, agitação marítima, neve, calor ou frio.</p>
       </div>
       <section className="section" aria-labelledby="h-mapa">
         <div className="sec-head"><h2 id="h-mapa">No mapa</h2><span className="label">toque numa área para ver os avisos</span></div>

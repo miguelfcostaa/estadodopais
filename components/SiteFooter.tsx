@@ -8,7 +8,7 @@ export function SiteFooter() {
           <Link className="brand" href="/">
             <span>estadodopais<b>.pt</b></span>
           </Link>
-          <p>O tempo em Portugal, explicado de forma simples. Feito com os dados abertos do IPMA.</p>
+          <p>Tempo, avisos, mar e riscos em Portugal, com os dados abertos do IPMA.</p>
         </div>
         <div>
           <span className="label">Navegar</span>

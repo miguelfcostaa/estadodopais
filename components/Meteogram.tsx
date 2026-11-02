@@ -136,8 +136,8 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
           </div>
         </div>
         <dl className="mg-panel-facts">
-          <div><dt className="label">Tempo</dt><dd>{TIPOS_TEMPO[h.tipoTempo] ?? "—"}</dd></div>
-          <div><dt className="label">Chuva</dt><dd className="num">{h.probChuva === null ? "—" : `${Math.round(h.probChuva)}%`}</dd></div>
+          <div><dt className="label">Tempo</dt><dd>{TIPOS_TEMPO[h.tipoTempo] ?? "–"}</dd></div>
+          <div><dt className="label">Chuva</dt><dd className="num">{h.probChuva === null ? "–" : `${Math.round(h.probChuva)}%`}</dd></div>
           <div><dt className="label">Vento</dt><dd className="num">{Math.round(h.vento)} km/h {h.dirVento}</dd></div>
           {h.humidade !== null && <div><dt className="label">Humidade</dt><dd className="num">{Math.round(h.humidade)}%</dd></div>}
         </dl>

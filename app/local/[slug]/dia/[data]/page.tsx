@@ -62,7 +62,7 @@ export default async function DiaPage({ params }: Props) {
     { icone: "temperatura", label: "Mínima", valor: graus(dia.tMin) },
     { icone: "chuva", label: "Chuva", valor: `${dia.probChuva}`, unidade: "%", nota: dia.intensidade ? `intensidade ${INTENSIDADE_CHUVA[dia.intensidade]}` : undefined },
     dia.dirVento
-      ? { icone: "vento", label: "Vento", valor: dia.ventoClasse ? INTENSIDADE_VENTO[dia.ventoClasse] : "—", unidade: dia.dirVento, nota: est.ventoMax ? `até ${Math.round(est.ventoMax.valor)} km/h às ${est.ventoMax.hora}h` : `de ${direcaoExtenso(dia.dirVento)}` }
+      ? { icone: "vento", label: "Vento", valor: dia.ventoClasse ? INTENSIDADE_VENTO[dia.ventoClasse] : "–", unidade: dia.dirVento, nota: est.ventoMax ? `até ${Math.round(est.ventoMax.valor)} km/h às ${est.ventoMax.hora}h` : `de ${direcaoExtenso(dia.dirVento)}` }
       : null,
     est.humidade ? { icone: "humidade", label: "Humidade", valor: intervaloTexto(est.humidade)!, unidade: "%" } : null,
     est.sensacao ? { icone: "sensacao", label: "Sensação térmica", valor: intervaloTexto(est.sensacao, "°")! } : null,
@@ -117,7 +117,7 @@ export default async function DiaPage({ params }: Props) {
                   <div className="moment-wx"><WeatherIcon tipo={m.tipoTempo} size={36} noite={m.noite} /><span>{TIPOS_TEMPO[m.tipoTempo]}</span></div>
                   <div className="moment-temp num">{intervaloTexto([m.tMin, m.tMax], "°")}</div>
                   <div className="moment-meta">
-                    <span className={m.probChuva && m.probChuva >= 20 ? "wet" : undefined}>Chuva {m.probChuva === null ? "—" : `${Math.round(m.probChuva)}%`}</span>
+                    <span className={m.probChuva && m.probChuva >= 20 ? "wet" : undefined}>Chuva {m.probChuva === null ? "–" : `${Math.round(m.probChuva)}%`}</span>
                     <span>Vento {Math.round(m.vento)} km/h {m.dirVento}</span>
                   </div>
                 </li>
