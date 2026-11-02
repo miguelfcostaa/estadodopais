@@ -312,7 +312,7 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-top: 16px; }
 .steps i { height: 6px; background: var(--line); border-radius: 1px; }
 .steps i.on { background: var(--accent); }
-/* Risco de incêndio: os segmentos acesos ficam todos na cor do nível atual (cores oficiais do IPMA) */
+/* Risco de incêndio e índice ultravioleta: os segmentos acesos ficam todos na cor do nível atual (cores oficiais do IPMA) */
 .steps.cores.n1 i.on { background: #509e2f; }
 .steps.cores.n2 i.on { background: #ffe900; }
 .steps.cores.n3 i.on { background: #e87722; }

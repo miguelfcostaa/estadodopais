@@ -4,7 +4,7 @@ import type { Aviso } from "@/lib/data";
 import { RISCO_INCENDIO } from "@/lib/data";
 import type { Previsao } from "@/lib/ipma";
 import { direcaoExtenso } from "@/lib/ipma";
-import { dataLonga, graus, hora, num, nivelUV } from "@/lib/format";
+import { dataLonga, degrauUV, graus, hora, nivelUV, num } from "@/lib/format";
 import { DayColumns } from "./DayColumns";
 import { FactIcon, type NomeIcone } from "./FactIcon";
 import { LocalPicker } from "./LocalPicker";
@@ -87,7 +87,7 @@ export function ForecastView({ p, avisos, distancia }: { p: Previsao; avisos: Av
               <div>
                 <span className="label">Índice ultravioleta</span>
                 <div className="big num">{num(p.uv)}<small>{nivelUV(p.uv)}</small></div>
-                <Steps n={Math.min(5, Math.max(1, Math.ceil(p.uv / 2.2)))} />
+                <Steps n={degrauUV(p.uv)} cores />
                 <div className="steps-l mono"><span>baixo</span><span>extremo</span></div>
               </div>
             )}

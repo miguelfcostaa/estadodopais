@@ -59,6 +59,11 @@ export function horaMinuto(iso: string): string {
   return iso.split("T")[1]?.slice(0, 5) ?? "";
 }
 
+// Posição do índice ultravioleta na escala de 5 níveis (1 baixo a 5 extremo), igual a nivelUV
+export function degrauUV(uv: number): number {
+  return uv < 3 ? 1 : uv < 6 ? 2 : uv < 8 ? 3 : uv < 11 ? 4 : 5;
+}
+
 export function nivelUV(uv: number): string {
   if (uv < 3) return "baixo";
   if (uv < 6) return "moderado";
