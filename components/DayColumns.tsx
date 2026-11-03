@@ -23,7 +23,7 @@ function corTempo(tipo: number): string {
 
 // Dias em colunas. Cada coluna abre a página desse dia.
 // A barra de temperatura usa a mesma escala em todos os dias mostrados.
-export function DayColumns({ dias, slug, atual, carrossel = false }: { dias: Dia[]; slug: string; atual?: string; carrossel?: boolean }) {
+export function DayColumns({ dias, slug, atual, carrossel = false, titulo }: { dias: Dia[]; slug: string; atual?: string; carrossel?: boolean; titulo?: React.ReactNode }) {
   const lo = Math.floor(Math.min(...dias.map((d) => d.tMin))) - 1;
   const hi = Math.ceil(Math.max(...dias.map((d) => d.tMax))) + 1;
   const pct = (t: number) => ((t - lo) / (hi - lo)) * 100;
@@ -100,7 +100,7 @@ export function DayColumns({ dias, slug, atual, carrossel = false }: { dias: Dia
     </ol>
   );
   return carrossel ? (
-    <Carousel label="Previsão dia a dia" inicio=".day.today">
+    <Carousel label="Previsão dia a dia" inicio=".day.today" titulo={titulo}>
       {lista}
     </Carousel>
   ) : (

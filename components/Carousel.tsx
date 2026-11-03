@@ -4,7 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 // Faixa horizontal que desliza com o rato, o dedo ou os botões ‹ ›.
 // "inicio" é o seletor de um elemento para onde a faixa deve abrir (por exemplo, a hora atual).
-export function Carousel({ children, label, inicio }: { children: React.ReactNode; label: string; inicio?: string }) {
+// Com "titulo", os botões ‹ › ficam na linha do título, à direita, em vez de por baixo da faixa.
+export function Carousel({ children, label, inicio, titulo }: { children: React.ReactNode; label: string; inicio?: string; titulo?: React.ReactNode }) {
   const faixa = useRef<HTMLDivElement>(null);
   const [podeVoltar, setPodeVoltar] = useState(false);
   const [podeAvancar, setPodeAvancar] = useState(false);
@@ -41,15 +42,25 @@ export function Carousel({ children, label, inicio }: { children: React.ReactNod
     f.scrollTo({ left: alvo, behavior: "smooth" });
   }
 
+  const botoes = (
+    <div className="carousel-nav">
+      <button type="button" className="carousel-btn" onClick={() => mover(-1)} disabled={!podeVoltar} aria-label="Anteriores">‹</button>
+      <button type="button" className="carousel-btn" onClick={() => mover(1)} disabled={!podeAvancar} aria-label="Seguintes">›</button>
+    </div>
+  );
+
   return (
     <div className="carousel" role="region" aria-label={label}>
+      {titulo && (
+        <div className="sec-head carousel-head">
+          {titulo}
+          {botoes}
+        </div>
+      )}
       <div className="carousel-track" ref={faixa} onScroll={atualizar} tabIndex={0}>
         {children}
       </div>
-      <div className="carousel-nav">
-        <button type="button" className="carousel-btn" onClick={() => mover(-1)} disabled={!podeVoltar} aria-label="Anteriores">‹</button>
-        <button type="button" className="carousel-btn" onClick={() => mover(1)} disabled={!podeAvancar} aria-label="Seguintes">›</button>
-      </div>
+      {!titulo && botoes}
     </div>
   );
 }
