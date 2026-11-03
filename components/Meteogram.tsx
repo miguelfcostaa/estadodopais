@@ -131,13 +131,13 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
         <div className="mg-panel-main">
           <WeatherIcon tipo={h.tipoTempo} size={44} noite={h.noite} />
           <div>
-            <span className="mg-when mono">{quando}</span>
+            <span className="mg-when mono">{quando}{h.estimado ? " · estimado" : ""}</span>
             <span className="mg-temp num">{num(h.temp)}°</span>
           </div>
         </div>
         <dl className="mg-panel-facts">
           <div><dt className="label">Tempo</dt><dd>{TIPOS_TEMPO[h.tipoTempo] ?? "—"}</dd></div>
-          <div><dt className="label">Chuva</dt><dd className="num">{h.probChuva === null ? "—" : `${Math.round(h.probChuva)}%`}</dd></div>
+          <div><dt className="label">Chuva</dt><dd className="num">{h.probChuva === null ? "—" : `${h.chuvaEstimada || h.estimado ? "≈ " : ""}${Math.round(h.probChuva)}%`}</dd></div>
           <div><dt className="label">Vento</dt><dd className="num">{Math.round(h.vento)} km/h {h.dirVento}</dd></div>
           {h.humidade !== null && <div><dt className="label">Humidade</dt><dd className="num">{Math.round(h.humidade)}%</dd></div>}
         </dl>
@@ -186,7 +186,7 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
                 )}
                 {/* chuva */}
                 {hh.probChuva !== null && hh.probChuva > 0 && (
-                  <rect x={x - Math.min(col * 0.32, 9)} width={Math.min(col * 0.64, 18)} y={C_BASE - (hh.probChuva / 100) * (C_BASE - C_TOPO)} height={(hh.probChuva / 100) * (C_BASE - C_TOPO)} rx={2} className="mg-rain" />
+                  <rect x={x - Math.min(col * 0.32, 9)} width={Math.min(col * 0.64, 18)} y={C_BASE - (hh.probChuva / 100) * (C_BASE - C_TOPO)} height={(hh.probChuva / 100) * (C_BASE - C_TOPO)} rx={2} className={hh.chuvaEstimada || hh.estimado ? "mg-rain est" : "mg-rain"} />
                 )}
                 {hh.probChuva !== null && hh.probChuva >= 10 && mostra(i, pRotulo) && (
                   <text x={x} y={C_BASE - (hh.probChuva / 100) * (C_BASE - C_TOPO) - 4} textAnchor="middle" className="mg-rain-label">{Math.round(hh.probChuva)}%</text>
@@ -228,7 +228,7 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
       </div>
       </div>
       <div className="mg-foot">
-        <p className="mg-hint mono">Passe o rato ou toque numa hora para ver os detalhes. Chuva em %, vento em km/h.</p>
+        <p className="mg-hint mono">Passe o rato ou toque numa hora para ver os detalhes. Chuva em %, vento em km/h. Barras mais claras: chuva estimada entre duas previsões do IPMA.</p>
         {(podeVoltar || podeAvancar) && (
           <div className="carousel-nav">
             <button type="button" className="carousel-btn" onClick={() => mover(-1)} disabled={!podeVoltar} aria-label="Horas anteriores">‹</button>

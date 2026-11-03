@@ -148,12 +148,15 @@ export async function getPrevisao(slug: string): Promise<Previsao | null> {
     periodoOnda: n(a.periodOndulacao),
     agua: n(a.tempAguaMar),
   });
-  const horas: Hora[] = horarias.map((a) => ponto(a, 1));
-  const ultimaHora = horas.at(-1)?.hora ?? "";
-  const pontos: Hora[] = [
-    ...horas,
-    ...agregado.filter((a) => a.idPeriodo === 3 && a.dataPrev.slice(0, 16) > ultimaHora).map((a) => ponto(a, 3)),
-  ];
+  const reais: Hora[] = horarias.map((a) => ponto(a, 1));
+  const ultimaHora = reais.at(-1)?.hora ?? "";
+  // Série hora a hora: os valores do IPMA e, onde faltam, estimativas (calculadas a cada pedido, por isso
+  // são substituídas pelos valores reais assim que o IPMA os publicar)
+  const pontos = completarHoras(
+    [...reais, ...agregado.filter((a) => a.idPeriodo === 3 && a.dataPrev.slice(0, 16) > ultimaHora).map((a) => ponto(a, 3))],
+    eNoite,
+  );
+  const horas = pontos.filter((h) => h.hora <= ultimaHora);
 
   const diarias = agregado.filter((a) => a.idPeriodo === 24);
   const dico = String(local.globalIdLocal).slice(1, 5);
@@ -234,6 +237,62 @@ export type ZonaMar = { id: number; zona: string; regiao: Local["regiao"]; lon: 
 
 // Locais na costa para os quais o IPMA não dá ondas na previsão do local (os do interior ficam sem mar)
 const COSTA_SEM_ONDAS = ["porto", "faro", "aveiro", "portimao"];
+
+// "2026-11-03T08:00" mais k horas (as horas são locais; somam-se como se fossem UTC)
+function maisHoras(iso: string, k: number): string {
+  return new Date(Date.parse(`${iso}:00Z`) + k * 3600_000).toISOString().slice(0, 16);
+}
+
+// Média ponderada entre dois valores (t de 0 a 1); sem um deles, não há estimativa
+function entre(a: number | null | undefined, b: number | null | undefined, t: number): number | null {
+  return a == null || b == null ? null : Math.round((a + (b - a) * t) * 10) / 10;
+}
+
+// Completa a série hora a hora:
+// 1. entre dois valores de 3 em 3 horas, acrescenta as horas em falta com a média ponderada dos valores numéricos
+//    (o tipo de tempo e as direções repetem o valor anterior, que não se podem calcular por média);
+// 2. onde falta a probabilidade de chuva (o IPMA só a dá de 3 em 3 horas), usa a média ponderada da anterior e da seguinte.
+function completarHoras(pontos: Hora[], eNoite: (hora: string) => boolean): Hora[] {
+  const serie: Hora[] = [];
+  pontos.forEach((p, i) => {
+    const seg = pontos[i + 1];
+    serie.push({ ...p, passo: 1 });
+    if (!seg) return;
+    const falta = Math.round((Date.parse(`${seg.hora}:00Z`) - Date.parse(`${p.hora}:00Z`)) / 3600_000);
+    for (let k = 1; k < falta; k++) {
+      const t = k / falta;
+      const hora = maisHoras(p.hora, k);
+      serie.push({
+        hora,
+        temp: entre(p.temp, seg.temp, t) ?? p.temp,
+        probChuva: entre(p.probChuva, seg.probChuva, t),
+        vento: entre(p.vento, seg.vento, t) ?? p.vento,
+        dirVento: p.dirVento,
+        tipoTempo: p.tipoTempo,
+        humidade: entre(p.humidade, seg.humidade, t),
+        noite: eNoite(hora),
+        passo: 1,
+        sensacao: entre(p.sensacao, seg.sensacao, t),
+        onda: entre(p.onda, seg.onda, t),
+        dirOnda: p.dirOnda,
+        periodoOnda: entre(p.periodoOnda, seg.periodoOnda, t),
+        agua: entre(p.agua, seg.agua, t),
+        estimado: true,
+      });
+    }
+  });
+  // Chuva em falta nas horas com valores reais
+  serie.forEach((h, i) => {
+    if (h.probChuva !== null) return;
+    let a = i - 1, b = i + 1;
+    while (a >= 0 && (serie[a].probChuva === null || serie[a].chuvaEstimada)) a--;
+    while (b < serie.length && (serie[b].probChuva === null || serie[b].chuvaEstimada)) b++;
+    if (a < 0 || b >= serie.length) return;
+    h.probChuva = entre(serie[a].probChuva, serie[b].probChuva, (i - a) / (b - a));
+    h.chuvaEstimada = true;
+  });
+  return serie;
+}
 
 // Distância em linha reta, em km
 function distanciaKm(lat1: number, lon1: number, lat2: number, lon2: number): number {

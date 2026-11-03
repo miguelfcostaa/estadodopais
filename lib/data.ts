@@ -25,6 +25,8 @@ export type Hora = {
   dirOnda?: string;
   periodoOnda?: number | null;
   agua?: number | null;
+  estimado?: boolean; // hora calculada entre dois valores de 3 em 3 horas do IPMA (não vem na previsão)
+  chuvaEstimada?: boolean; // probabilidade de chuva calculada entre o valor anterior e o seguinte
 };
 
 export type Dia = {

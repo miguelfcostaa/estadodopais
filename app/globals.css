@@ -215,6 +215,7 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .mg-tlabel { font-size: 13px; fill: var(--ink) !important; font-weight: 500; }
 .mg-tlabel.strong { font-size: 14px; font-weight: 700; }
 .mg-rain { fill: var(--accent); opacity: .75; }
+.mg-rain.est { opacity: .4; }
 .mg-rain-label { font-size: 11px; fill: var(--accent) !important; font-weight: 600; }
 .mg-norain { font-family: var(--mono) !important; font-size: 12px; fill: var(--faint) !important; }
 .mg-arrow { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
