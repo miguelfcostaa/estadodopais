@@ -11,16 +11,6 @@ import { WeatherIcon } from "./WeatherIcon";
 const DIRS: Record<string, number> = { N: 0, NE: 45, E: 90, SE: 135, S: 180, SW: 225, W: 270, NW: 315 };
 const MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
 
-// Cor do brilho de fundo de cada cartão, conforme o tempo previsto (códigos do IPMA)
-function corTempo(tipo: number): string {
-  if (tipo === 1 || tipo === 2) return "#f0962e"; // sol: laranja
-  if (tipo === 3 || tipo === 5) return "#d9a94a"; // parcialmente nublado, nuvens altas: âmbar suave
-  if ([19, 20, 23].includes(tipo)) return "#8f7cf2"; // trovoada: violeta
-  if ([18, 21, 22, 28, 29, 30].includes(tipo)) return "#b9dcf5"; // neve, granizo, geada: azul-gelo
-  if (tipo >= 6 && tipo <= 15) return "#3f8ef0"; // chuva, aguaceiros, chuvisco: azul
-  return "#8ca1b5"; // muito nublado, nevoeiro, neblina e o resto: cinzento-azulado
-}
-
 // Dias em colunas. Cada coluna abre a página desse dia.
 // A barra de temperatura usa a mesma escala em todos os dias mostrados.
 export function DayColumns({ dias, slug, atual, carrossel = false, titulo }: { dias: Dia[]; slug: string; atual?: string; carrossel?: boolean; titulo?: React.ReactNode }) {
@@ -37,7 +27,7 @@ export function DayColumns({ dias, slug, atual, carrossel = false, titulo }: { d
         const [, mes, dia] = d.data.split("-").map(Number);
         return (
           <li key={d.data} className={`day${(atual ? atual === d.data : i === 0) ? " today" : ""}`} aria-current={atual === d.data ? "page" : undefined}>
-            <Link className="day-link" style={{ "--brilho": corTempo(d.tipoTempo) } as React.CSSProperties} href={`/local/${slug}/dia/${d.data}`} aria-label={`${nome}, ${dia} de ${MESES[mes - 1]}: ver detalhes`}>
+            <Link className="day-link" href={`/local/${slug}/dia/${d.data}`} aria-label={`${nome}, ${dia} de ${MESES[mes - 1]}: ver detalhes`}>
               <div className="day-head">
                 <span className="day-name">
                   <span className="nome-longo">{nome}</span>
