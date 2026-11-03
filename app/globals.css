@@ -249,12 +249,12 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
     var(--surface);
   transition: border-color .2s ease-out, transform .2s ease-out, box-shadow .2s ease-out;
 }
-/* Ao passar o rato: o cartão sobe um pouco, o contorno ganha a cor do dia e o brilho do topo fica mais forte */
+/* Ao passar o rato: o cartão sobe um pouco, o contorno e a sombra ficam azuis e o brilho do topo fica mais forte */
 .day-link::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0; transition: opacity .2s ease-out;
   background: radial-gradient(120% 60% at 50% -10%, color-mix(in srgb, var(--brilho) 20%, transparent), transparent 70%);
 }
-.day-link:hover { border-color: color-mix(in srgb, var(--brilho) 55%, var(--line)); transform: translateY(-4px); box-shadow: 0 10px 24px -14px color-mix(in srgb, var(--brilho) 60%, transparent); }
+.day-link:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 10px 24px -14px color-mix(in srgb, var(--accent) 70%, transparent); }
 .day-link:hover::before { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   .day-link:hover { transform: none; }
