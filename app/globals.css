@@ -242,16 +242,24 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 /* Cartão: fundo próprio, cantos arredondados e um brilho no topo na cor da temperatura máxima do dia */
 .day-link {
   --brilho: var(--accent);
-  position: relative; display: flex; flex-direction: column; gap: 14px; height: 100%; padding: 18px 18px 16px;
+  position: relative; isolation: isolate; display: flex; flex-direction: column; gap: 14px; height: 100%; padding: 18px 18px 16px;
   color: inherit; text-decoration: none; border: 1px solid var(--line); overflow: hidden;
   background:
     radial-gradient(120% 60% at 50% -10%, color-mix(in srgb, var(--brilho) 22%, transparent), transparent 70%),
     var(--surface);
-  transition: border-color .15s, transform .15s;
+  transition: border-color .2s ease-out, transform .2s ease-out, box-shadow .2s ease-out;
 }
-.day-link:hover { border-color: color-mix(in srgb, var(--brilho) 55%, var(--line)); }
+/* Ao passar o rato: o cartão sobe um pouco, o contorno ganha a cor do dia e o brilho do topo fica mais forte */
+.day-link::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0; transition: opacity .2s ease-out;
+  background: radial-gradient(120% 60% at 50% -10%, color-mix(in srgb, var(--brilho) 20%, transparent), transparent 70%);
+}
+.day-link:hover { border-color: color-mix(in srgb, var(--brilho) 55%, var(--line)); transform: translateY(-4px); box-shadow: 0 10px 24px -14px color-mix(in srgb, var(--brilho) 60%, transparent); }
+.day-link:hover::before { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .day-link:hover { transform: none; }
+}
 .day-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.day.today .day-link { border-color: var(--accent); }
 .day-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
 .day-name { font-weight: 500; font-size: 15px; padding-top: 4px; }
 .day.today .day-name { color: var(--accent); }
@@ -484,7 +492,7 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 
 
 /* 10 dias em carrossel */
-.days5.days-track { display: flex; }
+.days5.days-track { display: flex; padding-block: 6px 14px; }
 .days-track .day { flex: 0 0 calc((100% - 4 * var(--gap-dias)) / 5); scroll-snap-align: start; }
 @media (max-width: 1100px) { .days-track .day { flex-basis: calc((100% - 2 * var(--gap-dias)) / 3); } }
 @media (max-width: 760px) { .days5 { --gap-dias: 8px; } .days-track .day { flex-basis: calc((100% - 3 * var(--gap-dias)) / 4); } }
