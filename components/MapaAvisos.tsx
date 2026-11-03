@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { LegendaNiveis } from "./LegendaNiveis";
 import type { Aviso, NivelAviso } from "@/lib/data";
-import { AREAS_AVISO, NIVEIS } from "@/lib/data";
+import { AREAS_AVISO } from "@/lib/data";
 import { nivelDaArea } from "@/lib/avisos";
 import { PAINEIS } from "@/lib/mapa";
 import { AREAS_MAPA, type AreaMapa } from "@/lib/mapa-avisos";
@@ -82,18 +83,7 @@ export function MapaAvisos({ avisos }: { avisos: Aviso[] }) {
           <Mapa nome="madeira" titulo="Madeira" avisos={avisos} />
         </div>
       </div>
-      <div className="scale mono">
-        {NIVEIS.map((n) => (
-          <span key={n.id}>
-            <i className={`lvl ${n.id}`} />
-            <span className="scale-txt">
-              <b>{n.nome.toLowerCase()}</b>
-              <span className="scale-sep"> · </span>
-              <span className="scale-sentido">{n.sentido}</span>
-            </span>
-          </span>
-        ))}
-      </div>
+      <LegendaNiveis id="legenda-mapa" />
     </>
   );
 }

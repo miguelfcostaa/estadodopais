@@ -385,14 +385,8 @@ table.data .r { text-align: right; }
 @media (max-width: 760px) {
   .regions { display: none; }
   .regions-compact { display: grid; gap: 14px; }
-  /* Legenda em 2 colunas: o nome do nível por cima e o significado por baixo, mais discreto */
-  .scale { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; font-size: 11.5px; }
-  .scale > span { align-items: flex-start; }
-  .scale .lvl { margin-top: 3px; flex: none; }
-  .scale-txt { display: grid; gap: 2px; }
-  .scale-txt b { color: var(--ink); text-transform: capitalize; }
-  .scale-sep { display: none; }
-  .scale-sentido { line-height: 1.35; }
+  /* No telemóvel, a legenda fica atrás de um botão que abre uma janela */
+  .scale:not(.scale-grelha) { display: none; }
 }
 .alert-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
 .alert-list li { display: flex; align-items: center; gap: 12px; padding-block: 12px; border-bottom: 1px solid var(--line); }
@@ -628,3 +622,29 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 .site-main:has(> .pagina-curta) { display: flex; flex-direction: column; padding-bottom: 0; }
 .pagina-curta { flex: 1; display: flex; flex-direction: column; width: 100%; }
 .pagina-curta .empty { margin-top: auto; padding-bottom: 0; }
+
+
+/* Legenda dos níveis de aviso: botão e janela (só no telemóvel) */
+.legenda-btn {
+  display: none; align-items: center; gap: 6px; margin-top: 4px; padding: 10px 0; min-height: 44px;
+  background: none; border: 0; color: var(--accent); font-size: 12px; letter-spacing: .02em; cursor: pointer;
+}
+.legenda-pop {
+  margin: auto; width: min(92vw, 360px); padding: 18px; border: 1px solid var(--line); border-radius: 6px;
+  background: var(--surface); color: var(--ink);
+}
+.legenda-pop::backdrop { background: rgb(0 0 0 / .5); }
+@media (max-width: 760px) {
+  .legenda-btn { display: inline-flex; }
+}
+.legenda-pop-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.legenda-fechar { background: none; border: 0; color: var(--muted); font-size: 24px; line-height: 1; min-width: 44px; min-height: 44px; margin: -12px -12px -12px 0; cursor: pointer; }
+.legenda-fechar:hover { color: var(--ink); }
+/* Dentro da janela: 2 colunas, o nome do nível por cima e o significado por baixo */
+.scale-grelha { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 0; font-size: 12px; }
+.scale-grelha > span { align-items: flex-start; }
+.scale-grelha .lvl { margin-top: 3px; flex: none; }
+.scale-grelha .scale-txt { display: grid; gap: 2px; }
+.scale-grelha .scale-txt b { color: var(--ink); text-transform: capitalize; }
+.scale-grelha .scale-sep { display: none; }
+.scale-grelha .scale-sentido { line-height: 1.35; }

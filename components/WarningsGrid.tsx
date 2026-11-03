@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { LegendaNiveis } from "./LegendaNiveis";
 import type { Aviso } from "@/lib/data";
-import { AREAS_AVISO, NIVEIS } from "@/lib/data";
+import { AREAS_AVISO } from "@/lib/data";
 import { areasPorRegiao, avisosDaArea, nivelDaArea, nomeNivel } from "@/lib/avisos";
 
 const REGIOES = ["Continente", "Madeira", "Açores"] as const;
@@ -86,18 +87,7 @@ export function WarningsGrid({ avisos, legenda = true }: { avisos: Aviso[]; lege
       </div>
 
       {legenda && (
-      <div className="scale mono">
-        {NIVEIS.map((n) => (
-          <span key={n.id}>
-            <i className={`lvl ${n.id}`} />
-            <span className="scale-txt">
-              <b>{n.nome.toLowerCase()}</b>
-              <span className="scale-sep"> · </span>
-              <span className="scale-sentido">{n.sentido}</span>
-            </span>
-          </span>
-        ))}
-      </div>
+      <LegendaNiveis id="legenda-avisos" />
       )}
     </>
   );
