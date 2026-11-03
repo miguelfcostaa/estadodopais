@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "Mapa e lista dos avisos meteorológicos do IPMA para o continente, a Madeira e os Açores nos próximos 3 dias.",
   alternates: { canonical: "/avisos" },
 };
-export const revalidate = 1800; // 30 minutos (avisos)
+export const revalidate = 300; // 5 minutos (avisos)
 
 export default async function AvisosPage() {
   const avisos = await getAvisos();

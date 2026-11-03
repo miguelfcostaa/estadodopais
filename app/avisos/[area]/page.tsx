@@ -8,7 +8,7 @@ import { AREAS_AVISO, LOCAIS, type NivelAviso } from "@/lib/data";
 import { intervalo, nomeNivel } from "@/lib/avisos";
 import { getTodosAvisos } from "@/lib/ipma";
 
-export const revalidate = 1800; // 30 minutos (avisos)
+export const revalidate = 300; // 5 minutos (avisos)
 
 type Props = { params: Promise<{ area: string }> };
 

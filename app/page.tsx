@@ -6,7 +6,7 @@ import { getAvisos, getPrevisao } from "@/lib/ipma";
 import { COOKIE_DIST, COOKIE_LOCAL } from "@/lib/preferencias";
 
 // A página inicial mostra o local guardado no navegador (ou Lisboa).
-// Os dados do IPMA continuam em cache (30 minutos para os avisos, 1 hora para a previsão; ver CACHE em lib/ipma.ts).
+// Os dados do IPMA continuam em cache (5 minutos para os avisos, 1 hora para a previsão; ver CACHE em lib/ipma.ts).
 export default async function HomePage() {
   const c = await cookies();
   const guardado = c.get(COOKIE_LOCAL)?.value;

@@ -10,7 +10,7 @@ const PUBLIC = "https://api.ipma.pt/public-data";
 
 // De quanto em quanto tempo se voltam a pedir os dados ao IPMA (em segundos)
 export const CACHE = {
-  avisos: 30 * 60, // podem mudar a qualquer hora
+  avisos: 5 * 60, // podem mudar a qualquer hora; pouco tempo, para todas as páginas mostrarem os mesmos avisos
   observacao: 30 * 60, // as estações publicam de hora a hora
   previsao: 60 * 60,
   mar: 60 * 60,

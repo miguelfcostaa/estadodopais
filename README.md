@@ -29,7 +29,7 @@ O estado do tempo, do mar e dos riscos em Portugal, num só sítio e explicado d
 ## Tecnologia
 
 - [Next.js](https://nextjs.org) 16 (App Router), React 19 e TypeScript, sem bibliotecas de interface: CSS próprio em `app/globals.css`, com tema escuro e claro.
-- Os dados do IPMA são pedidos no servidor e guardados em cache (ISR): avisos 30 minutos, previsão e mar 1 hora, risco de incêndio 6 horas (`CACHE` em `lib/ipma.ts`). Não há base de dados nem chaves de API.
+- Os dados do IPMA são pedidos no servidor e guardados em cache (ISR): avisos 5 minutos, previsão e mar 1 hora, risco de incêndio 6 horas (`CACHE` em `lib/ipma.ts`). Não há base de dados nem chaves de API.
 - Ícones do tempo, dos avisos e dos indicadores desenhados à mão em SVG (`components/WeatherIcon.tsx`, `AvisoIcon.tsx`, `FactIcon.tsx`).
 - Mapas gerados a partir do Natural Earth e guardados como percursos SVG (`lib/mapa.ts`, `lib/mapa-avisos.ts`).
 - Alojado na [Vercel](https://vercel.com), com publicação automática a cada push para `main`.

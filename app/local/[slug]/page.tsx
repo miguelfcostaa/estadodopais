@@ -6,7 +6,7 @@ import { LocalPicker } from "@/components/LocalPicker";
 import { getLocal, LOCAIS, emLocal, paraLocal } from "@/lib/data";
 import { getAvisos, getPrevisao } from "@/lib/ipma";
 
-export const revalidate = 1800; // 30 minutos (tem avisos)
+export const revalidate = 300; // 5 minutos (tem avisos)
 
 type Props = { params: Promise<{ slug: string }> };
 
