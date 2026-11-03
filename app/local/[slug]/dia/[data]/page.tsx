@@ -107,8 +107,7 @@ export default async function DiaPage({ params }: Props) {
 
       {momentos.length > 0 ? (
         <>
-          <section className="section" aria-labelledby="h-momentos">
-            <div className="sec-head"><h2 id="h-momentos">Ao longo do dia</h2><span className="label">madrugada · manhã · tarde · noite</span></div>
+          <section className="section sem-linha" aria-label="Ao longo do dia">
             <ol className="moments">
               {momentos.map((m) => (
                 <li key={m.nome}>
