@@ -411,7 +411,7 @@ table.data .r { text-align: right; }
 .fact-icon { color: var(--accent); flex: none; width: 20px; height: 20px; }
 
 /* Ligação para a página hora a hora, por baixo dos próximos dias */
-.after-days { margin-top: 6px; display: flex; align-items: center; gap: 12px 24px; flex-wrap: wrap; }
+.after-days { margin-top: 2rem; display: flex; align-items: center; gap: 12px 24px; flex-wrap: wrap; }
 
 
 /* Página hora a hora */
@@ -486,7 +486,7 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 
 
 /* 10 dias em carrossel */
-.days5.days-track { display: flex; padding-block: 6px 4px; }
+.days5.days-track { display: flex; padding-block: 6px 0; }
 .days-track .day { flex: 0 0 calc((100% - 4 * var(--gap-dias)) / 5); scroll-snap-align: start; }
 @media (max-width: 1100px) { .days-track .day { flex-basis: calc((100% - 2 * var(--gap-dias)) / 3); } }
 @media (max-width: 760px) { .days5 { --gap-dias: 8px; } .days-track .day { flex-basis: calc((100% - 3 * var(--gap-dias)) / 4); } }
