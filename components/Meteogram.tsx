@@ -119,7 +119,6 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
   // Rótulo de temperatura: os extremos têm sempre; os outros saem se ficarem colados a um extremo
   const rotuloTemp = (i: number) =>
     i === iMax || i === iMin || (mostra(i, pRotulo) && Math.abs(i - iMax) >= pRotulo && Math.abs(i - iMin) >= pRotulo) || i === iAgora;
-  const semChuva = horas.every((h) => !h.probChuva);
 
   const escolhido = sel ?? (iAgora >= 0 ? iAgora : 0);
   const h = horas[escolhido];
@@ -188,7 +187,7 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
                 {hh.probChuva !== null && hh.probChuva > 0 && (
                   <rect x={x - Math.min(col * 0.32, 9)} width={Math.min(col * 0.64, 18)} y={C_BASE - (hh.probChuva / 100) * (C_BASE - C_TOPO)} height={(hh.probChuva / 100) * (C_BASE - C_TOPO)} rx={2} className={hh.chuvaEstimada || hh.estimado ? "mg-rain est" : "mg-rain"} />
                 )}
-                {hh.probChuva !== null && hh.probChuva >= 10 && mostra(i, pRotulo) && (
+                {hh.probChuva !== null && mostra(i, pRotulo) && (
                   <text x={x} y={C_BASE - (hh.probChuva / 100) * (C_BASE - C_TOPO) - 4} textAnchor="middle" className="mg-rain-label">{Math.round(hh.probChuva)}%</text>
                 )}
                 {/* vento */}
@@ -204,7 +203,6 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
             );
           })}
 
-          {semChuva && <text x={Math.min(W, largura) / 2} y={C_BASE - 12} textAnchor="middle" className="mg-norain">sem chuva prevista</text>}
 
           {/* temperatura */}
           <path d={`${linha} L${pts[n - 1][0]} ${T_BASE + 6} L${pts[0][0]} ${T_BASE + 6} Z`} fill="url(#mg-fill)" />
