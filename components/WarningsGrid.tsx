@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AvisoIcon } from "./AvisoIcon";
 import { LegendaNiveis } from "./LegendaNiveis";
 import type { Aviso, NivelAviso } from "@/lib/data";
 import { AREAS_AVISO } from "@/lib/data";
@@ -9,7 +10,19 @@ const REGIOES = ["Continente", "Madeira", "Açores"] as const;
 const GRUPOS: NivelAviso[] = ["red", "orange", "yellow"];
 
 function tiposDaArea(avisos: Aviso[], id: string): string[] {
-  return [...new Set(avisosDaArea(avisos, id).map((a) => a.tipo.toLowerCase()))];
+  return [...new Set(avisosDaArea(avisos, id).map((a) => a.tipo))];
+}
+
+// Os tipos de aviso de uma área em ícones, na cor do nível (o nome fica para leitores de ecrã e ao passar o rato)
+function IconesTipos({ tipos, nivel }: { tipos: string[]; nivel: string }) {
+  return (
+    <span className={`why tipos ${nivel}`} title={tipos.join(", ")}>
+      {tipos.map((t) => (
+        <AvisoIcon key={t} tipo={t} size={18} />
+      ))}
+      <span className="sr-only">{tipos.join(", ").toLowerCase()}</span>
+    </span>
+  );
 }
 
 export function WarningsGrid({ avisos, legenda = true }: { avisos: Aviso[]; legenda?: boolean }) {
@@ -32,7 +45,7 @@ export function WarningsGrid({ avisos, legenda = true }: { avisos: Aviso[]; lege
                   <Link key={id} href={`/avisos/${id.toLowerCase()}`} className={`area${nivel !== "green" ? " alert" : ""}`}>
                     <span className={`lvl ${nivel}`} />
                     <span>{AREAS_AVISO[id].nome}</span>
-                    {tipos.length > 0 && <span className={`why mono ${nivel}`}>{tipos.length > 1 ? `${tipos[0]} +${tipos.length - 1}` : tipos[0]}</span>}
+                    {tipos.length > 0 && <IconesTipos tipos={tipos} nivel={nivel} />}
                   </Link>
                 );
               })}
@@ -68,7 +81,7 @@ export function WarningsGrid({ avisos, legenda = true }: { avisos: Aviso[]; lege
                         {AREAS_AVISO[id].nome}
                         <span className="label">{AREAS_AVISO[id].regiao}</span>
                       </span>
-                      <span className={`why mono ${nivel}`}>{tiposDaArea(avisos, id).join(", ")}</span>
+                      <IconesTipos tipos={tiposDaArea(avisos, id)} nivel={nivel} />
                     </Link>
                   </li>
                 ))}

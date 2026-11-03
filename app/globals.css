@@ -318,7 +318,7 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .lvl.orange { background: var(--w-orange); }
 .lvl.red { background: var(--w-red); }
 .area .lvl.green { opacity: .55; }
-.area.alert { color: var(--ink); font-weight: 500; }
+.area.alert { color: var(--ink); }
 .area .why { margin-left: auto; }
 .area .why.yellow { color: var(--w-yellow); }
 .area .why.orange { color: var(--w-orange); }
@@ -391,7 +391,7 @@ table.data .r { text-align: right; }
 .alert-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
 .alert-list li { display: flex; align-items: center; gap: 12px; padding-block: 12px; border-bottom: 1px solid var(--line); }
 .alert-list li:last-child { border-bottom: 0; }
-.alert-name { display: grid; gap: 2px; font-weight: 500; min-width: 0; }
+.alert-name { display: grid; gap: 2px; min-width: 0; }
 .alert-list .why { margin-left: auto; text-align: right; }
 .alert-list .why.yellow { color: var(--w-yellow); }
 .alert-list .why.orange { color: var(--w-orange); }
@@ -653,3 +653,7 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 .grupo-aviso summary .lvl { opacity: 1; }
 .grupo-aviso .alert-list { border-top: 0; margin: -4px 0 6px; padding-left: 22px; }
 .grupo-aviso .alert-list li { border-bottom: 0; border-top: 1px solid var(--line); }
+
+/* Tipos de aviso em ícones, lado a lado, na cor do nível */
+.why.tipos { display: inline-flex; align-items: center; gap: 6px; flex: none; }
+.why.tipos .aviso-icon { flex: none; }
