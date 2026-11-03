@@ -277,12 +277,13 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .day-meta .wet .num, .day-meta .wet .fact-icon { color: var(--accent); }
 .day-meta .wet .num { font-weight: 500; }
 .day-meta .sem-valor { color: var(--muted); }
+.sv-curto { display: none; }
 .day-seta { flex: none; color: var(--ink); }
 @media (max-width: 900px) {
   .day-desc { display: none; }
 }
 @media (max-width: 760px) {
-  .day-link { padding: 12px 8px 12px; gap: 10px; align-items: center; text-align: center; }
+  .day-link { padding: 16px 12px 14px; gap: 12px; align-items: center; text-align: center; }
   .day-head { flex-direction: column; align-items: center; gap: 2px; }
   .day-name { font-size: 13px; padding-top: 0; }
   .day-date { justify-items: center; }
@@ -293,7 +294,9 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
   .day-temps .tmax { font-size: 22px; }
   .day-temps .tmin { font-size: 14px; }
   .day-range { width: 100%; }
-  .day-meta { padding-top: 10px; gap: 6px; width: 100%; font-size: 13px; }
+  .day-meta { padding-top: 6px; gap: 8px; width: 100%; font-size: 13px; }
+  .sv-longo { display: none; }
+  .sv-curto { display: inline; }
   .day-meta li { justify-content: center; gap: 5px; }
   .day-meta .fact-icon { width: 14px; height: 14px; }
   .day-meta .day-wind, .day-meta .uv-nivel, .nome-longo { display: none; }
