@@ -603,3 +603,54 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 .site-main:has(> .pagina-curta) { display: flex; flex-direction: column; padding-bottom: 0; }
 .pagina-curta { flex: 1; display: flex; flex-direction: column; width: 100%; }
 .pagina-curta .empty { margin-top: auto; padding-bottom: 0; }
+
+
+/* Próximos dias em lista: uma linha por dia, com a barra de temperatura ao centro */
+.dlist { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.dlist li { border-bottom: 1px solid var(--line); }
+.dl-linha {
+  display: grid; align-items: center; gap: 16px; padding: 12px 12px; color: inherit; text-decoration: none;
+  grid-template-columns: 116px 32px minmax(120px, 1fr) 64px minmax(200px, 1.7fr) 120px 112px;
+  transition: background-color .15s;
+}
+.dl-linha:hover, .dl-linha:focus-visible { background: var(--surface); outline: none; }
+.dl-linha:focus-visible { box-shadow: inset 0 0 0 2px var(--accent); }
+.dl-hoje .dl-linha { box-shadow: inset 2px 0 0 var(--accent); background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 9%, transparent), transparent 60%); }
+.dl-hoje .dl-dia b { color: var(--accent); }
+.dl-linha svg.wx-icon { color: var(--ink); }
+.dl-dia { display: grid; gap: 2px; line-height: 1.2; }
+.dl-dia b { font-weight: 500; font-size: 16px; }
+.dl-dia .mono { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+.dl-desc { color: var(--muted); font-size: 14px; line-height: 1.3; min-width: 0; }
+.dl-chuva { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--muted); }
+.dl-chuva .fact-icon { width: 15px; height: 15px; color: var(--muted); }
+.dl-chuva.on, .dl-chuva.on .fact-icon { color: var(--accent); font-weight: 500; }
+.dl-temp { display: grid; grid-template-columns: 34px 1fr 34px; align-items: center; gap: 12px; }
+.dl-min { color: var(--muted); font-size: 16px; text-align: right; }
+.dl-max { font-family: var(--display); font-size: 20px; font-weight: 500; }
+.dl-barra { position: relative; height: 6px; background: var(--line); border-radius: 3px; }
+.dl-barra i { position: absolute; top: 0; bottom: 0; border-radius: 3px; }
+.dl-vento { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 14px; white-space: nowrap; }
+.dl-vento svg { color: var(--ink); flex: none; }
+.dl-uv { font-size: 14px; color: var(--muted); white-space: nowrap; }
+.dl-uv .mono { font-size: 11px; letter-spacing: .06em; }
+.dl-uv .num { color: var(--ink); }
+.dlist .nome-curto { display: none; }
+@media (max-width: 1100px) {
+  .dl-linha { grid-template-columns: 104px 32px 64px minmax(160px, 1fr) 112px 72px; }
+  .dl-desc, .dl-uv-nivel { display: none; }
+}
+@media (max-width: 760px) {
+  .dl-linha { grid-template-columns: 52px 28px 52px minmax(0, 1fr); gap: 10px; padding: 10px 4px; }
+  .dl-linha svg.wx-icon { width: 28px; height: 28px; }
+  .dl-vento, .dl-uv { display: none; }
+  .dlist .nome-longo { display: none; }
+  .dlist .nome-curto { display: inline; }
+  .dl-dia b { font-size: 15px; }
+  .dl-dia .mono { font-size: 11px; }
+  .dl-chuva { font-size: 13px; gap: 4px; }
+  .dl-chuva .fact-icon { width: 13px; height: 13px; }
+  .dl-temp { grid-template-columns: 28px 1fr 30px; gap: 8px; }
+  .dl-min { font-size: 14px; }
+  .dl-max { font-size: 17px; }
+}

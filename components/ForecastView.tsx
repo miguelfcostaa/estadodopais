@@ -5,7 +5,7 @@ import { RISCO_INCENDIO } from "@/lib/data";
 import type { Previsao } from "@/lib/ipma";
 import { direcaoExtenso } from "@/lib/ipma";
 import { dataLonga, degrauUV, graus, hora, nivelUV, num } from "@/lib/format";
-import { DayColumns } from "./DayColumns";
+import { DayList } from "./DayList";
 import { FactIcon, type NomeIcone } from "./FactIcon";
 import { LocalPicker } from "./LocalPicker";
 import { WarningsGrid } from "./WarningsGrid";
@@ -69,7 +69,7 @@ export function ForecastView({ p, avisos, distancia }: { p: Previsao; avisos: Av
           <h2 id="h-10">Próximos dias</h2>
           <span className="label">próximos {p.dias.length} dias</span>
         </div>
-        <DayColumns dias={p.dias} slug={local.slug} carrossel />
+        <DayList dias={p.dias} slug={local.slug} />
         <div className="after-days">
           <Link className="more" href={`/local/${local.slug}/horas`}>Ver previsão das próximas 48 horas →</Link>
         </div>
