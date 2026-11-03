@@ -93,8 +93,7 @@ export default async function DiaPage({ params }: Props) {
         </nav>
       </div>
 
-      <section className="section" aria-labelledby="h-resumo">
-        <div className="sec-head"><h2 id="h-resumo">Resumo do dia</h2></div>
+      <section className="section sem-linha" aria-label="Resumo do dia">
         <dl className="facts facts-wide">
           {visiveis.map((f) => (
             <div key={f.label}>

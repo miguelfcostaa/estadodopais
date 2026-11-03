@@ -178,6 +178,7 @@ h1 em { font-style: normal; color: var(--accent); }
 .facts dd small { font-family: var(--body); font-size: 16px; color: var(--muted); margin-left: 6px; }
 
 .section { padding-block: 44px; border-top: 1px solid var(--line); }
+.section.sem-linha { border-top: 0; padding-top: 8px; }
 .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
 h2 { font-family: var(--display); font-weight: 500; font-size: clamp(28px, 3.2vw, 38px); letter-spacing: -.01em; margin: 0; text-wrap: balance; }
 h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 12px; }
@@ -413,7 +414,7 @@ table.data .r { text-align: right; }
 .dia-titulo { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 18px; }
 .dia-titulo svg { flex: none; color: var(--ink); }
 .dia-titulo h1 { margin: 0; }
-.dia-local { color: var(--muted); font-size: 17px; margin: 6px 0 0; }
+.page-head .dia-local { color: var(--muted); font-size: 17px; margin: 16px 0 0; }
 .dia-nav { display: flex; justify-content: space-between; margin-top: 24px; }
 .facts-wide { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); column-gap: 24px; }
 .facts-wide div:nth-child(odd) { padding-right: 0; }
