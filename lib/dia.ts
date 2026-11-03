@@ -1,5 +1,5 @@
 // Contas para a página de um dia: momentos do dia, intervalos e frase-resumo.
-import { TIPOS_TEMPO, type Dia, type Hora } from "./data";
+import type { Dia, Hora } from "./data";
 import { hora } from "./format";
 import { direcaoExtenso, INTENSIDADE_VENTO } from "./ipma";
 
@@ -69,7 +69,6 @@ export function estatisticas(pontos: Hora[]) {
 
 export function resumoDia(d: Dia, pontos: Hora[], momentos: Momento[]): string {
   const frases: string[] = [];
-  frases.push(`${TIPOS_TEMPO[d.tipoTempo] ?? "Previsão do dia"}.`);
 
   const pico = pontos.length >= 6 ? pontos.reduce((a, b) => (b.temp > a.temp ? b : a)) : null;
   frases.push(`Temperatura entre ${Math.round(d.tMin)}° e ${Math.round(d.tMax)}°${pico ? `, mais quente por volta das ${hora(pico.hora)}h` : ""}.`);
