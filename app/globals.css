@@ -243,7 +243,7 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .day-link {
   --brilho: var(--accent);
   position: relative; display: flex; flex-direction: column; gap: 14px; height: 100%; padding: 18px 18px 16px;
-  color: inherit; text-decoration: none; border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+  color: inherit; text-decoration: none; border: 1px solid var(--line); overflow: hidden;
   background:
     radial-gradient(120% 60% at 50% -10%, color-mix(in srgb, var(--brilho) 22%, transparent), transparent 70%),
     var(--surface);
@@ -255,6 +255,7 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .day-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
 .day-name { font-weight: 500; font-size: 15px; padding-top: 4px; }
 .day.today .day-name { color: var(--accent); }
+.day-name .nome-curto { display: none; }
 .day-date { display: grid; justify-items: end; line-height: 1; }
 .day-date b { font-family: var(--display); font-size: 34px; font-weight: 500; letter-spacing: -.02em; color: var(--ink); }
 .day-date .mono { color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-size: 11px; margin-top: 4px; }
@@ -264,26 +265,21 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .day-temps { display: flex; align-items: baseline; gap: 10px; }
 .day-temps .tmax { font-family: var(--display); font-size: 36px; font-weight: 500; line-height: 1; letter-spacing: -.02em; }
 .day-temps .tmin { font-family: var(--display); font-size: 20px; color: var(--muted); line-height: 1; }
-.day-curva-box { height: 40px; margin: -2px -4px 0; }
-.day-curva { display: block; width: 100%; height: 100%; overflow: visible; }
-.day-range { position: relative; height: 5px; margin-block: 18px 17px; background: var(--line); border-radius: 3px; }
+.day-range { position: relative; height: 5px; background: var(--line); border-radius: 3px; }
 .day-range i { position: absolute; top: 0; bottom: 0; border-radius: 3px; }
-.day-pills { list-style: none; margin: auto 0 0; padding: 4px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
-.pill {
-  display: inline-flex; align-items: center; gap: 5px; padding: 4px 9px; border-radius: 999px; font-size: 13px;
-  background: color-mix(in srgb, var(--ink) 6%, transparent); color: var(--muted); white-space: nowrap;
-}
-.pill .fact-icon { width: 14px; height: 14px; color: var(--muted); }
-.pill .num { color: var(--ink); }
-.pill.wet { background: color-mix(in srgb, var(--accent) 16%, transparent); }
-.pill.wet .num, .pill.wet .fact-icon { color: var(--accent); }
-.pill.wet .num { font-weight: 500; }
+.day-meta { list-style: none; margin: auto 0 0; padding: 14px 0 0; display: grid; gap: 8px; font-size: 14px; color: var(--muted); }
+.day-meta li { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.day-meta .fact-icon { width: 16px; height: 16px; color: var(--muted); }
+.day-meta .num { color: var(--ink); }
+.day-meta .wet .num, .day-meta .wet .fact-icon { color: var(--accent); }
+.day-meta .wet .num { font-weight: 500; }
+.day-meta .sem-valor { color: var(--muted); }
 .day-seta { flex: none; color: var(--ink); }
 @media (max-width: 900px) {
   .day-desc { display: none; }
 }
 @media (max-width: 760px) {
-  .day-link { padding: 12px 8px 12px; gap: 10px; align-items: center; text-align: center; border-radius: 12px; }
+  .day-link { padding: 12px 8px 12px; gap: 10px; align-items: center; text-align: center; }
   .day-head { flex-direction: column; align-items: center; gap: 2px; }
   .day-name { font-size: 13px; padding-top: 0; }
   .day-date { justify-items: center; }
@@ -293,12 +289,12 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
   .day-temps { flex-direction: column; align-items: center; gap: 2px; }
   .day-temps .tmax { font-size: 22px; }
   .day-temps .tmin { font-size: 14px; }
-  .day-curva-box { width: 100%; height: 28px; margin: 0; }
-  .day-range { width: 100%; margin-block: 12px 11px; }
-  .day-pills { justify-content: center; gap: 4px; }
-  .pill { padding: 3px 7px; font-size: 12px; }
-  .pill.day-wind, .pill.day-uv, .nome-longo { display: none; }
-  .nome-curto { display: inline; }
+  .day-range { width: 100%; }
+  .day-meta { padding-top: 10px; gap: 6px; width: 100%; font-size: 13px; }
+  .day-meta li { justify-content: center; gap: 5px; }
+  .day-meta .fact-icon { width: 14px; height: 14px; }
+  .day-meta .day-wind, .day-meta .uv-nivel, .nome-longo { display: none; }
+  .day-name .nome-curto { display: inline; }
 }
 
 /* Avisos */
