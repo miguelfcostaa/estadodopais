@@ -43,7 +43,7 @@ export function ForecastView({ p, avisos, distancia }: { p: Previsao; avisos: Av
             {resumo.titulo.split("/").map((parte, i) => (
               <Fragment key={i}>{i > 0 && <>/<wbr /></>}{parte}</Fragment>
             ))}{" "}
-            <em className="num">{resumo.destaque}</em>.
+            <em className="num">{resumo.destaque}</em>
           </h1>
           <p className="summary">{resumo.texto}</p>
         </div>
