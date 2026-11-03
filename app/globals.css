@@ -239,7 +239,7 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 /* Só linhas verticais: cada cartão tem linha à esquerda e à direita; entre dois cartões fica uma só */
 .days5 { --gap-dias: 12px; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px var(--gap-dias); }
 .day { min-width: 0; }
-/* Cartão: fundo próprio, cantos arredondados e um brilho no topo na cor da temperatura máxima do dia */
+/* Cartão: fundo próprio e um brilho no topo na cor do tempo previsto (sol laranja, chuva azul, etc.) */
 .day-link {
   --brilho: var(--accent);
   position: relative; isolation: isolate; display: flex; flex-direction: column; gap: 14px; height: 100%; padding: 18px 18px 16px;
