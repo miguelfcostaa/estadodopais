@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Mono, Inter, Krub } from "next/font/google";
+import { Bricolage_Grotesque, IBM_Plex_Mono, Parkinsans } from "next/font/google";
 import { SiteFooter } from "@/components/SiteFooter";
 import { NavHistory } from "@/components/NavHistory";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -7,9 +7,9 @@ import { horaMinutoAtual } from "@/lib/format";
 import { SITE_DESCRICAO, SITE_NOME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
-// Títulos em Inter e texto em Krub; números e etiquetas em IBM Plex Mono
-const display = Inter({ subsets: ["latin", "latin-ext"], variable: "--font-display" });
-const sans = Krub({ subsets: ["latin", "latin-ext"], weight: ["300", "400", "500", "600"], variable: "--font-sans" });
+// Títulos em Bricolage Grotesque e texto em Parkinsans; números e etiquetas em IBM Plex Mono
+const display = Bricolage_Grotesque({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-display" });
+const sans = Parkinsans({ subsets: ["latin"], weight: ["300", "400", "500", "600"], variable: "--font-sans" });
 const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
