@@ -237,8 +237,8 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 
 /* Próximos dias: colunas clicáveis */
 /* Só linhas verticais: cada cartão tem linha à esquerda e à direita; entre dois cartões fica uma só */
-.days5 { list-style: none; margin: 0; padding: 0 1px 0 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); row-gap: 16px; }
-.day { border-left: 1px solid var(--line); border-right: 1px solid var(--line); margin-right: -1px; min-width: 0; }
+.days5 { --gap-dias: 12px; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px var(--gap-dias); }
+.day { border-left: 1px solid var(--line); border-right: 1px solid var(--line); min-width: 0; }
 .day-link { display: flex; flex-direction: column; gap: 14px; height: 100%; padding: 18px 18px 20px; color: inherit; text-decoration: none; transition: background-color .15s; }
 .day.today .day-link, .day-link:hover, .day-link:focus-visible { background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 10%, transparent), transparent 75%); box-shadow: inset 0 2px 0 var(--accent); }
 .day-link:focus-visible { outline: none; }
@@ -259,7 +259,7 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .day-temps .tmin { font-family: var(--display); font-size: 20px; color: var(--muted); line-height: 1; }
 .day-range { position: relative; height: 5px; background: var(--line); border-radius: 3px; }
 .day-range i { position: absolute; top: 0; bottom: 0; border-radius: 3px; }
-.day-meta { list-style: none; margin: auto 0 0; padding: 14px 0 0; border-top: 1px solid var(--line); display: grid; gap: 8px; font-size: 14px; color: var(--muted); }
+.day-meta { list-style: none; margin: auto 0 0; padding: 14px 0 0; display: grid; gap: 8px; font-size: 14px; color: var(--muted); }
 .day-meta li { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .day-meta .fact-icon { width: 16px; height: 16px; color: var(--subtle, var(--muted)); }
 .day-meta .num { color: var(--ink); }
@@ -477,9 +477,9 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 
 /* 10 dias em carrossel */
 .days5.days-track { display: flex; }
-.days-track .day { flex: 0 0 20%; scroll-snap-align: start; }
-@media (max-width: 1100px) { .days-track .day { flex-basis: calc(100% / 3); } }
-@media (max-width: 760px) { .days-track .day { flex-basis: 25%; } }
+.days-track .day { flex: 0 0 calc((100% - 4 * var(--gap-dias)) / 5); scroll-snap-align: start; }
+@media (max-width: 1100px) { .days-track .day { flex-basis: calc((100% - 2 * var(--gap-dias)) / 3); } }
+@media (max-width: 760px) { .days5 { --gap-dias: 8px; } .days-track .day { flex-basis: calc((100% - 3 * var(--gap-dias)) / 4); } }
 
 /* Telemóvel: revisão geral */
 .dir-inline { display: none; color: var(--muted); margin-left: 4px; }

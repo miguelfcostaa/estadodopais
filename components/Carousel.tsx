@@ -34,7 +34,8 @@ export function Carousel({ children, label, inicio }: { children: React.ReactNod
     if (!f) return;
     // Se o que sobra for menos do que um passo, vai até à ponta (evita parar a poucos píxeis do fim)
     const max = f.scrollWidth - f.clientWidth;
-    let alvo = f.scrollLeft + sentido * f.clientWidth;
+    const gap = parseFloat(getComputedStyle(f.firstElementChild ?? f).columnGap) || 0;
+    let alvo = f.scrollLeft + sentido * (f.clientWidth + gap);
     if (alvo > max - 8) alvo = max;
     if (alvo < 8) alvo = 0;
     f.scrollTo({ left: alvo, behavior: "smooth" });
