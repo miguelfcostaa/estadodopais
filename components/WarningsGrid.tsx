@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { LegendaNiveis } from "./LegendaNiveis";
-import type { Aviso } from "@/lib/data";
+import type { Aviso, NivelAviso } from "@/lib/data";
 import { AREAS_AVISO } from "@/lib/data";
 import { areasPorRegiao, avisosDaArea, nivelDaArea, nomeNivel } from "@/lib/avisos";
 
 const REGIOES = ["Continente", "Madeira", "Açores"] as const;
+// Ordem dos grupos no telemóvel: do mais grave para o menos grave
+const GRUPOS: NivelAviso[] = ["red", "orange", "yellow"];
 
 function tiposDaArea(avisos: Aviso[], id: string): string[] {
   return [...new Set(avisosDaArea(avisos, id).map((a) => a.tipo.toLowerCase()))];
@@ -39,27 +41,41 @@ export function WarningsGrid({ avisos, legenda = true }: { avisos: Aviso[]; lege
         ))}
       </div>
 
-      {/* Telemóvel: primeiro as áreas com aviso, o resto recolhido */}
+      {/* Telemóvel: as áreas agrupadas por cor do aviso, cada grupo numa lista que abre e fecha.
+          Cada grupo só aparece quando há avisos dessa cor; o vermelho abre logo, por ser o mais grave. */}
       <div className="regions-compact">
-        {comAviso.length > 0 && (
-          <ul className="alert-list">
-            {comAviso.map((id) => {
-              const nivel = nivelDaArea(avisos, id);
-              return (
-                <li key={id} className={nivel}>
-                  <Link className="alert-link" href={`/avisos/${id.toLowerCase()}`}>
-                  <span className={`lvl ${nivel}`} />
-                  <span className="alert-name">
-                    {AREAS_AVISO[id].nome}
-                    <span className="label">{AREAS_AVISO[id].regiao} · {nomeNivel(nivel)}</span>
-                  </span>
-                  <span className={`why mono ${nivel}`}>{tiposDaArea(avisos, id).join(", ")}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        )}
+        {GRUPOS.map((nivel) => {
+          const areas = comAviso.filter((id) => nivelDaArea(avisos, id) === nivel);
+          if (areas.length === 0) return null;
+          const nome = nomeNivel(nivel);
+          return (
+            <details key={nivel} className={`calm grupo-aviso ${nivel}`} open={nivel === "red"}>
+              <summary>
+                <span className={`lvl ${nivel}`} />
+                <span className="calm-text">
+                  {nome.charAt(0).toUpperCase() + nome.slice(1)} em {areas.length} {areas.length === 1 ? "área" : "áreas"}
+                </span>
+                <span className="calm-more mono">
+                  <span className="calm-ver">ver</span>
+                  <span className="calm-fechar">fechar</span>
+                </span>
+              </summary>
+              <ul className="alert-list">
+                {areas.map((id) => (
+                  <li key={id} className={nivel}>
+                    <Link className="alert-link" href={`/avisos/${id.toLowerCase()}`}>
+                      <span className="alert-name">
+                        {AREAS_AVISO[id].nome}
+                        <span className="label">{AREAS_AVISO[id].regiao}</span>
+                      </span>
+                      <span className={`why mono ${nivel}`}>{tiposDaArea(avisos, id).join(", ")}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          );
+        })}
         {totalSem > 0 && (
           <details className="calm">
             <summary>

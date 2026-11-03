@@ -384,7 +384,7 @@ table.data .r { text-align: right; }
 .regions-compact { display: none; }
 @media (max-width: 760px) {
   .regions { display: none; }
-  .regions-compact { display: grid; gap: 14px; }
+  .regions-compact { display: grid; gap: 0; border-bottom: 1px solid var(--line); }
   /* No telemóvel, a legenda fica atrás de um botão que abre uma janela */
   .scale:not(.scale-grelha) { display: none; }
 }
@@ -398,7 +398,6 @@ table.data .r { text-align: right; }
 .alert-list .why.red { color: var(--w-red); }
 /* Áreas sem aviso: mais uma fila da lista, sem caixa à volta */
 .calm { border-top: 1px solid var(--line); }
-.alert-list + .calm { margin-top: -14px; } /* cola à lista de cima, como mais uma fila */
 .calm summary { display: flex; align-items: center; gap: 12px; padding-block: 14px; cursor: pointer; color: var(--muted); list-style: none; }
 .calm summary::-webkit-details-marker { display: none; }
 .calm summary .lvl { opacity: .7; }
@@ -648,3 +647,9 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 .scale-grelha .scale-txt b { color: var(--ink); text-transform: capitalize; }
 .scale-grelha .scale-sep { display: none; }
 .scale-grelha .scale-sentido { line-height: 1.35; }
+
+/* Grupos de avisos por cor (telemóvel): o resumo de cada grupo em texto normal, a lista dentro sem linha por cima */
+.grupo-aviso summary { color: var(--ink); font-weight: 500; }
+.grupo-aviso summary .lvl { opacity: 1; }
+.grupo-aviso .alert-list { border-top: 0; margin: -4px 0 6px; padding-left: 22px; }
+.grupo-aviso .alert-list li { border-bottom: 0; border-top: 1px solid var(--line); }
