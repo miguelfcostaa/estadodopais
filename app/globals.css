@@ -240,15 +240,20 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .day { min-width: 0; }
 /* Cartão: um só fundo azul-escuro, sem contorno */
 .day-link {
+  --mola: cubic-bezier(.2, .8, .2, 1); /* arranca depressa e abranda no fim */
   position: relative; display: flex; flex-direction: column; gap: 14px; height: 100%; padding: 18px 18px 16px;
   color: inherit; text-decoration: none; border: 0;
-  background: color-mix(in srgb, var(--surface) 45%, var(--bg)); /* um pouco mais escuro do que os outros painéis */
-  transition: transform .2s ease-out;
+  background-color: color-mix(in srgb, var(--surface) 45%, var(--bg)); /* um pouco mais escuro do que os outros painéis */
+  transition: transform .3s var(--mola), background-color .3s ease-out;
 }
-/* Ao passar o rato: o cartão sobe um pouco */
-.day-link:hover { transform: translateY(-4px); }
+.day-wx svg { transform-origin: left bottom; transition: transform .4s var(--mola); }
+.day-range i { transition: filter .3s ease-out; }
+/* Ao passar o rato: o fundo clareia, o cartão sobe, o ícone cresce e a barra fica mais viva (sem cores novas) */
+.day-link:hover { background-color: var(--surface); transform: translateY(-4px); }
+.day-link:hover .day-wx svg { transform: translateY(-2px) scale(1.12); }
+.day-link:hover .day-range i { filter: brightness(1.15) saturate(1.15); }
 @media (prefers-reduced-motion: reduce) {
-  .day-link:hover { transform: none; }
+  .day-link:hover, .day-link:hover .day-wx svg { transform: none; }
 }
 .day-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .day-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
@@ -283,7 +288,7 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
   .day-date { justify-items: center; }
   .day-date b { font-size: 24px; }
   .day-wx { justify-items: center; }
-  .day-wx svg { width: 32px; height: 32px; }
+  .day-wx svg { width: 32px; height: 32px; transform-origin: center bottom; }
   .day-temps { flex-direction: column; align-items: center; gap: 2px; }
   .day-temps .tmax { font-size: 22px; }
   .day-temps .tmin { font-size: 14px; }
