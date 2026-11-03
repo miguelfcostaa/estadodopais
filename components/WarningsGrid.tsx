@@ -90,7 +90,11 @@ export function WarningsGrid({ avisos, legenda = true }: { avisos: Aviso[]; lege
         {NIVEIS.map((n) => (
           <span key={n.id}>
             <i className={`lvl ${n.id}`} />
-            {n.nome.toLowerCase()} · {n.sentido}
+            <span className="scale-txt">
+              <b>{n.nome.toLowerCase()}</b>
+              <span className="scale-sep"> · </span>
+              <span className="scale-sentido">{n.sentido}</span>
+            </span>
           </span>
         ))}
       </div>
