@@ -226,7 +226,6 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
       </div>
       </div>
       <div className="mg-foot">
-        <p className="mg-hint mono">Passe o rato ou toque numa hora para ver os detalhes. Chuva em %, vento em km/h. Barras mais claras: chuva estimada entre duas previsões do IPMA.</p>
         {(podeVoltar || podeAvancar) && (
           <div className="carousel-nav">
             <button type="button" className="carousel-btn" onClick={() => mover(-1)} disabled={!podeVoltar} aria-label="Horas anteriores">‹</button>

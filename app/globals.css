@@ -220,13 +220,12 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .mg-arrow { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .mg-wind { font-size: 12px; }
 .mg-hit { fill: transparent; cursor: pointer; }
-.mg-hint { color: var(--faint); margin: 0; }
 .mg-wrap { position: relative; min-width: 0; }
 .mg-wrap::before, .mg-wrap::after { content: ""; position: absolute; top: 0; bottom: 0; width: 40px; pointer-events: none; opacity: 0; transition: opacity .2s; z-index: 1; }
 .mg-wrap::before { left: 0; background: linear-gradient(to right, var(--bg), transparent); }
 .mg-wrap::after { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
 .mg-wrap.fade-l::before, .mg-wrap.fade-r::after { opacity: 1; }
-.mg-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.mg-foot { display: flex; align-items: center; justify-content: flex-end; gap: 16px; }
 .mg-foot .carousel-nav { margin-top: 0; flex: none; }
 @media (max-width: 760px) {
   .mg-panel { padding: 12px 14px; }
