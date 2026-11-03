@@ -14,7 +14,7 @@ const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variabl
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: `${SITE_NOME} · Tempo, avisos e mar em Portugal`, template: `%s · ${SITE_NOME}` },
+  title: { default: SITE_NOME, template: `%s · ${SITE_NOME}` },
   description: SITE_DESCRICAO,
   alternates: { canonical: "/" },
   openGraph: { type: "website", locale: "pt_PT", siteName: SITE_NOME, url: "/" },
