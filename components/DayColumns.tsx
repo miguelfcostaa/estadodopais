@@ -4,6 +4,7 @@ import { TIPOS_TEMPO } from "@/lib/data";
 import { INTENSIDADE_VENTO } from "@/lib/ipma";
 import { diaSemana, graus, nivelUV, num } from "@/lib/format";
 import { Carousel } from "./Carousel";
+import { FactIcon } from "./FactIcon";
 import { WeatherIcon } from "./WeatherIcon";
 
 const DIRS: Record<string, number> = { N: 0, NE: 45, E: 90, SE: 135, S: 180, SW: 225, W: 270, NW: 315 };
@@ -65,9 +66,9 @@ export function DayColumns({ dias, slug, atual, carrossel = false }: { dias: Dia
               </div>
 
               <div className="day-wx">
-                <WeatherIcon tipo={d.tipoTempo} size={34} />
-                <span className="day-desc">{TIPOS_TEMPO[d.tipoTempo]}</span>
+                <WeatherIcon tipo={d.tipoTempo} size={44} noite={false} />
               </div>
+              <p className="day-desc">{TIPOS_TEMPO[d.tipoTempo]}</p>
 
               <div className="day-temps">
                 <span className="tmax num">{graus(d.tMax)}</span>
@@ -77,38 +78,37 @@ export function DayColumns({ dias, slug, atual, carrossel = false }: { dias: Dia
                 <i style={{ left: `${pct(d.tMin)}%`, width: `${pct(d.tMax) - pct(d.tMin)}%`, background: gradiente(d.tMin, d.tMax) }} />
               </div>
 
-              <dl className="day-meta">
-                <div className={d.probChuva >= 20 ? "wet" : undefined}>
-                  <dt className="label">Chuva</dt>
-                  <dd className="num">{d.probChuva}%</dd>
-                </div>
+              {/* Chuva, vento e UV no fundo do cartão, com ícones em vez de etiquetas repetidas */}
+              <ul className="day-meta">
+                <li className={d.probChuva >= 20 ? "wet" : undefined}>
+                  <FactIcon nome="chuva" />
+                  <span className="sr-only">Chuva </span>
+                  <span className="num">{d.probChuva}%</span>
+                </li>
                 {d.dirVento && (
-                  <div className="day-wind">
-                    <dt className="label">Vento</dt>
-                    <dd>
-                      <svg width="12" height="12" viewBox="-8 -8 16 16" aria-hidden="true" style={{ transform: `rotate(${((DIRS[d.dirVento] ?? 0) + 180) % 360}deg)` }}>
-                        <path d="M0 -6 L0 6 M-3 2.5 L0 6 L3 2.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                      </svg>
-                      {d.ventoClasse ? INTENSIDADE_VENTO[d.ventoClasse] : ""} {d.dirVento}
-                    </dd>
-                  </div>
+                  <li className="day-wind">
+                    <FactIcon nome="vento" />
+                    <span className="sr-only">Vento </span>
+                    <svg className="day-seta" width="12" height="12" viewBox="-8 -8 16 16" aria-hidden="true" style={{ transform: `rotate(${((DIRS[d.dirVento] ?? 0) + 180) % 360}deg)` }}>
+                      <path d="M0 -6 L0 6 M-3 2.5 L0 6 L3 2.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                    </svg>
+                    <span>{d.ventoClasse ? INTENSIDADE_VENTO[d.ventoClasse] : ""} {d.dirVento}</span>
+                  </li>
                 )}
-                {/* O IPMA só prevê o índice UV para os primeiros 5 dias; nos outros fica um traço, para os cartões ficarem alinhados */}
-                <div>
-                  <dt className="label">UV</dt>
-                  <dd className="num">
-                    {d.uv != null ? (
-                      <>
-                        <span className="uv-pre">UV </span>
-                        {num(d.uv)}
-                        <span className="uv-nivel"> {nivelUV(d.uv)}</span>
-                      </>
-                    ) : (
-                      "—"
-                    )}
-                  </dd>
-                </div>
-              </dl>
+                {/* O IPMA só prevê o índice UV para os primeiros 5 dias */}
+                <li className="day-uv">
+                  <FactIcon nome="uv" />
+                  <span className="sr-only">Índice UV </span>
+                  {d.uv != null ? (
+                    <span>
+                      <span className="num">{num(d.uv)}</span>
+                      <span className="uv-nivel"> {nivelUV(d.uv)}</span>
+                    </span>
+                  ) : (
+                    <span className="sem-valor">sem previsão</span>
+                  )}
+                </li>
+              </ul>
             </Link>
           </li>
         );
