@@ -62,11 +62,11 @@ export default async function DiaPage({ params }: Props) {
     { icone: "temperatura", label: "Mínima", valor: graus(dia.tMin) },
     { icone: "chuva", label: "Chuva", valor: `${dia.probChuva}`, unidade: "%", nota: dia.intensidade ? `intensidade ${INTENSIDADE_CHUVA[dia.intensidade]}` : undefined },
     dia.uv != null ? { icone: "uv", label: "Índice UV", valor: num(dia.uv), unidade: nivelUV(dia.uv) } : null,
+    est.humidade ? { icone: "humidade", label: "Humidade", valor: intervaloTexto(est.humidade)!, unidade: "%" } : null,
     est.sensacao ? { icone: "sensacao", label: "Sensação térmica", valor: intervaloTexto(est.sensacao, "°")! } : null,
     dia.dirVento
       ? { icone: "vento", label: "Vento", valor: dia.ventoClasse ? INTENSIDADE_VENTO[dia.ventoClasse] : "-", unidade: dia.dirVento, nota: est.ventoMax ? `até ${Math.round(est.ventoMax.valor)} km/h às ${est.ventoMax.hora}h` : `de ${direcaoExtenso(dia.dirVento)}` }
       : null,
-    est.humidade ? { icone: "humidade", label: "Humidade", valor: intervaloTexto(est.humidade)!, unidade: "%" } : null,
     est.onda ? { icone: "ondas", label: "Ondas", valor: intervaloTexto([est.onda[0] * 10, est.onda[1] * 10])!.replace(/(\d+)/g, (x) => num(Number(x) / 10)), unidade: `m · ${est.dirOnda}`, nota: est.periodoOnda ? `período de ${intervaloTexto(est.periodoOnda, " s")}` : undefined } : null,
     est.agua ? { icone: "agua", label: "Água do mar", valor: intervaloTexto(est.agua, "°")! } : null,
     sol ? { icone: "nascer", label: "Nascer do sol", valor: hm(sol.nascer) } : null,
