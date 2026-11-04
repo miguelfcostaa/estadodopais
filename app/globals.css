@@ -176,7 +176,7 @@ h1 em { font-style: normal; color: var(--accent); }
 
 /* Só linhas entre filas: cada número tem linha por cima; nada por baixo da última fila */
 .facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; margin: 0; }
-.facts div { padding: 16px 0; border-top: 1px solid var(--line); display: grid; gap: 8px; align-content: center; }
+.facts div { padding: 16px 0; border-top: 1px solid var(--line); display: grid; gap: 8px; align-content: start; }
 .facts div:nth-child(odd) { padding-right: 16px; }
 .facts dd { margin: 0; font-family: var(--display); font-size: clamp(32px, 3.2vw, 44px); font-weight: 500; line-height: 1.1; }
 .facts dd small { font-family: var(--body); font-size: 16px; color: var(--muted); margin-left: 6px; }
@@ -547,6 +547,11 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
   /* resumo do dia: dois por linha */
   .facts-wide { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; }
   .facts-wide dd { font-size: 30px; }
+  /* etiquetas numa só linha e valor com a unidade sem quebrar */
+  .facts dt { font-size: 12px; letter-spacing: .04em; white-space: nowrap; }
+  .facts { grid-auto-rows: auto; }
+  .facts dd.num { display: flex; flex-wrap: wrap; align-items: baseline; white-space: nowrap; }
+  .facts dd small { margin-left: 4px; }
   /* mar, sol e fogo */
   .big { font-size: 40px; }
   .big.texto { font-size: 32px; line-height: 40px; height: 40px; }
@@ -714,3 +719,13 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 .erro-acoes { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
 .pk-btn.sem-seta { padding-right: 14px; }
 .pk-btn.sem-seta::after { display: none; }
+
+/* Telemóveis estreitos: valores dos factos mais pequenos para não partirem */
+@media (max-width: 400px) {
+  .facts-wide dd.num, .facts dd.num { font-size: 26px; }
+  .facts dd small { font-size: 14px; }
+}
+@media (max-width: 340px) {
+  .facts dt { font-size: 11px; letter-spacing: 0; gap: 6px; }
+  .facts-wide dd.num, .facts dd.num { font-size: 23px; }
+}
