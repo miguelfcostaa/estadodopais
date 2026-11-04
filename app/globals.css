@@ -515,7 +515,7 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 .type-state .lvl { opacity: .55; }
 .type-alerts { display: grid; gap: 12px; }
 .type-alerts .warn-item p { margin-top: 4px; }
-@media (max-width: 760px) { .types li { grid-template-columns: 1fr; gap: 8px; } .types li > .type-state { padding-left: 30px; } }
+@media (max-width: 760px) { .types li { grid-template-columns: 1fr; gap: 8px; } .types li > :not(.type-name) { padding-left: 30px; } }
 
 /* Carrossel */
 .carousel { position: relative; }
