@@ -24,7 +24,6 @@ export default async function AvisosPage() {
       <section className="section" aria-labelledby="h-mapa">
         <div className="sec-head"><h2 id="h-mapa">No mapa</h2><span className="label">toque numa área para ver os avisos</span></div>
         <MapaAvisos avisos={avisos} />
-        <p className="mapa-nota mono">A cor de cada área mostra o aviso mais grave nos próximos 3 dias. Limites: Natural Earth.</p>
       </section>
       <section className="section" aria-labelledby="h-areas">
         <div className="sec-head"><h2 id="h-areas">Por área</h2></div>
