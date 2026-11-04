@@ -183,8 +183,6 @@ h1 em { font-style: normal; color: var(--accent); }
 
 .section { padding-block: 44px; border-top: 1px solid var(--line); }
 .section.sem-linha { border-top: 0; padding-top: 8px; }
-/* períodos do dia: as linhas verticais tocam na linha de baixo, como na de cima */
-.section.periodos { padding-bottom: 0; }
 .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
 h2 { font-family: var(--display); font-weight: 500; font-size: clamp(28px, 3.2vw, 38px); letter-spacing: -.01em; margin: 0; text-wrap: balance; }
 h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 12px; }
