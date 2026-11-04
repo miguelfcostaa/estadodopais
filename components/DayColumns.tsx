@@ -79,7 +79,7 @@ export function DayColumns({ dias, slug, atual, carrossel = false, titulo }: { d
                       <span className="uv-nivel"> {nivelUV(d.uv)}</span>
                     </span>
                   ) : (
-                    <span className="sem-valor"><span className="sv-longo">sem previsão</span><span className="sv-curto" aria-hidden="true">–</span></span>
+                    <span className="sem-valor"><span className="sv-longo">sem previsão</span><span className="sv-curto" aria-hidden="true">-</span></span>
                   )}
                 </li>
               </ul>
