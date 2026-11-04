@@ -15,7 +15,16 @@ function nivelForma(avisos: Aviso[], id: string): NivelAviso {
 }
 
 // Parte do painel a mostrar, em unidades do painel (o mapa do mar precisa do mar à esquerda; este não)
-const RECORTE: Record<string, [number, number, number, number]> = { continente: [215, 673, 0, 825] }; // x0, x1, y0, y1
+const RECORTE: Record<string, [number, number, number, number]> = { continente: [215, 673, 0, 825], acores: [88, 278, 34, 168] }; // x0, x1, y0, y1
+
+// Nos Açores, os grupos Ocidental e Oriental ficam mais perto do Central (como nos mapas do IPMA),
+// para as ilhas aparecerem maiores. Deslocamento em unidades do painel.
+const DESLOCA: Record<string, [number, number]> = { AOC: [90, 30], AOR: [-60, -35] };
+const deslocada = (a: AreaMapa): AreaMapa => {
+  const [dx, dy] = DESLOCA[a.id] ?? [0, 0];
+  return { ...a, c: [a.c[0] + dx, a.c[1] + dy] };
+};
+const transformar = (id: string) => (DESLOCA[id] ? `translate(${DESLOCA[id][0]} ${DESLOCA[id][1]})` : undefined);
 
 // Um ponto em cada área de aviso, na cor do seu nível (na ilha da Madeira, um por cada uma das três zonas)
 function PontoZona({ a, avisos, caixa }: { a: AreaMapa; avisos: Aviso[]; caixa: [number, number, number, number] }) {
@@ -40,7 +49,7 @@ function zonaMadeira(avisos: Aviso[]): string {
 
 function Mapa({ nome, titulo, avisos }: { nome: "continente" | "acores" | "madeira"; titulo?: string; avisos: Aviso[] }) {
   const painel = PAINEIS[nome];
-  const areas = AREAS_MAPA.filter((a) => a.painel === nome);
+  const areas = AREAS_MAPA.filter((a) => a.painel === nome).map(deslocada);
   const [x0, x1, y0, y1] = RECORTE[nome] ?? [0, painel.w, 0, painel.h];
   const w = x1 - x0, h = y1 - y0;
   return (
@@ -58,7 +67,7 @@ function Mapa({ nome, titulo, avisos }: { nome: "continente" | "acores" | "madei
               return (
                 <Link key={a.id} prefetch={false} href={`/avisos/${destino}`} className="av-area">
                   <title>{a.id === "MADEIRA" ? "Madeira" : AREAS_AVISO[a.id]?.nome}</title>
-                  <path d={a.d} className={`av-forma ${nivel}`} />
+                  <path d={a.d} className={`av-forma ${nivel}`} transform={transformar(a.id)} />
                 </Link>
               );
             })}
