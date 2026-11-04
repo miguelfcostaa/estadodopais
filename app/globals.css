@@ -193,7 +193,7 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 
 /* Gráfico hora a hora */
 .mg { display: grid; gap: 14px; }
-.mg-panel { display: flex; align-items: center; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; padding: 14px 18px; border: 1px solid var(--line); border-radius: 6px; background: color-mix(in srgb, var(--surface) 45%, var(--bg)); /* o mesmo fundo dos cartões dos dias */ }
+.mg-panel { display: flex; align-items: center; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; padding: 14px 18px; border: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 45%, var(--bg)); /* o mesmo fundo dos cartões dos dias */ }
 .mg-panel-main { display: flex; align-items: center; gap: 14px; }
 .mg-panel-main svg { color: var(--ink); flex: none; }
 .mg-panel-main > div { display: grid; }
