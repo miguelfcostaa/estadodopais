@@ -55,10 +55,6 @@ export function hora(iso: string): number {
   return partes(iso).hora;
 }
 
-export function horaMinuto(iso: string): string {
-  return iso.split("T")[1]?.slice(0, 5) ?? "";
-}
-
 // Posição do índice ultravioleta na escala de 5 níveis (1 baixo a 5 extremo), igual a nivelUV
 export function degrauUV(uv: number): number {
   return uv < 3 ? 1 : uv < 6 ? 2 : uv < 8 ? 3 : uv < 11 ? 4 : 5;
@@ -77,11 +73,6 @@ export function quandoDia(iso: string): string {
   const p = partes(iso);
   const artigo = p.semana === 0 || p.semana === 6 ? "no" : "na";
   return `${artigo} ${DIAS_SEMANA[p.semana]}, ${p.dia} de ${MESES_LONGOS[p.mes - 1]}`;
-}
-
-// "07:54" a partir de "2026-10-30T07:54:38"
-export function horaDe(iso: string): string {
-  return iso.slice(11, 16);
 }
 
 // "Sábado, 31 de outubro"

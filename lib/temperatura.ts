@@ -1,9 +1,9 @@
 // Cor de cada temperatura (°C), para o gradiente da barra: do frio (azul) ao calor (vermelho)
-export const ESCALA: [number, string][] = [
+const ESCALA: [number, string][] = [
   [0, "#7aa6d6"], [8, "#6fb3b8"], [14, "#8cb88c"], [20, "#b5bd5a"], [26, "#d9a62b"], [32, "#e07b39"], [38, "#d6453d"],
 ];
 
-export function corDe(t: number): string {
+function corDe(t: number): string {
   if (t <= ESCALA[0][0]) return ESCALA[0][1];
   for (let i = 1; i < ESCALA.length; i++) {
     const [t1, c1] = ESCALA[i];

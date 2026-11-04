@@ -24,7 +24,7 @@ function PontoZona({ a, avisos, caixa }: { a: AreaMapa; avisos: Aviso[]; caixa: 
   const nome = AREAS_AVISO[a.id]?.nome;
   return (
     <Link
-      href={`/avisos/${a.id.toLowerCase()}`}
+      prefetch={false} href={`/avisos/${a.id.toLowerCase()}`}
       className={`av-ponto ${nivel}`}
       style={{ left: `${((a.c[0] - x0) / w) * 100}%`, top: `${((a.c[1] - y0) / h) * 100}%` }}
       title={nome}
@@ -56,7 +56,7 @@ function Mapa({ nome, titulo, avisos }: { nome: "continente" | "acores" | "madei
               const nivel = nivelForma(avisos, a.id);
               const destino = (a.id === "MADEIRA" ? zonaMadeira(avisos) : a.id).toLowerCase();
               return (
-                <Link key={a.id} href={`/avisos/${destino}`} className="av-area">
+                <Link key={a.id} prefetch={false} href={`/avisos/${destino}`} className="av-area">
                   <title>{a.id === "MADEIRA" ? "Madeira" : AREAS_AVISO[a.id]?.nome}</title>
                   <path d={a.d} className={`av-forma ${nivel}`} />
                 </Link>

@@ -42,7 +42,7 @@ export function WarningsGrid({ avisos, legenda = true }: { avisos: Aviso[]; lege
                 const nivel = nivelDaArea(avisos, id);
                 const tipos = tiposDaArea(avisos, id);
                 return (
-                  <Link key={id} href={`/avisos/${id.toLowerCase()}`} className={`area${nivel !== "green" ? " alert" : ""}`}>
+                  <Link key={id} prefetch={false} href={`/avisos/${id.toLowerCase()}`} className={`area${nivel !== "green" ? " alert" : ""}`}>
                     <span className={`lvl ${nivel}`} />
                     <span>{AREAS_AVISO[id].nome}</span>
                     {tipos.length > 0 && <IconesTipos tipos={tipos} nivel={nivel} />}
@@ -76,7 +76,7 @@ export function WarningsGrid({ avisos, legenda = true }: { avisos: Aviso[]; lege
               <ul className="alert-list">
                 {areas.map((id) => (
                   <li key={id} className={nivel}>
-                    <Link className="alert-link" href={`/avisos/${id.toLowerCase()}`}>
+                    <Link className="alert-link" prefetch={false} href={`/avisos/${id.toLowerCase()}`}>
                       <span className="alert-name">
                         {AREAS_AVISO[id].nome}
                         <span className="label">{AREAS_AVISO[id].regiao}</span>
@@ -106,7 +106,7 @@ export function WarningsGrid({ avisos, legenda = true }: { avisos: Aviso[]; lege
                   <span className="label">{r.regiao}</span>
                   <div className="chips">
                     {r.areas.map((id) => (
-                      <Link key={id} className="chip chip-link" href={`/avisos/${id.toLowerCase()}`}>{AREAS_AVISO[id].nome}</Link>
+                      <Link key={id} className="chip chip-link" prefetch={false} href={`/avisos/${id.toLowerCase()}`}>{AREAS_AVISO[id].nome}</Link>
                     ))}
                   </div>
                 </div>

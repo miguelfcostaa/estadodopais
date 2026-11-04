@@ -79,7 +79,6 @@ img, svg { max-width: 100%; }
 }
 .site-header .bar { display: flex; align-items: center; gap: 20px; padding-block: 18px; }
 .brand { display: inline-flex; align-items: center; gap: 10px; font-family: var(--display); font-size: 26px; font-weight: 500; letter-spacing: -.01em; text-decoration: none; line-height: 1; }
-.brand-mark { display: block; border-radius: 7px; }
 .brand b { color: var(--accent); font-weight: 400; }
 .status { display: flex; align-items: center; gap: 8px; color: var(--muted); }
 .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex: none; }
@@ -107,8 +106,6 @@ img, svg { max-width: 100%; }
 
 /* ---------- Corpo ---------- */
 .site-main { flex: 1; padding-bottom: 24px; }
-.proto { margin-top: 24px; border: 1px dashed var(--faint); color: var(--muted); padding: 10px 14px; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
-.proto strong { color: var(--ink); font-weight: 500; }
 
 .page-head { padding-block: 48px 32px; }
 .page-head h1, .lead h1 {
@@ -168,7 +165,6 @@ h1 em { font-style: normal; color: var(--accent); }
 @media (min-width: 901px) {
   .lead > div:first-child { display: flex; flex-direction: column; justify-content: flex-end; }
 }
-.source { color: var(--faint); margin: 16px 0 0; }
 
 /* Só linhas entre filas: cada número tem linha por cima; nada por baixo da última fila */
 .facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; margin: 0; }

@@ -53,7 +53,7 @@ export type Aviso = {
   texto: string;
 };
 
-export function slugify(nome: string): string {
+function slugify(nome: string): string {
   return nome
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
