@@ -480,6 +480,11 @@ table.data .r { text-align: right; }
   .moments li:nth-child(n + 3) { border-top: 1px solid var(--line); }
   .moment-wx span { display: none; }
 }
+/* Telemóvel: nome do período e horário na mesma linha */
+@media (max-width: 560px) {
+  .moments li { padding-inline: 12px; }
+  .moments > li > .label { column-gap: 8px; font-size: 10.5px; }
+}
 
 /* Áreas de aviso clicáveis */
 a.area { text-decoration: none; transition: color .15s; }
