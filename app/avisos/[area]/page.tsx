@@ -51,7 +51,6 @@ export default async function AreaPage({ params }: Props) {
         <BackLink href="/avisos" label="Voltar para avisos" />
         <span className="label"><i className={`lvl ${pior}`} /> {info.regiao}</span>
         <h1>{info.nome}</h1>
-        {ativos.length === 0 && <p className="warn-lead">Sem avisos nos próximos 3 dias.</p>}
         </div>
         <MapaArea id={id} nivel={pior} />
       </div>

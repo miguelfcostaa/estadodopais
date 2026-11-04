@@ -308,7 +308,6 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 }
 
 /* Avisos */
-.warn-lead { font-family: var(--display); font-size: clamp(21px, 2.3vw, 26px); font-weight: 400; max-width: 46ch; margin: 0 0 28px; line-height: 1.35; }
 .regions { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 32px; }
 @media (max-width: 900px) { .regions { grid-template-columns: 1fr; } }
 .areas { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0 20px; margin-top: 10px; }
