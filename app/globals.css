@@ -403,14 +403,8 @@ table.data .r { text-align: right; }
 .rodape li:not(:last-child)::after { content: "·"; margin-inline: 10px; color: var(--faint); }
 .rodape a { display: inline-block; padding-block: 6px; color: var(--subtle); text-decoration: none; }
 .rodape a:hover { color: var(--ink); }
-/* Telemóvel: duas colunas alinhadas, sem pontos a separar */
-@media (max-width: 560px) {
-  .rodape { display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; row-gap: 2px; padding-block: 16px 28px; }
-  .rodape li:not(:last-child)::after { content: none; }
-  .rodape li { display: block; padding-block: 3px; }
-  .rodape li:first-child, .rodape li:nth-last-child(-n+2) { grid-column: 1 / -1; }
-  .rodape li:last-child { margin-top: 12px; }
-}
+/* o © não é ligação: mesma altura de linha que as outras */
+.rodape li:last-child { padding-block: 6px; }
 
 /* Avisos no telemóvel: áreas com aviso primeiro, as restantes recolhidas */
 .regions-compact { display: none; }

@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const intervaloTexto = (v: [number, number] | null, unidade = "") =>
-  v ? (Math.round(v[0]) === Math.round(v[1]) ? `${Math.round(v[0])}${unidade}` : `${Math.round(v[0])}–${Math.round(v[1])}${unidade}`) : null;
+  v ? (Math.round(v[0]) === Math.round(v[1]) ? `${Math.round(v[0])}${unidade}` : `${Math.round(v[0])} - ${Math.round(v[1])}${unidade}`) : null;
 
 export default async function DiaPage({ params }: Props) {
   const { slug, data } = await params;
@@ -111,7 +111,7 @@ export default async function DiaPage({ params }: Props) {
             <ol className="moments">
               {momentos.map((m) => (
                 <li key={m.nome}>
-                  <span className="label">{m.nome} <span className="mono">{String(m.inicio).padStart(2, "0")}h–{String(m.fim).padStart(2, "0")}h</span></span>
+                  <span className="label">{m.nome} <span className="mono">{String(m.inicio).padStart(2, "0")}h - {String(m.fim).padStart(2, "0")}h</span></span>
                   <div className="moment-wx"><WeatherIcon tipo={m.tipoTempo} size={36} noite={m.noite} /><span>{TIPOS_TEMPO[m.tipoTempo]}</span></div>
                   <div className="moment-temp num">{intervaloTexto([m.tMin, m.tMax], "°")}</div>
                   <div className="moment-meta">
