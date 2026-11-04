@@ -183,6 +183,8 @@ h1 em { font-style: normal; color: var(--accent); }
 
 .section { padding-block: 44px; border-top: 1px solid var(--line); }
 .section.sem-linha { border-top: 0; padding-top: 8px; }
+/* períodos do dia: as linhas verticais tocam na linha de baixo, como na de cima */
+.section.periodos { padding-bottom: 0; }
 .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
 h2 { font-family: var(--display); font-weight: 500; font-size: clamp(28px, 3.2vw, 38px); letter-spacing: -.01em; margin: 0; text-wrap: balance; }
 h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 12px; }
@@ -466,7 +468,7 @@ table.data .r { text-align: right; }
 .moments { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); }
 .moments li { display: grid; gap: 12px; align-content: start; padding: 18px; border-left: 1px solid var(--line); }
 .moments li:first-child { border-left: 0; }
-.moments .label .mono { color: var(--subtle); margin-left: 6px; letter-spacing: 0; }
+.moments .label .mono { color: var(--subtle); margin-left: 6px; letter-spacing: 0; white-space: nowrap; }
 .moment-wx { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; }
 .moment-wx svg { flex: none; color: var(--ink); }
 .moment-temp { font-family: var(--display); font-size: 30px; font-weight: 500; }
