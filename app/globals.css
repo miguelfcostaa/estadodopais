@@ -372,10 +372,7 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
   .mar-tabelas { grid-template-columns: 1fr; }
   .mar-tabelas .table-scroll + .table-scroll thead { display: none; }
 }
-.t-curto { display: none; }
 @media (max-width: 560px) {
-  .t-longo { display: none; }
-  .t-curto { display: inline; }
   .mar-tabelas .c-zona { width: 36%; }
   .mar-tabelas .c-ondas { width: 28%; }
   .mar-tabelas .c-agua { width: 36%; }
