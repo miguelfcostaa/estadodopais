@@ -5,7 +5,7 @@ import { AvisoIcon } from "@/components/AvisoIcon";
 import { BackLink } from "@/components/BackLink";
 import { MapaArea } from "@/components/MapaArea";
 import { AREAS_AVISO, LOCAIS, type NivelAviso } from "@/lib/data";
-import { intervalo, nomeNivel } from "@/lib/avisos";
+import { intervalo } from "@/lib/avisos";
 import { getTodosAvisos } from "@/lib/ipma";
 
 export const revalidate = 300; // 5 minutos (avisos)
@@ -51,20 +51,7 @@ export default async function AreaPage({ params }: Props) {
         <BackLink href="/avisos" label="Voltar para avisos" />
         <span className="label"><i className={`lvl ${pior}`} /> {info.regiao}</span>
         <h1>{info.nome}</h1>
-        <p className="warn-lead">
-          {ativos.length === 0 ? (
-            "Sem avisos nos próximos 3 dias."
-          ) : (
-            <>
-              {ativos.map((a, i) => (
-                <span key={i}>
-                  {i > 0 && " "}
-                  <b className={a.nivel}>Aviso {nomeNivel(a.nivel)} por {a.tipo.toLowerCase()}, {intervalo(a)}.</b>
-                </span>
-              ))}
-            </>
-          )}
-        </p>
+        {ativos.length === 0 && <p className="warn-lead">Sem avisos nos próximos 3 dias.</p>}
         </div>
         <MapaArea id={id} nivel={pior} />
       </div>
