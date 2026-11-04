@@ -1,11 +1,11 @@
 /* Escuro por defeito (céu noturno); claro com data-theme="light". */
 :root {
-  --bg: #0b1520;
-  --surface: #10202f;
-  --line: #1d3043;
+  --bg: #08083b;
+  --surface: #0a0a4d;
+  --line: #171761;
   --ink: #e3edf6;
   --muted: #8ca1b5;
-  --faint: #4a6075; /* só linhas e contornos */
+  --faint: #464691; /* só linhas e contornos */
   --subtle: #748a9e; /* texto discreto, com contraste de pelo menos 4,5:1 */
   --accent: #58b0ff;
   --rain: #2f6aa3;
