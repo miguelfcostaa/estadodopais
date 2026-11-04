@@ -469,6 +469,8 @@ table.data .r { text-align: right; }
 .page-head .dia-local { color: var(--muted); font-size: 17px; margin: 16px 0 0; }
 .dia-nav { display: flex; justify-content: space-between; margin-top: 24px; }
 .facts-wide { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); column-gap: 24px; }
+/* a última linha de factos já tem margem por baixo: a secção tira essa parte para o espaço até à linha ser igual ao das outras */
+.section:has(> .facts-wide:last-child) { padding-bottom: 28px; }
 .facts-wide div:nth-child(odd) { padding-right: 0; }
 .facts .fact-note { margin: 0; font-family: var(--body); font-size: 14px; font-weight: 400; line-height: 1.4; color: var(--muted); }
 .moments { list-style: none; margin: 0; padding: 0; padding-top: 44px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); }
