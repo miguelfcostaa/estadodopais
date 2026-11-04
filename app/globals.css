@@ -362,6 +362,7 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .mar-tabelas table.data { min-width: 0; table-layout: fixed; }
 .mar-tabelas td.r { white-space: nowrap; }
 .mar-tabelas th { vertical-align: bottom; }
+.mar-tabelas table.data .c-ondas, .mar-tabelas table.data td.ondas { text-align: center; }
 .mar-tabelas .c-zona { width: 40%; }
 .mar-tabelas .c-ondas { width: 30%; }
 .mar-tabelas .c-agua { width: 30%; }
