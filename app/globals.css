@@ -374,13 +374,13 @@ table.data .r { text-align: right; }
 
 /* ---------- Rodapé ---------- */
 .site-footer { border-top: 1px solid var(--line); margin-top: 32px; }
-.site-footer .cols { display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 1fr)); gap: 40px; padding-block: 44px 32px; }
-@media (max-width: 760px) { .site-footer .cols { grid-template-columns: 1fr; gap: 28px; } }
-.site-footer p { margin: 10px 0 0; color: var(--muted); font-size: 14.5px; max-width: 42ch; }
-.site-footer ul { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 0; }
-.site-footer ul a { display: inline-block; padding-block: 6px; color: var(--muted); text-decoration: none; font-size: 14.5px; }
-.site-footer ul a:hover { color: var(--ink); }
-.site-footer .base { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-block: 18px 32px; border-top: 1px solid var(--line); color: var(--subtle); }
+/* Rodapé numa só linha, na fonte do texto, com os itens separados por "·" */
+.rodape { list-style: none; margin-block: 0; padding-block: 20px 32px; display: flex; flex-wrap: wrap; align-items: center; font-size: 13.5px; color: var(--subtle); }
+.rodape li { display: inline-block; }
+/* O "·" fica no fim de cada item, para não começar uma linha quando o rodapé quebra no telemóvel */
+.rodape li:not(:last-child)::after { content: "·"; margin-inline: 10px; color: var(--faint); }
+.rodape a { display: inline-block; padding-block: 6px; color: var(--subtle); text-decoration: none; }
+.rodape a:hover { color: var(--ink); }
 
 /* Avisos no telemóvel: áreas com aviso primeiro, as restantes recolhidas */
 .regions-compact { display: none; }

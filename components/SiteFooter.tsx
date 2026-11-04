@@ -1,38 +1,22 @@
 import Link from "next/link";
 
+// Rodapé numa só linha: a fonte dos dados, as páginas principais, o código e o ano
 export function SiteFooter() {
   return (
     <footer className="site-footer">
-      <div className="wrap cols">
-        <div>
-          <Link className="brand" href="/">
-            <span>estadodopais<b>.pt</b></span>
-          </Link>
-          <p>O tempo em Portugal, explicado de forma simples. Feito com os dados abertos do IPMA.</p>
-        </div>
-        <div>
-          <span className="label">Navegar</span>
-          <ul>
-            <li><Link href="/">Previsão de hoje</Link></li>
-            <li><Link href="/avisos">Avisos meteorológicos</Link></li>
-            <li><Link href="/mar">Mar, UV e incêndio</Link></li>
-            <li><Link href="/sobre">Sobre o projeto</Link></li>
-          </ul>
-        </div>
-        <div>
-          <span className="label">Dados</span>
-          <ul>
-            <li><a href="https://www.ipma.pt" target="_blank" rel="noopener">IPMA, I.P.</a></li>
-            <li><a href="https://api.ipma.pt" target="_blank" rel="noopener">API de dados abertos</a></li>
-            <li><Link href="/sobre#condicoes">Condições de utilização</Link></li>
-            <li><a href="https://github.com/miguelfcostaa/estadodopais.pt" target="_blank" rel="noopener">Código no GitHub</a></li>
-          </ul>
-        </div>
-      </div>
-      <div className="wrap base mono">
-        <span>Dados: Instituto Português do Mar e da Atmosfera. Este site não é do IPMA.</span>
-        <span>© 2026 estadodopais.pt</span>
-      </div>
+      <ul className="wrap rodape">
+        <li>
+          Dados: <a href="https://www.ipma.pt" target="_blank" rel="noopener">IPMA</a>
+        </li>
+        <li><Link href="/avisos">Avisos</Link></li>
+        <li><Link href="/mar">Mar</Link></li>
+        <li><Link href="/sobre">Sobre</Link></li>
+        <li><Link href="/sobre#condicoes">Condições de utilização</Link></li>
+        <li>
+          <a href="https://github.com/miguelfcostaa/estadodopais.pt" target="_blank" rel="noopener">Código aberto (AGPL-3.0)</a>
+        </li>
+        <li>© 2026 estadodopais.pt</li>
+      </ul>
     </footer>
   );
 }
