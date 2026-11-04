@@ -439,6 +439,9 @@ table.data .r { text-align: right; }
 .calm { border-top: 1px solid var(--line); }
 .calm summary { display: flex; align-items: center; gap: 12px; padding-block: 14px; cursor: pointer; color: var(--muted); list-style: none; }
 .calm summary::-webkit-details-marker { display: none; }
+/* sem cor ao tocar ou clicar (o contorno só aparece a quem navega com o teclado) */
+.calm summary { -webkit-tap-highlight-color: transparent; }
+.calm summary:focus:not(:focus-visible) { outline: none; }
 .calm summary .lvl { opacity: .7; }
 .calm-text { flex: 1; }
 /* Seta que abre e fecha, na cor do texto ao lado */
