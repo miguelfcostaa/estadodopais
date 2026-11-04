@@ -18,7 +18,6 @@ function DiaMar({ zonas, quando }: { zonas: ZonaMar[]; quando: string }) {
       <section className="section" aria-label={`Mapa do mar, ${quando}`}>
         <div className="sec-head"><h2>No mapa</h2><span className="label">ondas em metros · água em °C</span></div>
         <MapaMar zonas={zonas} />
-        <p className="mapa-nota mono">A seta mostra para onde seguem as ondas. Valores previstos pelo IPMA para {quando}. Contornos: Natural Earth.</p>
       </section>
       <section className="section" aria-label={`Tabela do mar, ${quando}`}>
         <div className="sec-head"><h2>Em detalhe</h2><span className="label">ondas em metros · água em °C</span></div>

@@ -560,7 +560,6 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 .baixoEsq .mapa-label { top: 18px; right: -8px; text-align: right; justify-items: end; }
 .baixoDir .mapa-label { top: 18px; left: -8px; }
 .cima .mapa-label { bottom: 18px; left: 0; transform: translateX(-50%); text-align: center; justify-items: center; }
-.mapa-nota { color: var(--subtle); margin: 18px 0 0; }
 @media (max-width: 900px) {
   .mapa { grid-template-columns: 1fr; }
 }
