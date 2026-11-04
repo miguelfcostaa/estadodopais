@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, IBM_Plex_Mono, Parkinsans } from "next/font/google";
 import { SiteFooter } from "@/components/SiteFooter";
+import { Revelar } from "@/components/Revelar";
 import { NavHistory } from "@/components/NavHistory";
 import { SiteHeader } from "@/components/SiteHeader";
 import { horaMinutoAtual } from "@/lib/format";
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteHeader atualizado={horaMinutoAtual()} />
         <main className="site-main" id="conteudo" tabIndex={-1}>{children}</main>
         <SiteFooter />
+        <Revelar />
       </body>
     </html>
   );
