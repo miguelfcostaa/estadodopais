@@ -119,6 +119,9 @@ img, svg { max-width: 100%; }
   line-height: 1.02; letter-spacing: -.02em; margin: 0 0 20px; text-wrap: balance; overflow-wrap: break-word;
 }
 .page-head p { color: var(--muted); font-size: 17px; max-width: 60ch; margin: 0; }
+/* a descrição acompanha a largura do título */
+.page-head.ajustado { width: fit-content; max-width: 100%; }
+.page-head.ajustado p { width: 0; min-width: 100%; max-width: none; }
 h1 em { font-style: normal; color: var(--accent); }
 
 .lead { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 56px; padding-block: 0 40px; align-items: stretch; }

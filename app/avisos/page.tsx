@@ -16,7 +16,7 @@ export default async function AvisosPage() {
   const avisos = await getAvisos();
   return (
     <div className="wrap">
-      <div className="page-head">
+      <div className="page-head ajustado">
         <span className="label">Próximos 3 dias</span>
         <h1>Avisos meteorológicos</h1>
         <p>O IPMA emite avisos por distrito no continente e por zona nas ilhas. A cor diz o grau de risco; o tipo diz porquê.</p>
