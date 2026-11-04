@@ -32,7 +32,7 @@ function TabelaMar({ zonas }: { zonas: ZonaMar[] }) {
               <td className="mono col-wide">{z.regiao}</td>
               <td className="r">{num(z.ondaMin)}–{num(z.ondaMax)}<span className="unit-m"> m</span> <span className="mono dir-inline">{z.dir}</span></td>
               <td className="mono col-wide col-dir">{z.dir}</td>
-              <td className="r">{z.aguaMin !== null && z.aguaMax !== null ? `${num(z.aguaMin)}–${num(z.aguaMax)}°` : "—"}</td>
+              <td className="r">{z.aguaMin !== null && z.aguaMax !== null ? `${num(z.aguaMin)}–${num(z.aguaMax)}°` : " - "}</td>
             </tr>
           ))}
         </tbody>
