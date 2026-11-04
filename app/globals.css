@@ -119,9 +119,8 @@ img, svg { max-width: 100%; }
   line-height: 1.02; letter-spacing: -.02em; margin: 0 0 20px; text-wrap: balance; overflow-wrap: break-word;
 }
 .page-head p { color: var(--muted); font-size: 17px; max-width: 60ch; margin: 0; }
-/* a descrição acompanha a largura do título */
-.page-head.ajustado { width: fit-content; max-width: 100%; }
-.page-head.ajustado p { width: 0; min-width: 100%; max-width: none; }
+/* a descrição usa a largura da página */
+.page-head.ajustado p { max-width: none; }
 h1 em { font-style: normal; color: var(--accent); }
 
 .lead { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 56px; padding-block: 0 40px; align-items: stretch; }
@@ -358,6 +357,26 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .steps-l { display: flex; justify-content: space-between; margin-top: 6px; color: var(--subtle); }
 
 .table-scroll { overflow-x: auto; }
+/* Mar: tabela dividida em duas colunas */
+.mar-tabelas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px; }
+.mar-tabelas table.data { min-width: 0; table-layout: fixed; }
+.mar-tabelas td.r { white-space: nowrap; }
+.mar-tabelas th { vertical-align: bottom; }
+.mar-tabelas .c-zona { width: 34%; }
+.mar-tabelas .c-reg { width: 18%; }
+.mar-tabelas .c-ondas { width: 22%; }
+.mar-tabelas .c-agua { width: 26%; }
+.mar-tabelas .col-dir { display: none; }
+.mar-tabelas .dir-inline { display: inline; }
+@media (max-width: 900px) {
+  .mar-tabelas { grid-template-columns: 1fr; }
+  .mar-tabelas .table-scroll + .table-scroll thead { display: none; }
+}
+@media (max-width: 560px) {
+  .mar-tabelas .c-zona { width: 36%; }
+  .mar-tabelas .c-ondas { width: 28%; }
+  .mar-tabelas .c-agua { width: 36%; }
+}
 table.data { width: 100%; border-collapse: collapse; min-width: 560px; }
 table.data th { text-align: left; font-weight: 400; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); }
 table.data td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
