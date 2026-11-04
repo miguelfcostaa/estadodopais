@@ -35,7 +35,7 @@ function Pino({ z, painel }: { z: ZonaMar; painel: Painel }) {
           <svg width="10" height="10" viewBox="-8 -8 16 16" aria-hidden="true" style={{ transform: `rotate(${((DIRS[z.dir] ?? 0) + 180) % 360}deg)` }}>
             <path d="M0 -6 L0 6 M-3.5 2.5 L0 6 L3.5 2.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
           </svg>
-          {num(z.ondaMin)}–{num(z.ondaMax)} m
+          {num(z.ondaMin)} - {num(z.ondaMax)} m
           {agua !== null && <em> · {num(Math.round(agua * 10) / 10)}°</em>}
         </span>
       </div>
