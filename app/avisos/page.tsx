@@ -9,15 +9,18 @@ import type { Aviso, NivelAviso } from "@/lib/data";
 
 const GRAVIDADE: NivelAviso[] = ["green", "yellow", "orange", "red"];
 const ORDEM_AREAS = Object.keys(AREAS_AVISO);
+const REGIOES_ORDEM = ["Continente", "Madeira", "Açores"] as const;
+
+const nAvisos = (n: number) => (n === 1 ? "1 aviso" : `${n} avisos`);
+const piorNivel = (l: Aviso[]) => GRAVIDADE[Math.max(...l.map((a) => GRAVIDADE.indexOf(a.nivel)))];
 
 // Avisos agrupados por área: primeiro as áreas com o aviso mais grave; dentro de cada uma, por ordem de início
 function porArea(avisos: Aviso[]) {
   const grupos = new Map<string, Aviso[]>();
   for (const a of avisos) grupos.set(a.idAreaAviso, [...(grupos.get(a.idAreaAviso) ?? []), a]);
-  const pior = (l: Aviso[]) => Math.max(...l.map((a) => GRAVIDADE.indexOf(a.nivel)));
   return [...grupos.entries()]
     .map(([id, lista]) => ({ id, lista: [...lista].sort((x, y) => x.inicio.localeCompare(y.inicio)) }))
-    .sort((x, y) => pior(y.lista) - pior(x.lista) || ORDEM_AREAS.indexOf(x.id) - ORDEM_AREAS.indexOf(y.id));
+    .sort((x, y) => GRAVIDADE.indexOf(piorNivel(y.lista)) - GRAVIDADE.indexOf(piorNivel(x.lista)) || ORDEM_AREAS.indexOf(x.id) - ORDEM_AREAS.indexOf(y.id));
 }
 
 export const metadata: Metadata = {
@@ -47,29 +50,45 @@ export default async function AvisosPage() {
       <section className="section" aria-labelledby="h-det">
         <div className="sec-head">
           <h2 id="h-det">Em detalhe</h2>
-          <span className="label">{avisos.length === 1 ? "1 aviso ativo" : `${avisos.length} avisos ativos`}</span>
+          <span className="label">{nAvisos(avisos.length)} {avisos.length === 1 ? "ativo" : "ativos"}</span>
         </div>
         {avisos.length === 0 ? (
           <p className="summary">Não há avisos amarelos, laranja ou vermelhos neste momento.</p>
         ) : (
-          <div className="warn-grupos">
-            {porArea(avisos).map(({ id, lista }) => (
-              <article key={id} className="warn-grupo">
-                <h3>
-                  <Link prefetch={false} href={`/avisos/${id.toLowerCase()}`}>{AREAS_AVISO[id]?.nome ?? id}</Link>
-                  <span className="label">{AREAS_AVISO[id]?.regiao}</span>
-                </h3>
-                <div className="warn-list">
-                  {lista.map((a, i) => (
-                    <div key={i} className={`warn-item ${a.nivel}`}>
-                      <span className="label">{a.tipo} · {nomeNivel(a.nivel)}</span>
-                      {a.texto && <p>{a.texto}</p>}
-                      <p className="mono">{intervalo(a)}</p>
-                    </div>
-                  ))}
-                </div>
-              </article>
-            ))}
+          <div className="warn-regioes">
+            {REGIOES_ORDEM.map((regiao) => {
+              const grupos = porArea(avisos.filter((a) => AREAS_AVISO[a.idAreaAviso]?.regiao === regiao));
+              if (grupos.length === 0) return null;
+              return (
+                <details key={regiao} className="calm warn-regiao">
+                  <summary>
+                    <span className={`lvl ${piorNivel(grupos.flatMap((g) => g.lista))}`} />
+                    <h3 className="calm-text">{regiao}</h3>
+                    <span className="label">{nAvisos(grupos.reduce((n, g) => n + g.lista.length, 0))}</span>
+                    <span className="calm-more mono">
+                      <span className="calm-ver">ver</span>
+                      <span className="calm-fechar">fechar</span>
+                    </span>
+                  </summary>
+                  <div className="warn-grupos">
+                    {grupos.map(({ id, lista }) => (
+                      <article key={id} className="warn-grupo">
+                        <h4><Link prefetch={false} href={`/avisos/${id.toLowerCase()}`}>{AREAS_AVISO[id]?.nome ?? id}</Link></h4>
+                        <div className="warn-list">
+                          {lista.map((a, i) => (
+                            <div key={i} className={`warn-item ${a.nivel}`}>
+                              <span className="label">{a.tipo} · {nomeNivel(a.nivel)}</span>
+                              {a.texto && <p>{a.texto}</p>}
+                              <p className="mono">{intervalo(a)}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </details>
+              );
+            })}
           </div>
         )}
       </section>
