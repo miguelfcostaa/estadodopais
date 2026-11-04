@@ -335,7 +335,8 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .warn-regioes { margin-top: 20px; border-bottom: 1px solid var(--line); }
 .calm.warn-regiao summary { color: var(--ink); }
 .warn-regiao summary h3 { margin: 0; font-size: 18px; font-weight: 500; }
-.warn-regiao summary .label { margin-left: auto; }
+.warn-regiao summary h3.calm-text { flex: none; }
+.warn-regiao summary .calm-more { margin-left: auto; }
 .calm.warn-regiao summary .lvl { opacity: 1; }
 .warn-regiao[open] > .warn-grupos { padding: 12px 0 36px; }
 .warn-grupos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 36px 48px; align-items: start; }
