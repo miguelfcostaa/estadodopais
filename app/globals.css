@@ -483,6 +483,7 @@ table.data .r { text-align: right; }
 /* Telemóvel: nome do período e horário na mesma linha */
 @media (max-width: 560px) {
   .moments li { padding-inline: 12px; }
+  .moments li:nth-child(even) { padding-inline: 18px; }
   .moments > li > .label { column-gap: 8px; font-size: 10.5px; }
 }
 
