@@ -50,7 +50,7 @@ export default async function AreaPage({ params }: Props) {
         <div>
         <BackLink href="/avisos" label="Voltar para avisos" />
         <span className="label"><i className={`lvl ${pior}`} /> {info.regiao}</span>
-        <h1>{info.nome}</h1>
+        <h1 style={{ "--letras": Math.max(...info.nome.split(" ").map((p) => p.length)) } as React.CSSProperties}>{info.nome}</h1>
         </div>
         <MapaArea id={id} nivel={pior} />
       </div>

@@ -631,13 +631,14 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
 .am-forma.red { fill: color-mix(in srgb, var(--w-red) 70%, var(--surface)); stroke: var(--w-red); }
 .am-ponto { fill: var(--ink); stroke: var(--bg); stroke-width: 2; vector-effect: non-scaling-stroke; }
 @media (max-width: 700px) {
-  .area-head { gap: 16px; align-items: start; }
-  .area-head:has(.area-mapa-continente) { align-items: center; }
+  /* texto à esquerda, mapa à direita */
+  /* o título encolhe o necessário para a palavra mais comprida caber inteira ao lado do mapa */
+  .area-head h1 { font-size: min(42px, calc((100vw - 200px) / (var(--letras, 6) * 0.6))); }
+  .area-head { gap: 16px; align-items: center; }
   .area-mapa { width: 120px; height: 130px; }
   .area-mapa-continente { width: 90px; height: 165px; }
-  .area-head:has(.area-mapa-acores), .area-head:has(.area-mapa-madeira) { grid-template-columns: 1fr; gap: 8px; }
-  .area-mapa-acores { width: min(100%, 300px); height: auto; aspect-ratio: 1.65; }
-  .area-mapa-madeira { width: min(100%, 220px); height: auto; aspect-ratio: 1.3; }
+  .area-mapa-acores { width: 150px; height: auto; aspect-ratio: 1.65; }
+  .area-mapa-madeira { width: 140px; height: auto; aspect-ratio: 1.3; }
 }
 /* pontos das zonas da Madeira: ponto na cor do nível, contorno do fundo e halo suave */
 .av-ponto {
