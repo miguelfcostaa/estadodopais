@@ -19,7 +19,6 @@ function TabelaMar({ zonas }: { zonas: ZonaMar[] }) {
         <thead>
           <tr>
             <th className="label c-zona">Zona</th>
-            <th className="label col-wide c-reg">Região</th>
             <th className="label r c-ondas">Ondas</th>
             <th className="label col-wide col-dir">Direção</th>
             <th className="label r c-agua">Temperatura da água</th>
@@ -29,7 +28,6 @@ function TabelaMar({ zonas }: { zonas: ZonaMar[] }) {
           {zonas.map((z) => (
             <tr key={z.zona}>
               <td>{z.zona}</td>
-              <td className="mono col-wide">{z.regiao}</td>
               <td className="r">{num(z.ondaMin)} - {num(z.ondaMax)}<span className="unit-m"> m</span> <span className="mono dir-inline">{z.dir}</span></td>
               <td className="mono col-wide col-dir">{z.dir}</td>
               <td className="r">{z.aguaMin !== null && z.aguaMax !== null ? `${num(z.aguaMin)} - ${num(z.aguaMax)}°` : " - "}</td>

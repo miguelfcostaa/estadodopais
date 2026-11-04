@@ -362,10 +362,9 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .mar-tabelas table.data { min-width: 0; table-layout: fixed; }
 .mar-tabelas td.r { white-space: nowrap; }
 .mar-tabelas th { vertical-align: bottom; }
-.mar-tabelas .c-zona { width: 34%; }
-.mar-tabelas .c-reg { width: 18%; }
-.mar-tabelas .c-ondas { width: 22%; }
-.mar-tabelas .c-agua { width: 26%; }
+.mar-tabelas .c-zona { width: 40%; }
+.mar-tabelas .c-ondas { width: 30%; }
+.mar-tabelas .c-agua { width: 30%; }
 .mar-tabelas .col-dir { display: none; }
 .mar-tabelas .dir-inline { display: inline; }
 @media (max-width: 900px) {
