@@ -21,7 +21,7 @@ function TabelaMar({ zonas }: { zonas: ZonaMar[] }) {
             <th className="label c-zona">Zona</th>
             <th className="label r c-ondas">Ondas</th>
             <th className="label col-wide col-dir">Direção</th>
-            <th className="label r c-agua">Temperatura da água</th>
+            <th className="label r c-agua"><span className="t-longo">Temperatura da água</span><span className="t-curto">Água</span></th>
           </tr>
         </thead>
         <tbody>
