@@ -69,6 +69,9 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
   // Largura de cada coluna: ocupa o espaço todo, com um mínimo para caber cada hora (o resto desliza)
   const minimo = largura < 600 ? 46 : 44;
   const col = Math.max(minimo, largura / Math.max(n, 1));
+  // num gráfico de um só dia (página do dia) o nome do dia não se mostra: já está no título da página
+  const umDia = horas.length > 0 && horas.every((h) => h.hora.slice(0, 10) === horas[0].hora.slice(0, 10));
+  const corte = umDia ? Y_HORA - 18 : 0; // sem a linha do dia, o gráfico começa logo nas horas
   const W = Math.round(col * n);
   const cx = (i: number) => col * i + col / 2;
   const passo = (px: number) => Math.max(1, Math.ceil(px / col));
@@ -144,7 +147,7 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
 
       <div className={`mg-wrap${podeVoltar ? " fade-l" : ""}${podeAvancar ? " fade-r" : ""}`}>
       <div className="mg-scroll" ref={faixa} onScroll={atualizar}>
-        <svg className="mg-svg" width={W} height={ALTURA} role="img" aria-label="Gráfico hora a hora: temperatura, chuva e vento" onMouseLeave={() => setSel(null)}>
+        <svg className="mg-svg" width={W} height={ALTURA - corte} viewBox={`0 ${corte} ${W} ${ALTURA - corte}`} role="img" aria-label="Gráfico hora a hora: temperatura, chuva e vento" onMouseLeave={() => setSel(null)}>
           <defs>
             <linearGradient id="mg-fill" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.28" />
@@ -168,9 +171,11 @@ export function Meteogram({ horas: todas, agora: agoraServidor, fuso, aPartirDeA
                 {novoDia && (
                   <>
                     {i > 0 && <line x1={col * i} x2={col * i} y1={0} y2={ALTURA} className="mg-daysep" />}
-                    <text x={col * i + 6} y={Y_DIA} className="mg-day">
-                      {hh.hora.slice(0, 10) === agora.slice(0, 10) ? "Hoje" : `${diaSemana(hh.hora, true)} ${dataCurta(hh.hora)}`}
-                    </text>
+                    {!umDia && (
+                      <text x={col * i + 6} y={Y_DIA} className="mg-day">
+                        {hh.hora.slice(0, 10) === agora.slice(0, 10) ? "Hoje" : `${diaSemana(hh.hora, true)} ${dataCurta(hh.hora)}`}
+                      </text>
+                    )}
                   </>
                 )}
                 {mostra(i, pRotulo) && (
