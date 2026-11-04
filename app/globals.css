@@ -463,10 +463,11 @@ table.data .r { text-align: right; }
 .facts-wide { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); column-gap: 24px; }
 .facts-wide div:nth-child(odd) { padding-right: 0; }
 .facts .fact-note { margin: 0; font-family: var(--body); font-size: 14px; font-weight: 400; line-height: 1.4; color: var(--muted); }
-.moments { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+.moments { list-style: none; margin: 0; padding: 0; padding-top: 44px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); }
 .moments li { display: grid; gap: 12px; align-content: start; padding: 18px; border-left: 1px solid var(--line); }
 .moments li:first-child { border-left: 0; }
-.moments .label .mono { color: var(--subtle); margin-left: 6px; letter-spacing: 0; white-space: nowrap; }
+.moments > li > .label { display: flex; flex-wrap: wrap; column-gap: 12px; }
+.moments .label .mono { color: var(--subtle); letter-spacing: 0; white-space: nowrap; }
 .moment-wx { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; }
 .moment-wx svg { flex: none; color: var(--ink); }
 .moment-temp { font-family: var(--display); font-size: 30px; font-weight: 500; }
