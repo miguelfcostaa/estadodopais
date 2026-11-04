@@ -340,8 +340,8 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .calm.warn-regiao summary .lvl { opacity: 1; }
 .warn-regiao[open] > .warn-grupos { padding: 12px 0 36px; }
 .warn-grupos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 36px 48px; align-items: start; }
-.warn-grupo h4 { margin: 0; padding-bottom: 10px; border-bottom: 1px solid var(--line); font-size: 20px; font-weight: 500; }
-.warn-grupo h4 a { color: var(--ink); text-decoration: none; }
+.warn-grupo h4 { margin: 0; padding-bottom: 8px; border-bottom: 1px solid var(--line); font-size: 15px; font-weight: 400; }
+.warn-grupo h4 a { color: var(--muted); text-decoration: none; }
 .warn-grupo h4 a:hover { color: var(--accent); }
 .warn-grupo .warn-list { margin-top: 16px; }
 .warn-item { border-left: 2px solid var(--w-yellow); padding: 4px 0 4px 16px; max-width: 70ch; }
