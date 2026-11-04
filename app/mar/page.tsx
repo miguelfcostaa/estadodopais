@@ -68,7 +68,7 @@ export default async function MarPage() {
   const quando = (i: number) => (i === 0 ? "hoje" : i === 1 ? "amanhã" : diaSemana(dias[i].data).toLowerCase());
   return (
     <div className="wrap">
-      <div className="page-head">
+      <div className="page-head ajustado">
         <span className="label">{dataLonga(dias[0].data)}</span>
         <h1>Estado do mar</h1>
         <p>Altura das ondas e temperatura da água ao longo da costa, do continente aos Açores, hoje e nos próximos dois dias.</p>
