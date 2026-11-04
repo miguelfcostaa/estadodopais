@@ -331,6 +331,12 @@ h3 { font-family: var(--body); font-weight: 500; font-size: 18px; margin: 6px 0 
 .scale > span { display: inline-flex; gap: 8px; align-items: center; }
 .scale-txt b { font-weight: 400; }
 .warn-list { display: grid; gap: 20px; margin-top: 28px; }
+/* Avisos em detalhe, agrupados por área */
+.warn-grupos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 36px 48px; margin-top: 28px; align-items: start; }
+.warn-grupo h3 { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0; padding-bottom: 10px; border-bottom: 1px solid var(--line); font-size: 20px; font-weight: 500; }
+.warn-grupo h3 a { color: var(--ink); text-decoration: none; }
+.warn-grupo h3 a:hover { color: var(--accent); }
+.warn-grupo .warn-list { margin-top: 16px; }
 .warn-item { border-left: 2px solid var(--w-yellow); padding: 4px 0 4px 16px; max-width: 70ch; }
 .warn-item.orange { border-left-color: var(--w-orange); }
 .warn-item.red { border-left-color: var(--w-red); }

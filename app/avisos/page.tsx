@@ -1,9 +1,24 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { MapaAvisos } from "@/components/MapaAvisos";
 import { WarningsGrid } from "@/components/WarningsGrid";
 import { AREAS_AVISO } from "@/lib/data";
 import { intervalo, nomeNivel } from "@/lib/avisos";
 import { getAvisos } from "@/lib/ipma";
+import type { Aviso, NivelAviso } from "@/lib/data";
+
+const GRAVIDADE: NivelAviso[] = ["green", "yellow", "orange", "red"];
+const ORDEM_AREAS = Object.keys(AREAS_AVISO);
+
+// Avisos agrupados por área: primeiro as áreas com o aviso mais grave; dentro de cada uma, por ordem de início
+function porArea(avisos: Aviso[]) {
+  const grupos = new Map<string, Aviso[]>();
+  for (const a of avisos) grupos.set(a.idAreaAviso, [...(grupos.get(a.idAreaAviso) ?? []), a]);
+  const pior = (l: Aviso[]) => Math.max(...l.map((a) => GRAVIDADE.indexOf(a.nivel)));
+  return [...grupos.entries()]
+    .map(([id, lista]) => ({ id, lista: [...lista].sort((x, y) => x.inicio.localeCompare(y.inicio)) }))
+    .sort((x, y) => pior(y.lista) - pior(x.lista) || ORDEM_AREAS.indexOf(x.id) - ORDEM_AREAS.indexOf(y.id));
+}
 
 export const metadata: Metadata = {
   title: "Avisos meteorológicos em Portugal",
@@ -37,15 +52,23 @@ export default async function AvisosPage() {
         {avisos.length === 0 ? (
           <p className="summary">Não há avisos amarelos, laranja ou vermelhos neste momento.</p>
         ) : (
-          <div className="warn-list">
-            {avisos.map((a, i) => (
-              <div key={i} className={`warn-item ${a.nivel}`}>
-                <span className="label">
-                  {AREAS_AVISO[a.idAreaAviso]?.regiao} · {AREAS_AVISO[a.idAreaAviso]?.nome ?? a.idAreaAviso} · {a.tipo} · {nomeNivel(a.nivel)}
-                </span>
-                {a.texto && <p>{a.texto}</p>}
-                <p className="mono">{intervalo(a)}</p>
-              </div>
+          <div className="warn-grupos">
+            {porArea(avisos).map(({ id, lista }) => (
+              <article key={id} className="warn-grupo">
+                <h3>
+                  <Link prefetch={false} href={`/avisos/${id.toLowerCase()}`}>{AREAS_AVISO[id]?.nome ?? id}</Link>
+                  <span className="label">{AREAS_AVISO[id]?.regiao}</span>
+                </h3>
+                <div className="warn-list">
+                  {lista.map((a, i) => (
+                    <div key={i} className={`warn-item ${a.nivel}`}>
+                      <span className="label">{a.tipo} · {nomeNivel(a.nivel)}</span>
+                      {a.texto && <p>{a.texto}</p>}
+                      <p className="mono">{intervalo(a)}</p>
+                    </div>
+                  ))}
+                </div>
+              </article>
             ))}
           </div>
         )}
