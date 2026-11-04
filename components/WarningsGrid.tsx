@@ -68,10 +68,7 @@ export function WarningsGrid({ avisos, legenda = true }: { avisos: Aviso[]; lege
                 <span className="calm-text">
                   {nome.charAt(0).toUpperCase() + nome.slice(1)} em {areas.length} {areas.length === 1 ? "área" : "áreas"}
                 </span>
-                <span className="calm-more mono">
-                  <span className="calm-ver">ver</span>
-                  <span className="calm-fechar">fechar</span>
-                </span>
+                <svg className="calm-seta" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
               </summary>
               <ul className="alert-list">
                 {areas.map((id) => (
@@ -94,10 +91,7 @@ export function WarningsGrid({ avisos, legenda = true }: { avisos: Aviso[]; lege
             <summary>
               <span className="lvl green" />
               <span className="calm-text">Sem aviso em {totalSem} {totalSem === 1 ? "área" : "áreas"}</span>
-              <span className="calm-more mono">
-                <span className="calm-ver">ver todas</span>
-                <span className="calm-fechar">fechar</span>
-              </span>
+              <svg className="calm-seta" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
             </summary>
             {semAviso
               .filter((r) => r.areas.length > 0)
