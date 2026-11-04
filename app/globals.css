@@ -737,3 +737,6 @@ a.area:hover span:nth-child(2) { text-decoration: underline; text-underline-offs
   .facts dt { font-size: 11px; letter-spacing: 0; gap: 6px; }
   .facts-wide dd.num, .facts dd.num { font-size: 23px; }
 }
+
+/* Texto que só aparece em ecrãs largos */
+@media (max-width: 560px) { .so-largo { display: none; } }

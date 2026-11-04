@@ -56,7 +56,7 @@ export default async function AreaPage({ params }: Props) {
       </div>
 
       <section className="section" aria-labelledby="h-tipos">
-        <div className="sec-head"><h2 id="h-tipos">Por tipo de aviso</h2><span className="label">próximos 3 dias</span></div>
+        <div className="sec-head"><h2 id="h-tipos">Por tipo de aviso</h2><span className="label"><span className="so-largo">próximos </span>3 dias</span></div>
         <ul className="types">
           {TIPOS.map((t) => {
             const deste = todos.filter((a) => a.tipo === t);
