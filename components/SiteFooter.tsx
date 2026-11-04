@@ -25,6 +25,7 @@ export function SiteFooter() {
             <li><a href="https://www.ipma.pt" target="_blank" rel="noopener">IPMA, I.P.</a></li>
             <li><a href="https://api.ipma.pt" target="_blank" rel="noopener">API de dados abertos</a></li>
             <li><Link href="/sobre#condicoes">Condições de utilização</Link></li>
+            <li><a href="https://github.com/miguelfcostaa/estadodopais.pt" target="_blank" rel="noopener">Código no GitHub</a></li>
           </ul>
         </div>
       </div>

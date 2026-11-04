@@ -2,7 +2,7 @@
 
 O estado do tempo, do mar e dos riscos em Portugal, num só sítio e explicado de forma simples. Feito com os dados abertos do IPMA.
 
-**Site:** https://www.estadodopais.pt
+**Site:** https://www.estadodopais.pt · **Licença:** [GNU AGPL v3](LICENSE) (ver [Licença](#licença))
 
 ## O que mostra
 
@@ -78,3 +78,23 @@ npm run typecheck
 
 - **IPMA, I.P.:** previsões, avisos, mar, índice ultravioleta e risco de incêndio, pela [API de dados abertos](https://api.ipma.pt). Condições de utilização: uso sem fins lucrativos, com indicação da fonte e ligação ao site do IPMA.
 - **Natural Earth:** limites de países e distritos usados nos mapas (domínio público).
+
+## Como contribuir
+
+Ideias, erros e melhorias são bem-vindos.
+
+1. Para um erro ou uma sugestão, abre uma [issue](https://github.com/miguelfcostaa/estadodopais.pt/issues) a explicar o que viste e em que página.
+2. Para propor uma alteração, faz um fork do repositório, cria uma branch, faz as alterações e abre um pull request.
+3. Antes do pull request, confirma que o site compila sem erros:
+
+```bash
+npm run build
+```
+
+O site é em português de Portugal: textos, nomes de variáveis e comentários.
+
+## Licença
+
+O código está sob a licença [GNU Affero General Public License v3.0](LICENSE) (AGPL-3.0). Podes usar, alterar e partilhar o código, mas quem publicar uma versão alterada, incluindo como site, tem de disponibilizar o código dessa versão com a mesma licença.
+
+A licença aplica-se só ao código. Os dados meteorológicos são do IPMA, I.P., com as condições de utilização indicadas em [Fontes de dados](#fontes-de-dados). Os contornos dos mapas são do Natural Earth (domínio público).

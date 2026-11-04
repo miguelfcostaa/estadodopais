@@ -30,6 +30,12 @@ export default function SobrePage() {
         <p>
           O IPMA permite usar os seus dados <strong>sem fins lucrativos</strong>, desde que se indique sempre a fonte e a ligação ao site do instituto.
         </p>
+        <h2 id="codigo">Código aberto</h2>
+        <p>
+          O código do site é aberto e está no{" "}
+          <a href="https://github.com/miguelfcostaa/estadodopais.pt" target="_blank" rel="noopener">GitHub</a>, com a licença{" "}
+          <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener">GNU AGPL v3</a>. Sugestões, erros e contribuições são bem-vindos.
+        </p>
       </div>
     </div>
   );
